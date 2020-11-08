@@ -31,4 +31,6 @@ Para la ejecución del problema se tendrán en cuenta los distintos factores:
 
 En la siguiente imagen veremos un esquema del output que proporcionará el sistema:
 
-![Esquema del output](/images/screen.png)
+<p align="center">
+  <img src="/images/screen.png" width="350" alt="accessibility text">
+</p>
