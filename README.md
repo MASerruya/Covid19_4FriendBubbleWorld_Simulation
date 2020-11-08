@@ -15,10 +15,10 @@ Para la ejecución del problema se tendrán en cuenta los distintos factores:
 
 * 2 tipos de Agentes
     * Young people:
-        * Riesgo de contagio bajo
+        * Probabilidad de ser asintomático alta
         * Probabilidad de complicaciones bajo
     * Adult people:
-        * Riesgo de contagio alto
+        * Probabilidad de ser asintomático baja
         * Probabilidad de complicaciones alto
 
 * 4 estancias:
