@@ -26,5 +26,9 @@ Para la ejecución del problema se tendrán en cuenta los distintos factores:
     * Work: Misma probabilidad de contagio para todos los agentes
     * Hospital: Los agentes contagiados irán a la casilla Hospital en caso de enfermar
     * Home: Probabilidad de contagio 0 (todos los agentes viven en casas distintas)
+    
+    ## Esquema de la solución propuesta
 
+En la siguiente imagen veremos un esquema del output que proporcionará el sistema:
 
+![Esquema del output](/images/screen.png)
