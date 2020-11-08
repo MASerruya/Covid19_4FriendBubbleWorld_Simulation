@@ -7,3 +7,13 @@ Ciencia y Tecnología Informática de la Universidad Carlos III de Madrid.
 La finalidad de este proyecto consiste en simular mediante un sistema de
 agentes la propagación de la COVID19 considerando distintas situaciones
 y entidades con las que acercarse a la realidad lo máximo posible.
+
+Para la ejecución del problema se tendrán en cuenta los distintos factores:
+
+* 4 estancias:
+    * Bar: Agentes Young se quitarán la mascarilla, mientras agentes Old se la dejarán puesta
+    * Work: Misma probabilidad de contagio para todos los agentes
+    * Hospital: Los agentes contagiados irán a la casilla Hospital en caso de enfermar
+    * Home: Probabilidad de contagio 0 (todos los agentes viven en casas distintas)
+
+
