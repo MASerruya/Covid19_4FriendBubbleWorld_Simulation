@@ -4,5 +4,5 @@
 MAS covid_city{
 	infrastructure: Centralised
 	environment: SpreadEnv(gui)
-	agents: young#5; adult;
+	agents: young #2;
 }
