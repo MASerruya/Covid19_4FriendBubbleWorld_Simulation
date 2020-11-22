@@ -9,8 +9,6 @@ public class SpreadEnv extends Environment {
 	SpreadModel model;
 	SpreadView view;
 	
-	public static final Literal gtb = Literal.parseLiteral("go_to_bar(young)");
-	
 	public static final Literal yab = Literal.parseLiteral("at(young,bar)");
 	
 	@Override
@@ -20,32 +18,36 @@ public class SpreadEnv extends Environment {
         if (args.length == 1 && args[0].equals("gui")) {
             view  = new SpreadView(model);
             model.setView(view);
+			//view.update();
         }
-
-		updatePercepts();
+		
+        // Agent to location
+		// get the agent location
+        Location lAgent = model.getAgPos(0);
+        while (!lAgent.equals(model.lBar)) {
+			model.moveTowards(model.lBar, 5);
+			try {
+                Thread.sleep(400);
+            } catch (Exception e) {}
+        }
     }
 	
 	    void updatePercepts() {
-			// clear the percepts of the agents
-			clearPercepts("young");
-	
-			// get the robot location
-			Location lyoung = model.getAgPos(0);
-	
-			// add agent location to its percepts
-			//if (lyoung.equals(model.lBar)) {
-			addPercept("young", yab);
-			//}
-		}
+        // clear the percepts of the agents
+        clearPercepts("young");
+
+        // get the robot location
+        Location lyoung = model.getAgPos(0);
+
+        // add agent location to its percepts
+        if (lyoung.equals(model.lBar)) {
+            addPercept("young", yab);
+        }
+    }
 	
 	@Override
     public boolean executeAction(String ag, Structure action) {
-		
         System.out.println("["+ag+"] doing: "+action);
-		String sid =  ag.substring(ag.length() - 1);
-		int iid =  Integer.parseInt(sid)-1;
-		
-		
         boolean result = false;
         if (action.getFunctor().equals("move_towards")) {
             String l = action.getTerm(0).toString();
@@ -54,7 +56,7 @@ public class SpreadEnv extends Environment {
                 dest = model.lBar;
             }
             try {
-                result = model.moveTowards(dest,iid);
+                result = model.moveTowards(dest,0);
             } catch (Exception e) {
                 e.printStackTrace();
             }

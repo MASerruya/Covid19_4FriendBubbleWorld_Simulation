@@ -22,7 +22,7 @@ public class SpreadView extends GridWorldView {
 	/** draw application objects */
     @Override
     public void draw(Graphics g, int x, int y, int object) {
-        
+        //Location lYoung = sModel.getAgPos(0);
         super.drawAgent(g, x, y, Color.lightGray, -1);
 		switch (object) {
 			case SpreadModel.JOB:
