@@ -58,7 +58,27 @@ public class SpreadModel extends GridWorldModel {
 		}
 		
         setAgPos(id, lAgent); // move the person in the grid
+		
+		//UpdateGrid()
+		        // initial location of fridge and owner
+		// initial location of the objects
+        add(JOB, lJob);
+        add(BAR, lBar);
+        add(HOSPITAL, lHospital);
+        add(HOME, lHome);
         return true;
     }
 	
+	/*boolean goToBar() {
+        if (fridgeOpen && availableBeers > 0 && !carryingBeer) {
+            availableBeers--;
+            carryingBeer = true;
+            if (view != null)
+                view.update(lFridge.x,lFridge.y);
+            return true;
+        } else {
+            return false;
+        }
+    }
+	*/
 }

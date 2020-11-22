@@ -58,7 +58,7 @@ public class SpreadView extends GridWorldView {
 				drawString(g, x, y, defaultFont, "HOME");
 				break;
 			}		
-			//repaint();
+			repaint();
     }
 	
 	@Override

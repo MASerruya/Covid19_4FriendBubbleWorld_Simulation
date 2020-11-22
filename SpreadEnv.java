@@ -9,6 +9,8 @@ public class SpreadEnv extends Environment {
 	SpreadModel model;
 	SpreadView view;
 	
+	public static final Literal yab = Literal.parseLiteral("at(young,bar)");
+	
 	@Override
     public void init(String[] args) {
         model = new SpreadModel();
@@ -18,15 +20,48 @@ public class SpreadEnv extends Environment {
             model.setView(view);
 			//view.update();
         }
-		
-        // Agent to location
-		// get the agent location
-        Location lAgent = model.getAgPos(0);
-        while (!lAgent.equals(model.lBar)) {
-			model.moveTowards(model.lBar, 5);
-			try {
-                Thread.sleep(400);
+	
+    }
+	
+	    void updatePercepts() {
+        // clear the percepts of the agents
+        clearPercepts("young");
+
+        // get the robot location
+        Location lyoung = model.getAgPos(0);
+
+        // add agent location to its percepts
+        if (lyoung.equals(model.lBar)) {
+            addPercept("young", yab);
+        }
+    }
+	
+	@Override
+    public boolean executeAction(String ag, Structure action) {
+        System.out.println("["+ag+"] doing: "+action);
+        boolean result = false;
+        if (action.getFunctor().equals("move_towards")) {
+            String l = action.getTerm(0).toString();
+            Location dest = null;
+            if (l.equals("bar")) {
+                dest = model.lBar;
+            }
+            try {
+                result = model.moveTowards(dest,0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            //logger.info("Failed to execute action "+action);
+        }
+
+        if (result) {
+            updatePercepts();
+            try {
+                Thread.sleep(100);
             } catch (Exception e) {}
         }
+        return result;
     }
 }
