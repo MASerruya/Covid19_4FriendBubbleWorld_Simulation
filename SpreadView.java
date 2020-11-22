@@ -58,14 +58,14 @@ public class SpreadView extends GridWorldView {
 				drawString(g, x, y, defaultFont, "HOME");
 				break;
 			}		
-        //repaint();
+			//repaint();
     }
 	
 	@Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
         Location lAgent = sModel.getAgPos(id);
-        //Location lAdult = sModel.getAgPos(1);
-		
+        //Location lAdult = sModel.getAgPos(1);	
+		/*
 		if(lAgent.equals(sModel.lJob)){				
 			c = Color.yellow;
 		} else if (lAgent.equals(sModel.lJob)){
@@ -78,14 +78,44 @@ public class SpreadView extends GridWorldView {
 			c = Color.red;
 		} else {
 			c = Color.pink;
-		}
+		}*/
+		/*super.drawAgent(g, x, y, c, -1);
+		g.setColor(Color.black);*/
 		
-		
-		super.drawAgent(g, x, y, c, -1);
-		g.setColor(Color.black);
-		if(id<4){ // Caso young
+		if(id<5){ // Caso young
+			if(lAgent.equals(sModel.lJob)){				
+				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lJob)){
+				c = Color.blue;
+			} else if (lAgent.equals(sModel.lBar)){
+				c = Color.green;
+			} else if (lAgent.equals(sModel.lHospital)){
+				c = Color.green;
+			} else if (lAgent.equals(sModel.lHome)){
+				c = Color.red;
+			} else {
+				c = Color.magenta;
+			}
+			super.drawAgent(g, x, y, c, -1);
+			g.setColor(Color.black);
 			super.drawString(g, x, y, defaultFont, "Young");
+		
 		} else { // Caso adult
+			if(lAgent.equals(sModel.lJob)){				
+				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lJob)){
+				c = Color.blue;
+			} else if (lAgent.equals(sModel.lBar)){
+				c = Color.green;
+			} else if (lAgent.equals(sModel.lHospital)){
+				c = Color.green;
+			} else if (lAgent.equals(sModel.lHome)){
+				c = Color.red;
+			} else {
+				c = Color.pink;
+			}
+			super.drawAgent(g, x, y, c, -1);
+			g.setColor(Color.black);
 			super.drawString(g, x, y, defaultFont, "Adult");
 		}
 		

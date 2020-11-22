@@ -4,17 +4,29 @@ import jason.environment.grid.Location;
 import java.util.logging.Logger;
 
 public class SpreadEnv extends Environment {
-
-
-    SpreadModel model; // the model of the grid
-
+    
+	// Model of the grid
+	SpreadModel model;
+	SpreadView view;
+	
 	@Override
     public void init(String[] args) {
         model = new SpreadModel();
 
         if (args.length == 1 && args[0].equals("gui")) {
-            SpreadView view  = new SpreadView(model);
+            view  = new SpreadView(model);
             model.setView(view);
+			//view.update();
+        }
+		
+        // Agent to location
+		// get the agent location
+        Location lAgent = model.getAgPos(0);
+        while (!lAgent.equals(model.lBar)) {
+			model.moveTowards(model.lBar, 5);
+			try {
+                Thread.sleep(400);
+            } catch (Exception e) {}
         }
     }
 }

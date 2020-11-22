@@ -15,21 +15,22 @@ public class SpreadModel extends GridWorldModel {
 	
 	// Object location
 	Location lJob = new Location(4,0);
-	Location lBar = new Location(7,7);
+	Location lBar = new Location(28,7);
 	Location lHospital = new Location(22,18);
     Location lHome  = new Location(GSize-1,GSize-1);
 	
 	
 	public SpreadModel() {
         // create a GSize grid with n mobile agents
-        super(GSize, GSize, 5);
+        super(GSize, GSize, 6);
 		
-		// Agent location
+		// Agents location
 		setAgPos(0, 13, 10);
 		setAgPos(1, 3, 3);
 		setAgPos(2, 21, 21);
 		setAgPos(3, 4, 4);
 		setAgPos(4, 1, 1);
+		setAgPos(5, 0, 0);
 	
 		// initial location of the objects
         add(JOB, lJob);
@@ -37,4 +38,27 @@ public class SpreadModel extends GridWorldModel {
         add(HOSPITAL, lHospital);
         add(HOME, lHome);
     }
+	
+	
+	boolean moveTowards(Location dest, int id) {
+        Location lAgent = getAgPos(id);
+        
+		// X coord
+		if (lAgent.x < dest.x){
+			lAgent.x++;
+		}else if (lAgent.x > dest.x){
+			lAgent.x--;
+		}
+		
+		// Y coord
+        if (lAgent.y < dest.y){
+			lAgent.y++;
+        }else if (lAgent.y > dest.y){   
+			lAgent.y--;
+		}
+		
+        setAgPos(id, lAgent); // move the person in the grid
+        return true;
+    }
+	
 }
