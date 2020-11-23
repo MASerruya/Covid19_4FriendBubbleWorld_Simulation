@@ -8,7 +8,10 @@ public class SpreadModel extends GridWorldModel {
 	public static final int JOB = 16;
 	public static final int BAR = 32;
 	public static final int HOSPITAL = 64;
-	public static final int HOME = 128;
+	public static final int HOME = 128; 
+	
+	public static final int NUMBER_OF_YOUNG = 2;
+	public static final int NUMBER_OF_ADULT = 2;
 	
 	// Grid size
 	public static int GSize = 30;
@@ -23,15 +26,15 @@ public class SpreadModel extends GridWorldModel {
 	public SpreadModel() {
         // create a GSize grid with n mobile agents
         super(GSize, GSize, 6);
-		
+		                
 		// Agents location
 		setAgPos(0, 13, 10);
 		
 		setAgPos(1, 3, 3);
 		
+		setAgPos(2, 12, 10);
+		setAgPos(3, 11, 10); 
 		/*
-		setAgPos(2, 21, 21);
-		setAgPos(3, 4, 4);
 		setAgPos(4, 1, 1);
 		setAgPos(5, 0, 0);
 		*/
@@ -70,7 +73,7 @@ public class SpreadModel extends GridWorldModel {
                      
 	
 		
-		
+		   
 		// repaint the locations
         if (view != null) {                             
             view.update(lJob.x,lJob.y);
