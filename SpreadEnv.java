@@ -9,9 +9,10 @@ public class SpreadEnv extends Environment {
 	SpreadModel model;
 	SpreadView view;
 	
-	public static final Literal gtb = Literal.parseLiteral("go_to_bar(young)");
-	
-	public static final Literal yab = Literal.parseLiteral("at(young,bar)");
+	public static final Literal yab = Literal.parseLiteral("at(young,bar)"); 
+	public static final Literal yaj = Literal.parseLiteral("at(young,job)"); 
+	public static final Literal yahos = Literal.parseLiteral("at(young,hospital)");
+	public static final Literal yahom = Literal.parseLiteral("at(young,home)");   
 	
 	@Override
     public void init(String[] args) {
@@ -26,23 +27,36 @@ public class SpreadEnv extends Environment {
     }
 	
 	    void updatePercepts() {
-			// clear the percepts of the agents
+			// clear the percepts of the agents    
 			clearPercepts("young");
 	
 			// get the robot location
-			Location lyoung = model.getAgPos(0);
+			for(int i = 0; i < 2; i++){
+				String sid = Integer.toString(i+1);      
+				Location lyoung = model.getAgPos(i);
 	
-			// add agent location to its percepts
-			//if (lyoung.equals(model.lBar)) {
-			addPercept("young", yab);
-			//}
+				// add agent location to its percepts
+				if (lyoung.equals(model.lBar)) {
+					addPercept("young" + sid, yab);                          
+				}
+				else if (lyoung.equals(model.lJob)) {
+					addPercept("young" + sid, yaj);
+				}                                                    
+				else if (lyoung.equals(model.lHospital)) {
+					addPercept("young" + sid, yahos);
+				}                  
+				else if (lyoung.equals(model.lHome)) {
+					addPercept("young" + sid, yahom);
+				}                                               
+                           
+			}                                                       
 		}
 	
 	@Override
     public boolean executeAction(String ag, Structure action) {
-		
-        System.out.println("["+ag+"] doing: "+action);
-		String sid =  ag.substring(ag.length() - 1);
+		                                                                                                                                  
+        System.out.println("["+ag+"] doing: "+action); 
+		String sid =  ag.substring(ag.length() - 1);   
 		int iid =  Integer.parseInt(sid)-1;
 		
 		
@@ -55,6 +69,7 @@ public class SpreadEnv extends Environment {
             }
             try {
                 result = model.moveTowards(dest,iid);
+	
             } catch (Exception e) {
                 e.printStackTrace();
             }

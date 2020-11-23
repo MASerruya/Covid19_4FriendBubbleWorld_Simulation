@@ -64,11 +64,15 @@ public class SpreadModel extends GridWorldModel {
         setAgPos(id, lAgent); // move the person in the grid
 		
 		//UpdateGrid()
-		        // initial location of fridge and owner
-		// initial location of the objects
+		
+                                              
+
+                     
+	
+		
 		
 		// repaint the locations
-        if (view != null) {
+        if (view != null) {                             
             view.update(lJob.x,lJob.y);
             view.update(lBar.x,lBar.y);
 			view.update(lHospital.x,lHospital.y);
@@ -76,17 +80,6 @@ public class SpreadModel extends GridWorldModel {
         }
         return true;
     }
-	
-	/*boolean goToBar() {
-        if (fridgeOpen && availableBeers > 0 && !carryingBeer) {
-            availableBeers--;
-            carryingBeer = true;
-            if (view != null)
-                view.update(lFridge.x,lFridge.y);
-            return true;
-        } else {
-            return false;
-        }
-    }
-	*/
+
+
 }

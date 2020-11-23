@@ -42,7 +42,7 @@ public class SpreadView extends GridWorldView {
 				drawString(g, x, y, defaultFont, "BAR");
 				break;
 			case SpreadModel.HOSPITAL:
-				//if (lRobot.equals(hmodel.lOwner)) {
+				//if (lRobot.equals(hmodel.lOwner)) {                          
 				//    super.drawAgent(g, x, y, Color.yellow, -1);
 				//}
 				//super.drawAgent(g, x, y, Color.red, -1);
