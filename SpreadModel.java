@@ -1,6 +1,6 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
-
+                        
 /** class that implements the Model of Covid City application */
 public class SpreadModel extends GridWorldModel {
 

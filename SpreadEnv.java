@@ -98,7 +98,16 @@ public class SpreadEnv extends Environment {
             Location dest = null;
             if (l.equals("bar")) {
                 dest = model.lBar;
-            }
+            }      
+			else if (l.equals("job")) {
+               dest = model.lJob;
+           }  
+		   else if (l.equals("hospital")) {
+               dest = model.lHospital;
+           }         
+		   else if (l.equals("home")) {
+               dest = model.lHome;
+           }                                        
             try {
                 result = model.moveTowards(dest,iid);
 	
