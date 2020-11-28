@@ -32,67 +32,74 @@ public class SpreadEnv extends Environment {
 		updatePercepts();
     }
 	
-	    void updatePercepts() {
-			// clear the percepts of the agents    
-			clearPercepts("young");
 	
-			// get the robot location
-			for(int i = 0; i < model.NUMBER_OF_YOUNG; i++){
-				String sid = Integer.toString(i+1);      
-				Location lyoung = model.getAgPos(i);
-	                           
-				// add agent location to its percepts
-				if (lyoung.equals(model.lBar)) {
-					addPercept("young" + sid, yab);                          
-				}
-				else if (lyoung.equals(model.lJob)) {
-					addPercept("young" + sid, yaj);
-				}                                                    
-				else if (lyoung.equals(model.lHospital)) {
-					addPercept("young" + sid, yahos);
-				}                  
-				else if (lyoung.equals(model.lHome)) {
-					addPercept("young" + sid, yahom);
-				}                                               
-                           
-			}  
-			                
-			// get the robot location
-			for(int i = 0; i < model.NUMBER_OF_ADULT; i++){
-				String sid = Integer.toString(i+1);      
-				Location ladult = model.getAgPos(i+model.NUMBER_OF_YOUNG);  
- 
-				// add agent location to its percepts
-				if (ladult.equals(model.lBar)) {
-					addPercept("adult" + sid, aab);              
-				}
-				else if (ladult.equals(model.lJob)) {
-					addPercept("adult" + sid, aaj);
-				}                                                
-				else if (ladult.equals(model.lHospital)) {
-					addPercept("adult" + sid, aahos);
-				}                  
-				else if (ladult.equals(model.lHome)) {
-					addPercept("adult" + sid, aahom);
-				}                                                        
+	public void updatePercepts() {
+		// clear the percepts of the agents    
+		clearPercepts("young");
+		clearPercepts("adult");
+
+		// get the Young location
+		for(int i = 0; i < model.NUMBER_OF_YOUNG; i++){
+			String sid = Integer.toString(i+1);      
+			Location lyoung = model.getAgPos(i);
+						   
+			// add agent location to its percepts
+			if (lyoung.equals(model.lBar)) {
+				addPercept("young" + sid, yab);                          
+			}
+			else if (lyoung.equals(model.lJob)) {
+				addPercept("young" + sid, yaj);
 			}                                                    
-		}
+			else if (lyoung.equals(model.lHospital)) {
+				addPercept("young" + sid, yahos);
+			}                  
+			else if (lyoung.equals(model.lHome)) {
+				addPercept("young" + sid, yahom);
+			}                                               
+					   
+		}  
+			                
+		// get the Adult location
+		for(int i = 0; i < model.NUMBER_OF_ADULT; i++){
+			String sid = Integer.toString(i+1);      
+			Location ladult = model.getAgPos(i+model.NUMBER_OF_YOUNG);  
+
+			// add agent location to its percepts
+			if (ladult.equals(model.lBar)) {
+				addPercept("adult" + sid, aab);              
+			}
+			else if (ladult.equals(model.lJob)) {
+				addPercept("adult" + sid, aaj);
+			}                                                
+			else if (ladult.equals(model.lHospital)) {
+				addPercept("adult" + sid, aahos);
+			}                  
+			else if (ladult.equals(model.lHome)) {
+				addPercept("adult" + sid, aahom);
+			}                                                        
+		}                                                    
+	}
+	
+	
 	
 	@Override
     public boolean executeAction(String ag, Structure action) {
-		                                                                                                                                  
+		   
+		boolean result = false;
         System.out.println("["+ag+"] doing: "+action); 
-		String sid =  ag.substring(ag.length() - 1);    
+		
+		// Variables for getting agent id
+		//String sid =  ag.substring(ag.length() - 1);    
+		String sid;  
 		int iid;  
 		if(ag.startsWith("young")){   //Si es young, si ag es young1 el iid es 0
-			 iid =  Integer.parseInt(sid)-1;    
+			sid = ag.substring(5, ag.length()); 
+			iid =  Integer.parseInt(sid)-1;    
 		}else{                     //Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
-		     iid =  Integer.parseInt(sid)-1 + model.NUMBER_OF_YOUNG;  
-		}                                   
+		    sid = ag.substring(5, ag.length()); 
+			iid =  Integer.parseInt(sid)-1 + model.NUMBER_OF_YOUNG;  
+		}
 		
-		
-		
-        boolean result = false;
         if (action.getFunctor().equals("move_towards")) {                                                                                 
             String l = action.getTerm(0).toString();
             Location dest = null;
@@ -127,4 +134,6 @@ public class SpreadEnv extends Environment {
         }
         return result;
     }
+	
+	
 }

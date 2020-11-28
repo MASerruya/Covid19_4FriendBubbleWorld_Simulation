@@ -17,7 +17,7 @@ routine(young, 0).
 
 // Routine plan
 +!routine(young, 7)
-	: routine(young, 2) 
+	: routine(young, 0) 
 	<-  !at(young, home); 
 		!at(young, job); 
 		!at(young, bar).
