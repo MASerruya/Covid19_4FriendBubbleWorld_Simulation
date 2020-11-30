@@ -1,8 +1,0 @@
-/* Jason Project
-*/
-
-MAS covid_city{
-	infrastructure: Centralised
-	environment: SpreadEnv(gui)
-	agents: young #2; adult #2;       
-}
