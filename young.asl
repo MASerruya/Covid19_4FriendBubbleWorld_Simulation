@@ -29,7 +29,7 @@
 	<- !at(young,job);
 		!at(young,home).
 		
-
++!live : changed_day() <- !live.
 
 +!live : is_day(WEEKEND) <- !at(young,bar).
 

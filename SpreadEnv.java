@@ -36,7 +36,8 @@ public class SpreadEnv extends Environment {
 	
 	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
 	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)");  
-	public static final Literal dmonday = Literal.parseLiteral("is_day(MONDAY)"); 
+	
+	public static final Literal dmonday = Literal.parseLiteral("changed_day()"); 
 	
 	
 	@Override
@@ -165,12 +166,9 @@ public class SpreadEnv extends Environment {
                 e.printStackTrace();
             }
 
-        } else if (action.getFunctor().equals("is_day")) { 
-            //logger.info("Failed to execute action "+action);
-
-        }
+        } 
 	else {
-		System.out.println("Hola"); 
+		//What to do if action is not defined
 
 	}
 
