@@ -1,5 +1,6 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
+import java.time.LocalDateTime;
                         
 /** class that implements the Model of Covid City application */
 public class SpreadModel extends GridWorldModel {
@@ -9,6 +10,19 @@ public class SpreadModel extends GridWorldModel {
 	public static final int BAR = 32;
 	public static final int HOSPITAL = 64;
 	public static final int HOME = 128; 
+	// Week days
+	public static final int L = 0;
+	public static final int M = 1;
+	public static final int X = 2;
+	public static final int J = 3;
+	public static final int V = 4;
+	public static final int S = 5;
+	public static final int D = 6;
+	// Cases to check if it is someday between L & V or between S & D.
+	public static final int WEEK 	= 7;
+	public static final int WEEKEND = 8;
+	// A day in the system is turned into 30 seconds.
+	public static final int DAY	= 30;
 	
 	public static final int NUMBER_OF_YOUNG = 2;
 	public static final int NUMBER_OF_ADULT = 2;
@@ -84,5 +98,28 @@ public class SpreadModel extends GridWorldModel {
         return true;
     }
 
+
+	boolean isDay(int day)
+	{
+		LocalDateTime now = LocalDateTime.now();
+		//Get the current number of seconds consumed of the current hour.
+		int seconds = now.getMinute() * 60 + now.getSecond();
+		//Get the actual date within the system.
+		int current_day = (seconds / DAY) % 7;
+
+		//Check if the current day is a week day.
+		if (day == WEEK)
+		{
+			return ((day >= L) && (day <= V));
+		}
+		//Check if the current day is a weekend day.
+		else if (day == WEEKEND)
+		{
+			return ((day == S) || (day == D));
+		}
+
+		//Check if we are in some day of the week.
+		return (day == current_day);
+	}
 
 }

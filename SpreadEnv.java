@@ -104,8 +104,8 @@ public class SpreadEnv extends Environment {
             Location dest = null;
             if (l.equals("bar")) {
                 dest = model.lBar;
-            }      
-			else if (l.equals("job")) {
+            }
+		else if (l.equals("job")) {
                dest = model.lJob;
            }  
 		   else if (l.equals("hospital")) {
@@ -121,9 +121,29 @@ public class SpreadEnv extends Environment {
                 e.printStackTrace();
             }
 
-        } else {
+        } else if (action.getFunctor().equals("is_day")) {                                                                                 
             //logger.info("Failed to execute action "+action);
+            String l = action.getTerm(0).toString();
+	    int day = 0;
+		if (l.equals("L")) {day = 0;}
+		else if (l.equals("M")){day = 1;}
+		else if (l.equals("X")){day = 2;}
+		else if (l.equals("J")){day = 3;}
+		else if (l.equals("V")){day = 4;}
+		else if (l.equals("S")){day = 5;}
+		else if (l.equals("D")){day = 6;}
+		else if (l.equals("WEEK")){day = 7;}
+		else if (l.equals("WEEKEND")){day = 8;} 
+            try {
+                result = model.isDay(day);
+	
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+	else {
+
+	}
 
         if (result) {
             updatePercepts();
