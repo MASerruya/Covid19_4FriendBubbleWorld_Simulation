@@ -110,12 +110,12 @@ public class SpreadModel extends GridWorldModel {
 		//Check if the current day is a week day.
 		if (day == WEEK)
 		{
-			return ((day >= L) && (day <= V));
+			return ((current_day >= L) && (current_day <= V));
 		}
 		//Check if the current day is a weekend day.
 		else if (day == WEEKEND)
 		{
-			return ((day == S) || (day == D));
+			return ((current_day == S) || (current_day == D));
 		}
 
 		//Check if we are in some day of the week.

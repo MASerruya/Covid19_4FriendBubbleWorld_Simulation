@@ -25,7 +25,7 @@
 !live.
 
 //Plan to live depending on the week day.
-+!live : true <- !at(young,job).
++!live : is_day(WEEK) <- !at(young,job).
 +!live : is_day(WEEKEND) <- !at(young,bar).
 
 //Plan to move.
