@@ -2,12 +2,27 @@ import jason.asSyntax.*;
 import jason.environment.Environment;
 import jason.environment.grid.Location;
 import java.util.logging.Logger;
+import java.time.LocalDateTime;
 
 public class SpreadEnv extends Environment {
     
 	// Model of the grid
 	SpreadModel model;
 	SpreadView view;
+	
+	// Week days
+	public static final int L = 0;
+	public static final int M = 1;
+	public static final int X = 2;
+	public static final int J = 3;
+	public static final int V = 4;
+	public static final int S = 5;
+	public static final int D = 6;
+	// Cases to check if it is someday between L & V or between S & D.
+	public static final int WEEK 	= 7;
+	public static final int WEEKEND = 8;
+	// A day in the system is turned into 30 seconds.
+	public static final int DAY	= 30;
 	 
 	public static final Literal yab = Literal.parseLiteral("at(young,bar)"); 
 	public static final Literal yaj = Literal.parseLiteral("at(young,job)"); 
@@ -17,7 +32,11 @@ public class SpreadEnv extends Environment {
 	public static final Literal aab = Literal.parseLiteral("at(adult,bar)"); 
 	public static final Literal aaj = Literal.parseLiteral("at(adult,job)"); 
 	public static final Literal aahos = Literal.parseLiteral("at(adult,hospital)");     
-	public static final Literal aahom = Literal.parseLiteral("at(adult,home)");         
+	public static final Literal aahom = Literal.parseLiteral("at(adult,home)"); 
+	
+	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
+	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)");  
+	public static final Literal dmonday = Literal.parseLiteral("is_day(MONDAY)"); 
 	
 	
 	@Override
@@ -55,7 +74,7 @@ public class SpreadEnv extends Environment {
 			}                  
 			else if (lyoung.equals(model.lHome)) {
 				addPercept("young" + sid, yahom);
-			}                                               
+			}    
 					   
 		}  
 			                
@@ -77,9 +96,34 @@ public class SpreadEnv extends Environment {
 			else if (ladult.equals(model.lHome)) {
 				addPercept("adult" + sid, aahom);
 			}                                                        
-		}                                                    
+		}
+		boolean week = this.isWeekDay();
+		if (week){ 
+			addPercept(dweek);
+		}   else{
+			addPercept(dweekend);
+		}
 	}
 	
+	public boolean isWeekDay()
+	{
+		LocalDateTime now = LocalDateTime.now();
+		//Get the current number of seconds consumed of the current hour.
+		int seconds = now.getMinute() * 60 + now.getSecond();
+		//Get the actual date within the system.
+		int current_day = (seconds / DAY) % 7;
+
+		//Check if the current day is a week day.
+		if (current_day == WEEK)
+		{
+			return true;
+		}
+		//Check if the current day is a weekend day.
+		else
+		{
+			return false;
+		}
+	}
 	
 	@Override
     public boolean executeAction(String ag, Structure action) {
@@ -121,27 +165,12 @@ public class SpreadEnv extends Environment {
                 e.printStackTrace();
             }
 
-        } else if (action.getFunctor().equals("is_day")) {                                                                                 
+        } else if (action.getFunctor().equals("is_day")) { 
             //logger.info("Failed to execute action "+action);
-            String l = action.getTerm(0).toString();
-	    int day = 0;
-		if (l.equals("L")) {day = 0;}
-		else if (l.equals("M")){day = 1;}
-		else if (l.equals("X")){day = 2;}
-		else if (l.equals("J")){day = 3;}
-		else if (l.equals("V")){day = 4;}
-		else if (l.equals("S")){day = 5;}
-		else if (l.equals("D")){day = 6;}
-		else if (l.equals("WEEK")){day = 7;}
-		else if (l.equals("WEEKEND")){day = 8;} 
-            try {
-                result = model.isDay(day);
-	
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
 	else {
+		System.out.println("Hola"); 
 
 	}
 

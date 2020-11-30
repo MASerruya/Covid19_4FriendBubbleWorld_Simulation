@@ -99,27 +99,6 @@ public class SpreadModel extends GridWorldModel {
     }
 
 
-	boolean isDay(int day)
-	{
-		LocalDateTime now = LocalDateTime.now();
-		//Get the current number of seconds consumed of the current hour.
-		int seconds = now.getMinute() * 60 + now.getSecond();
-		//Get the actual date within the system.
-		int current_day = (seconds / DAY) % 7;
 
-		//Check if the current day is a week day.
-		if (day == WEEK)
-		{
-			return ((current_day >= L) && (current_day <= V));
-		}
-		//Check if the current day is a weekend day.
-		else if (day == WEEKEND)
-		{
-			return ((current_day == S) || (current_day == D));
-		}
-
-		//Check if we are in some day of the week.
-		return (day == current_day);
-	}
 
 }
