@@ -37,7 +37,6 @@ public class SpreadEnv extends Environment {
 	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
 	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)");  
 	
-	public static final Literal dmonday = Literal.parseLiteral("changed_day()"); 
 	
 	
 	@Override
@@ -106,6 +105,10 @@ public class SpreadEnv extends Environment {
 		}
 	}
 	
+	public void calendars(){                 
+		
+	}
+	                         
 	public boolean isWeekDay()
 	{
 		LocalDateTime now = LocalDateTime.now();
@@ -165,7 +168,7 @@ public class SpreadEnv extends Environment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+                                                                                                                                     
         } 
 	else {
 		//What to do if action is not defined
