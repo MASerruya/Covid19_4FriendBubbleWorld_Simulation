@@ -81,12 +81,6 @@ public class SpreadModel extends GridWorldModel {
         setAgPos(id, lAgent); // move the person in the grid
 		
 		//UpdateGrid()
-		
-                                              
-
-                     
-	
-		
 		   
 		// repaint the locations
         if (view != null) {                             

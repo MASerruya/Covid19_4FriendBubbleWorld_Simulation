@@ -26,14 +26,17 @@
                                                                                                                                   
 //Plan to live depending on the week day.
 +!live : is_day(WEEK) 
-	<- !at(young,job);
+	<- .print("live: WEEKDAY -- Agent located at: " );!at(young,job);
 		!at(young,home).
 	                                                           
                                                                                                                                     
-+!live : is_day(WEEKEND) <- !at(young,bar).
++!live : is_day(WEEKEND) <- .print("live: WEEKEND");!at(young,bar).
 
 //Plan to move.
-+!at(young,P) : at(young,P) <- true.
++!at(young,P) : at(young,P) <- .print("MOV TO: ", P, " Already at point!").//true.
 +!at(young,P) : not at(young,P)
-  <- move_towards(P);
+  <- .print("MOV TO: ", P); move_towards(P);
      !at(young,P).
+
+//New day
++new_day : true <- .print("NEWDAY!"); !live.

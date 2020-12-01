@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
+//DEBUG
+import java.util.*;
 
 
 public class SpreadEnv extends Environment {
@@ -54,14 +56,18 @@ public class SpreadEnv extends Environment {
 	/****************** ENV. METHODS ********************/
 	
 	/* Task to execute each day elapsed. Adds the newday perception */
-    //TODO: Create and manage newday belief for all agents.
     private Runnable dayelapsed = () -> {
 
-    	//Iterate all intial project agents adding newday belief
-    	for (AgentParameters agent : project.getAgents()) addPercept(agent.name, newday);
+    	//Add newday perception for all agents
+    	addPercept(newday);
 
     	//Debug log code, decide if remove in final version.
     	System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
+
+    	//DEBUG -- Print all percepts at this time
+    	Collection<Literal> allperc = consultPercepts("young1");
+    	System.out.println("PERCEPS FROM YOUNG1 " + " " + allperc);
+    	
     };
 	
 	@Override
@@ -90,16 +96,18 @@ public class SpreadEnv extends Environment {
 		/* Creating a executor sevice to schedule a task that adds the newday belief each 'DAY' seconds elapsed */
 
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-		//Schedule, dayelapsed->task to run, delay 0 to first execution, schedule each DAY seconds
-        executorService.scheduleWithFixedDelay(dayelapsed, 0, DAY, TimeUnit.SECONDS);
+		//Schedule, dayelapsed->task to run, delay DAY to first execution, schedule each DAY seconds
+        executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
     }
 
 	
 	
 	public void updatePercepts() {
 		// clear the percepts of the agents    
-		clearPercepts("young");
-		clearPercepts("adult");
+		clearAllPercepts();
+		//clearPercepts("adult");
+		//DEBUG
+		System.out.println("Removed all percepts!");
 
 		// get the Young location
 		for(int i = 0; i < model.NUMBER_OF_YOUNG; i++){
@@ -108,16 +116,20 @@ public class SpreadEnv extends Environment {
 						   
 			// add agent location to its percepts
 			if (lyoung.equals(model.lBar)) {
-				addPercept("young" + sid, yab);                          
+				addPercept("young" + sid, yab);
+				System.out.println("Added lbar percept!");                          
 			}
 			else if (lyoung.equals(model.lJob)) {
 				addPercept("young" + sid, yaj);
+				System.out.println("Added ljob percept!");
 			}                                                    
 			else if (lyoung.equals(model.lHospital)) {
 				addPercept("young" + sid, yahos);
+				System.out.println("Added lhosp percept!");
 			}                  
 			else if (lyoung.equals(model.lHome)) {
 				addPercept("young" + sid, yahom);
+				System.out.println("Added lhome percept!");
 			}    
 					   
 		}  
@@ -141,6 +153,7 @@ public class SpreadEnv extends Environment {
 				addPercept("adult" + sid, aahom);
 			}                                                        
 		}
+
 		boolean week = this.isWeekDay();
 		if (week){ 
 			addPercept(dweek);
@@ -175,6 +188,10 @@ public class SpreadEnv extends Environment {
 	
 	@Override
     public boolean executeAction(String ag, Structure action) {
+
+    	//DEBUG -- Prior to action, percepts
+    	Collection<Literal> allpercb = consultPercepts(ag);
+		System.out.println("PERCEPS FROM BEFORE " + ag + " " + allpercb);
 		   
 		boolean result = false;
         System.out.println("["+ag+"] doing: "+action); 
@@ -225,6 +242,11 @@ public class SpreadEnv extends Environment {
                 Thread.sleep(100);
             } catch (Exception e) {}
         }
+
+        //DEBUG -- After action, percepts
+    	allpercb = consultPercepts(ag);
+		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
+
         return result;
     }
 	
