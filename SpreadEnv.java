@@ -1,11 +1,21 @@
 import jason.asSyntax.*;
 import jason.environment.Environment;
 import jason.environment.grid.Location;
+import jason.mas2j.*;
 import java.util.logging.Logger;
 import java.time.LocalDateTime;
 
+/*	Imports for periodical task schedulling */
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.io.*;
+
+
 public class SpreadEnv extends Environment {
     
+    /****************** CONSTANTS ********************/
+
 	// Model of the grid
 	SpreadModel model;
 	SpreadView view;
@@ -35,21 +45,55 @@ public class SpreadEnv extends Environment {
 	public static final Literal aahom = Literal.parseLiteral("at(adult,home)"); 
 	
 	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
-	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)");  
+	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)"); 
+	public static final Literal newday = Literal.parseLiteral("new_day"); 
+
+	private static MAS2JProject project;
+
+
+	/****************** ENV. METHODS ********************/
 	
-	
+	/* Task to execute each day elapsed. Adds the newday perception */
+    //TODO: Create and manage newday belief for all agents.
+    private Runnable dayelapsed = () -> {
+
+    	//Iterate all intial project agents adding newday belief
+    	for (AgentParameters agent : project.getAgents()) addPercept(agent.name, newday);
+
+    	//Debug log code, decide if remove in final version.
+    	System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
+    };
 	
 	@Override
     public void init(String[] args) {
         model = new SpreadModel();
 
-        if (args.length == 1 && args[0].equals("gui")) {
+        if (args.length == 2 && args[0].equals("gui")) {
             view  = new SpreadView(model);
             model.setView(view);
+
+            //Store initial parsed projects (to get a list of all initial agents)
+            try{
+            	jason.mas2j.parser.mas2j parser = new jason.mas2j.parser.mas2j(new FileInputStream(args[1]));
+            	project = parser.mas();
+            }
+            catch (Exception e){
+            	//Catch exceptions in project initialization
+            	e.printStackTrace();
+            }
+            
+
         }
 
 		updatePercepts();
+
+		/* Creating a executor sevice to schedule a task that adds the newday belief each 'DAY' seconds elapsed */
+
+		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+		//Schedule, dayelapsed->task to run, delay 0 to first execution, schedule each DAY seconds
+        executorService.scheduleWithFixedDelay(dayelapsed, 0, DAY, TimeUnit.SECONDS);
     }
+
 	
 	
 	public void updatePercepts() {
