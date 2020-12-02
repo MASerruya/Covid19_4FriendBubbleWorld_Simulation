@@ -35,7 +35,10 @@ public class SpreadEnv extends Environment {
 	public static final int WEEKEND = 8;
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY	= 30;
+
+	/******** LITERALS ************************/
 	 
+	 //Location
 	public static final Literal yab = Literal.parseLiteral("at(young,bar)"); 
 	public static final Literal yaj = Literal.parseLiteral("at(young,job)"); 
 	public static final Literal yahos = Literal.parseLiteral("at(young,hospital)");        
@@ -45,12 +48,25 @@ public class SpreadEnv extends Environment {
 	public static final Literal aaj = Literal.parseLiteral("at(adult,job)"); 
 	public static final Literal aahos = Literal.parseLiteral("at(adult,hospital)");     
 	public static final Literal aahom = Literal.parseLiteral("at(adult,home)"); 
+
+	//Weekdays and time
 	
 	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
 	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)"); 
 	public static final Literal newday = Literal.parseLiteral("new_day"); 
 
+	public static final Literal lu = Literal.parseLiteral("is_wday(LUN)");
+	public static final Literal ma = Literal.parseLiteral("is_wday(MAR)");
+	public static final Literal mi = Literal.parseLiteral("is_wday(MIER)");
+	public static final Literal ju = Literal.parseLiteral("is_wday(JUE)");
+	public static final Literal vi = Literal.parseLiteral("is_wday(VIE)");
+	public static final Literal sa = Literal.parseLiteral("is_wday(SAB)");
+	public static final Literal dom = Literal.parseLiteral("is_wday(DOM)");
+
 	private static MAS2JProject project;
+
+	//Internal variable to keep track of the current day
+	private int curr_day;
 
 
 	/****************** ENV. METHODS ********************/
@@ -60,6 +76,15 @@ public class SpreadEnv extends Environment {
 
     	//Add newday perception for all agents
     	addPercept(newday);
+
+    	//Update the internal day
+    	curr_day = (curr_day + 1) % 7;
+    	addPercept(get_weeklit(curr_day));
+
+    	//Update week/weekend percept
+    	if(curr_day < S) addPercept(dweek);
+    	else addPercept(dweekend);
+
 
     	//Debug log code, decide if remove in final version.
     	System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
@@ -92,6 +117,12 @@ public class SpreadEnv extends Environment {
         }
 
 		updatePercepts();
+
+		//Set initial day to monday
+		curr_day = V;
+		addPercept(vi);
+		addPercept(dweek);
+
 
 		/* Creating a executor sevice to schedule a task that adds the newday belief each 'DAY' seconds elapsed */
 
@@ -154,12 +185,15 @@ public class SpreadEnv extends Environment {
 			}                                                        
 		}
 
-		boolean week = this.isWeekDay();
+
+		//Now this is managed by the newday routine
+		//TODO: This function has removed the current day perception, needed?????
+		/*boolean week = this.isWeekDay();
 		if (week){ 
 			addPercept(dweek);
 		}   else{
 			addPercept(dweekend);
-		}
+		}*/
 	}
 	
 	public void calendars(){                 
@@ -248,6 +282,29 @@ public class SpreadEnv extends Environment {
 		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
 
         return result;
+    }
+
+
+    /** 	Auxiliar function to translate numbers into weeday literals 	**/
+
+    private Literal get_weeklit(int wday){
+
+    	//Translate number to literal
+    	switch(wday){
+    		case L:	return lu;
+    		case M: return ma;
+    		case X: return mi;
+    		case J: return ju;
+    		case V: return vi;
+    		case S: return sa;
+    		case D: return dom;
+    	}
+
+    	//For other number error
+    	System.out.println("[ERROR] Invalid weeday internal record.");
+    	System.exit(-1);
+
+    	return Literal.parseLiteral("");
     }
 	
 	
