@@ -51,8 +51,8 @@ public class SpreadEnv extends Environment {
 
 	//Weekdays and time
 	
-	public static final Literal dweek = Literal.parseLiteral("is_day(WEEK)");  
-	public static final Literal dweekend = Literal.parseLiteral("is_day(WEEKEND)"); 
+	public static final Literal dweek = Literal.parseLiteral("is_week");  
+	public static final Literal dweekend = Literal.parseLiteral("is_weekend"); 
 	public static final Literal newday = Literal.parseLiteral("new_day"); 
 
 	public static final Literal lu = Literal.parseLiteral("is_wday(LUN)");
@@ -62,6 +62,8 @@ public class SpreadEnv extends Environment {
 	public static final Literal vi = Literal.parseLiteral("is_wday(VIE)");
 	public static final Literal sa = Literal.parseLiteral("is_wday(SAB)");
 	public static final Literal dom = Literal.parseLiteral("is_wday(DOM)");
+	
+	public static final Literal inf = Literal.parseLiteral("is_infected");
 
 	private static MAS2JProject project;
 
@@ -73,17 +75,14 @@ public class SpreadEnv extends Environment {
 	
 	/* Task to execute each day elapsed. Adds the newday perception */
     private Runnable dayelapsed = () -> {
-
+		clearAllPercepts();
     	//Add newday perception for all agents
-    	addPercept(newday);
+		
+		curr_day = (curr_day + 1) % 7;
+    	updatePercepts();
+		addPercept(newday);
 
-    	//Update the internal day
-    	curr_day = (curr_day + 1) % 7;
-    	addPercept(get_weeklit(curr_day));
-
-    	//Update week/weekend percept
-    	if(curr_day < S) addPercept(dweek);
-    	else addPercept(dweekend);
+		
 
 
     	//Debug log code, decide if remove in final version.
@@ -139,6 +138,16 @@ public class SpreadEnv extends Environment {
 		//clearPercepts("adult");
 		//DEBUG
 		System.out.println("Removed all percepts!");
+		
+		addPercept(get_weeklit(curr_day));
+			
+		if(curr_day < S){
+			addPercept(dweek);
+		}
+		else {
+			System.out.println("WEEKEEEEEEEEEEEEEEEEEEEND");
+			addPercept(dweekend); 
+		}
 
 		// get the Young location
 		for(int i = 0; i < model.NUMBER_OF_YOUNG; i++){
@@ -161,7 +170,7 @@ public class SpreadEnv extends Environment {
 			else if (lyoung.equals(model.lHome)) {
 				addPercept("young" + sid, yahom);
 				System.out.println("Added lhome percept!");
-			}    
+			} 
 					   
 		}  
 			                
@@ -186,40 +195,9 @@ public class SpreadEnv extends Environment {
 		}
 
 
-		//Now this is managed by the newday routine
-		//TODO: This function has removed the current day perception, needed?????
-		/*boolean week = this.isWeekDay();
-		if (week){ 
-			addPercept(dweek);
-		}   else{
-			addPercept(dweekend);
-		}*/
 	}
-	
-	public void calendars(){                 
-		
-	}
-	                         
-	public boolean isWeekDay()
-	{
-		LocalDateTime now = LocalDateTime.now();
-		//Get the current number of seconds consumed of the current hour.
-		int seconds = now.getMinute() * 60 + now.getSecond();
-		//Get the actual date within the system.
-		int current_day = (seconds / DAY) % 7;
 
-		//Check if the current day is a week day.
-		if (current_day == WEEK)
-		{
-			return true;
-		}
-		//Check if the current day is a weekend day.
-		else
-		{
-			return false;
-		}
-	}
-	
+
 	@Override
     public boolean executeAction(String ag, Structure action) {
 

@@ -25,15 +25,22 @@
 !live.
                                                                                                                                   
 //Plan to live depending on the week day.
-+!live : is_day(WEEK) 
+
+
++!live: is_infected 	 
+	<- .print("live: INFECTED");!at(young,hospital); !at(young,home).
+                                                                                                                                    
++!live : is_weekend
+	<- .print("live: WEEKEND");!at(young,bar); !at(young,home).
+
+
+
++!live : is_week
 	<- .print("live: WEEKDAY -- Agent located at: " );!at(young,job);
 		!at(young,home).
-	                                                           
-                                                                                                                                    
-+!live : is_day(WEEKEND) <- .print("live: WEEKEND");!at(young,bar).
 
 //Plan to move.
-+!at(young,P) : at(young,P) <- .print("MOV TO: ", P, " Already at point!").//true.
++!at(young,P) : at(young,P) <- true.//true.
 +!at(young,P) : not at(young,P)
   <- .print("MOV TO: ", P); move_towards(P);
      !at(young,P).
