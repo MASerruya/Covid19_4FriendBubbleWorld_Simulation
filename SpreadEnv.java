@@ -53,7 +53,7 @@ public class SpreadEnv extends Environment {
 	
 	public static final Literal dweek = Literal.parseLiteral("is_week");  
 	public static final Literal dweekend = Literal.parseLiteral("is_weekend"); 
-	public static final Literal newday = Literal.parseLiteral("new_day"); 
+	public static final Literal newday = Literal.parseLiteral("new_day(young)"); 
 
 	public static final Literal lu = Literal.parseLiteral("is_wday(LUN)");
 	public static final Literal ma = Literal.parseLiteral("is_wday(MAR)");
@@ -63,7 +63,7 @@ public class SpreadEnv extends Environment {
 	public static final Literal sa = Literal.parseLiteral("is_wday(SAB)");
 	public static final Literal dom = Literal.parseLiteral("is_wday(DOM)");
 	
-	public static final Literal inf = Literal.parseLiteral("is_infected");
+	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
 
 	private static MAS2JProject project;
 
@@ -80,8 +80,12 @@ public class SpreadEnv extends Environment {
 		
 		curr_day = (curr_day + 1) % 7;
     	updatePercepts();
-		addPercept(newday);
-
+		addPercept("young1",newday); 
+		addPercept("young2",newday);
+		
+		try {
+          Thread.sleep(100);
+        } catch (Exception e) {}        
 		
 
 
@@ -130,7 +134,52 @@ public class SpreadEnv extends Environment {
         executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
     }
 
-	
+	public void updatePercepts(String ag, String sid, int iid){        
+		       		// clear the percepts of the agents    
+		clearPercepts(ag);
+		//clearPercepts("adult");
+		//DEBUG
+		System.out.println("Removed percepts: " + ag);    
+		                         
+		addPercept(get_weeklit(curr_day));  
+		
+		Location lagent = model.getAgPos(iid);  
+
+        if (ag.startsWith("young")) {
+						// add agent location to its percepts
+			if (lagent.equals(model.lBar)) {
+				addPercept("young" + sid, yab);
+				System.out.println("Added lbar percept!");           
+			}
+			else if (lagent.equals(model.lJob)) {
+				addPercept("young" + sid, yaj);
+				System.out.println("Added ljob percept!");
+			}                                                    
+			else if (lagent.equals(model.lHospital)) {
+				addPercept("young" + sid, yahos);
+				System.out.println("Added lhosp percept!");
+			}                  
+			else if (lagent.equals(model.lHome)) {
+				addPercept("young" + sid, yahom);
+				System.out.println("Added lhome percept!");
+			} 
+		}else if (ag.startsWith("adult")){
+          			// add agent location to its percepts
+			if (lagent.equals(model.lBar)) {
+				addPercept("adult" + sid, aab);              
+			}
+			else if (lagent.equals(model.lJob)) {
+				addPercept("adult" + sid, aaj);
+			}                                                
+			else if (lagent.equals(model.lHospital)) {
+				addPercept("adult" + sid, aahos);
+			}                  
+			else if (lagent.equals(model.lHome)) {
+				addPercept("adult" + sid, aahom);
+			}                                                  
+		}
+
+	}
 	
 	public void updatePercepts() {
 		// clear the percepts of the agents    
@@ -152,7 +201,10 @@ public class SpreadEnv extends Environment {
 		// get the Young location
 		for(int i = 0; i < model.NUMBER_OF_YOUNG; i++){
 			String sid = Integer.toString(i+1);      
-			Location lyoung = model.getAgPos(i);
+			Location lyoung = model.getAgPos(i);  
+			if(i == 0){       
+				addPercept("young" + sid, yinf);
+			}
 						   
 			// add agent location to its percepts
 			if (lyoung.equals(model.lBar)) {
@@ -192,11 +244,9 @@ public class SpreadEnv extends Environment {
 			else if (ladult.equals(model.lHome)) {
 				addPercept("adult" + sid, aahom);
 			}                                                        
-		}
-
-
-	}
-
+		}                                                            
+	}                                                                               
+           
 
 	@Override
     public boolean executeAction(String ag, Structure action) {
@@ -204,21 +254,21 @@ public class SpreadEnv extends Environment {
     	//DEBUG -- Prior to action, percepts
     	Collection<Literal> allpercb = consultPercepts(ag);
 		System.out.println("PERCEPS FROM BEFORE " + ag + " " + allpercb);
-		   
+		      
 		boolean result = false;
         System.out.println("["+ag+"] doing: "+action); 
 		
 		// Variables for getting agent id
 		//String sid =  ag.substring(ag.length() - 1);    
-		String sid;  
-		int iid;  
+		String sid;                                                                                                                     
+		int iid;                                       
 		if(ag.startsWith("young")){   //Si es young, si ag es young1 el iid es 0
-			sid = ag.substring(5, ag.length()); 
-			iid =  Integer.parseInt(sid)-1;    
+			sid = ag.substring(5, ag.length());             
+			iid =  Integer.parseInt(sid)-1;         
 		}else{                     //Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
 		    sid = ag.substring(5, ag.length()); 
-			iid =  Integer.parseInt(sid)-1 + model.NUMBER_OF_YOUNG;  
-		}
+			iid =  Integer.parseInt(sid)-1 + model.NUMBER_OF_YOUNG;       
+		}                                            
 		
         if (action.getFunctor().equals("move_towards")) {                                                                                 
             String l = action.getTerm(0).toString();
@@ -249,10 +299,10 @@ public class SpreadEnv extends Environment {
 	}
 
         if (result) {
-            updatePercepts();
-            try {
+            updatePercepts(ag, sid, iid);       
+            try {                                                                                                                 
                 Thread.sleep(100);
-            } catch (Exception e) {}
+            } catch (Exception e) {}     
         }
 
         //DEBUG -- After action, percepts

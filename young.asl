@@ -27,7 +27,7 @@
 //Plan to live depending on the week day.
 
 
-+!live: is_infected 	 
++!live: is_infected(young)	 
 	<- .print("live: INFECTED");!at(young,hospital); !at(young,home).
                                                                                                                                     
 +!live : is_weekend
@@ -46,4 +46,4 @@
      !at(young,P).
 
 //New day
-+new_day : true <- .print("NEWDAY!"); !live.
++new_day(young) : true <- .print("NEWDAY!"); !live.
