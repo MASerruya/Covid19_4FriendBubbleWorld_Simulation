@@ -32,7 +32,7 @@ public class SpreadModel extends GridWorldModel {
 	
 	// Object location
 	Location lJob = new Location(4,0);
-	Location lBar = new Location(28,7);
+	Location lBar = new Location(22,7);
 	Location lHospital = new Location(22,18);
     Location lHome  = new Location(GSize-1,GSize-1);
 	
@@ -63,19 +63,35 @@ public class SpreadModel extends GridWorldModel {
 	
 	boolean moveTowards(Location dest, int id) {
         Location lAgent = getAgPos(id);
-        
-		// X coord
-		if (lAgent.x < dest.x){
+		
+                   
+ 		// Just moves in X coord 
+		if (lAgent.x < dest.x && lAgent.y == dest.y){
 			lAgent.x++;
-		}else if (lAgent.x > dest.x){
+		}else if (lAgent.x > dest.x && lAgent.y == dest.y){
 			lAgent.x--;
 		}
-		
-		// Y coord
-        if (lAgent.y < dest.y){
+		// Just moves in Y coord
+        else if (lAgent.y < dest.y && lAgent.x == dest.x){
 			lAgent.y++;
-        }else if (lAgent.y > dest.y){   
+        }else if (lAgent.y > dest.y  && lAgent.x == dest.x){   
 			lAgent.y--;
+		}else{                                                           
+			int randomNum = (int) ((Math.random()*3 + id) ) %3;
+			if(randomNum==0 || randomNum==2){ 
+				if (lAgent.y < dest.y){  
+					lAgent.y++;                      
+				}else{  
+					lAgent.y--;
+				}                             
+			}
+			if(randomNum==1 || randomNum==2){ 
+				if (lAgent.x < dest.x){  
+					lAgent.x++;                                     
+				}else{  
+					lAgent.x--;
+				}                             
+			}       
 		}
 		
         setAgPos(id, lAgent); // move the person in the grid
