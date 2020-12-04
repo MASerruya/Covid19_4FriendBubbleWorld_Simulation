@@ -80,6 +80,8 @@ public class SpreadEnv extends Environment {
 		
 		curr_day = (curr_day + 1) % 7;
     	updatePercepts();
+		
+		/*has to be done for all agents*/
 		addPercept("young1",newday); 
 		addPercept("young2",newday);
 		
