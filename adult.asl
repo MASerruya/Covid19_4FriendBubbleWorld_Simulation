@@ -1,11 +1,11 @@
 !live.
                                                                                                                                   
 //Plan to live depending on the week day.
-/*
+
 +!live: is_infected(adult)	 
 	<- .print("live: ADULT INFECTED");
 	!at(adult,hospital);
-	!at(adult,home).*/
+	!at(adult,home).
 /*    
 +!live : is_wday(DOM)
 	<- .print("live: *********************SUNDAY");

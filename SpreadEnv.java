@@ -140,6 +140,11 @@ public class SpreadEnv extends Environment {
 		// Update the percepts to all the agents
 		updatePercepts();
 
+		// Infect the patients 0
+		//addPercept("young1", yinf);
+		String[] infectedAtBegining = {"young1", "adult2"};
+		infectAtBegining(infectedAtBegining);
+		
 		// Creating a executor sevice to schedule a task that adds the newday belief
 		// each 'DAY' seconds elapsed
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -249,9 +254,9 @@ public class SpreadEnv extends Environment {
 		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
 			String sid = Integer.toString(i + 1);
 			Location lyoung = model.getAgPos(i);
-			if (i == 0) {
+			/*if (i == 0) {
 				addPercept("young" + sid, yinf);
-			}
+			}*/
 
 			// add agent location to its percepts
 			if (lyoung.equals(model.lBar)) {
@@ -412,5 +417,29 @@ public class SpreadEnv extends Environment {
 
 		return Literal.parseLiteral("");
 	}
+	
+	/**
+	 * Function to define which agents are infected at the begining
+	 * 
+	 * @param ag agents to be infected
+	 */
+	private void infectAtBegining(String[] ags) {
+		
+		// Verify not empty array
+		if(ags.length>0) {
+			
+			for (int k = 0; k< ags.length; k++) {
+				
+				if(ags[k].startsWith("young")) { // Young case
+					addPercept(ags[k], yinf);
+				
+				} else if (ags[k].startsWith("adult")) { // Adult case
+					addPercept(ags[k], ainf);
+				}
+			}
+		}
+	}
+	
+	
 
 }
