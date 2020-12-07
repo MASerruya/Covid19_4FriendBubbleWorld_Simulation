@@ -72,6 +72,12 @@ public class SpreadEnv extends Environment {
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
 	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
 
+	// Responsability
+	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
+	public static final Literal resp2 = Literal.parseLiteral("is_medium_responsible");
+	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
+	public static final Literal[] respArray = { resp1, resp2, resp3 };
+
 	private static MAS2JProject project;
 
 	// Internal variable to keep track of the current day
@@ -140,11 +146,16 @@ public class SpreadEnv extends Environment {
 		// Update the percepts to all the agents
 		updatePercepts();
 
+		// Set the responsability degree to agents
+		// TODO: get agentlist dinamically
+		String[] allAgents = { "young1", "young2", "adult1", "adult2" };
+		setResponsability(allAgents);
+
 		// Infect the patients 0
-		//addPercept("young1", yinf);
-		String[] infectedAtBegining = {"young1", "adult2"};
+		// addPercept("young1", yinf);
+		String[] infectedAtBegining = { "young1" };
 		infectAtBegining(infectedAtBegining);
-		
+
 		// Creating a executor sevice to schedule a task that adds the newday belief
 		// each 'DAY' seconds elapsed
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -254,9 +265,9 @@ public class SpreadEnv extends Environment {
 		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
 			String sid = Integer.toString(i + 1);
 			Location lyoung = model.getAgPos(i);
-			/*if (i == 0) {
-				addPercept("young" + sid, yinf);
-			}*/
+			/*
+			 * if (i == 0) { addPercept("young" + sid, yinf); }
+			 */
 
 			// add agent location to its percepts
 			if (lyoung.equals(model.lBar)) {
@@ -417,29 +428,55 @@ public class SpreadEnv extends Environment {
 
 		return Literal.parseLiteral("");
 	}
-	
+
 	/**
-	 * Function to define which agents are infected at the begining
+	 * Method to define which agents are infected at the begining
 	 * 
 	 * @param ag agents to be infected
 	 */
 	private void infectAtBegining(String[] ags) {
-		
+
 		// Verify not empty array
-		if(ags.length>0) {
-			
-			for (int k = 0; k< ags.length; k++) {
-				
-				if(ags[k].startsWith("young")) { // Young case
+		if (ags.length > 0) {
+
+			for (int k = 0; k < ags.length; k++) {
+
+				if (ags[k].startsWith("young")) { // Young case
 					addPercept(ags[k], yinf);
-				
+
 				} else if (ags[k].startsWith("adult")) { // Adult case
 					addPercept(ags[k], ainf);
 				}
 			}
 		}
 	}
-	
-	
+
+	/**
+	 * Method that defines randomly how responsible an agent is
+	 * 
+	 * @param ag agent to be set
+	 */
+	private void setResponsability(String[] ags) {
+
+		// Verify not empty array
+		if (ags.length > 0) {
+
+			Random rand = new Random();
+			int value = 0;
+
+			for (int k = 0; k < ags.length; k++) {
+				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
+				// agente
+				if (ags[k].startsWith("young")) { // Young case: 20%High, 40%Medium, 40%Low
+					value = rand.nextInt(2);
+					addPercept(ags[k], respArray[value]);
+
+				} else if (ags[k].startsWith("adult")) { // Adult case: 40%High, 35%Medium, 25%Low
+					value = rand.nextInt(2);
+					addPercept(ags[k], respArray[value]);
+				}
+			}
+		}
+	}
 
 }

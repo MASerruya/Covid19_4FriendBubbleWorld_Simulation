@@ -6,6 +6,16 @@
 	<- .print("live: ADULT INFECTED");
 	!at(adult,hospital);
 	!at(adult,home).
+
+/*	
++!live: is_low_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ A-RESPONSABLE: BAJO").
++!live: is_medium_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ A-RESPONSABLE: MEDIO").
++!live: is_high_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ A-sRESPONSABLE: ALTO").
+*/
+
 /*    
 +!live : is_wday(DOM)
 	<- .print("live: *********************SUNDAY");

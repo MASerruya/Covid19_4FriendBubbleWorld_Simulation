@@ -24,13 +24,20 @@
 
 !live.
                                                                                                                                   
-//Plan to live depending on the week day.
-
 +!live: is_infected(young)	 
 	<- .print("live: YOUNG INFECTED");
 	!at(young,hospital);
 	!at(young,home).
-                                                                                                                                    
+
+/*+!live: is_low_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: BAJO").
++!live: is_medium_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: MEDIO").
++!live: is_high_responsible
+	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: ALTO").*/
+
+//Plan to live depending on the week day.
+                                                                                                                          
 +!live : is_weekend
 	<- .print("live: WEEKEND");
 	!at(young,bar);
