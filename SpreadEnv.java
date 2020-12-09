@@ -87,6 +87,8 @@ public class SpreadEnv extends Environment {
 
 	/* Task to execute each day elapsed. Adds the newday perception */
 	private Runnable dayelapsed = () -> {
+
+		//Add newday perception for all agents
 		clearAllPercepts();
 		// Add newday perception for all agents
 
@@ -325,6 +327,62 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
+	public void updatePosition(String ag, String sid, int iid) {
+
+		Location lagent = model.getAgPos(iid);
+
+		if (ag.startsWith("young")) {
+			// add agent location to its percepts
+			if (lagent.equals(model.lBar)) {
+				addPercept("young" + sid, yab);
+				System.out.println("Added lbar percept!");
+			} else if (lagent.equals(model.lJob)) {
+				addPercept("young" + sid, yaj);
+				System.out.println("Added ljob percept!");
+			} else if (lagent.equals(model.lHospital)) {
+				addPercept("young" + sid, yahos);
+				System.out.println("Added lhosp percept!");
+			} else if (lagent.equals(model.lHome)) {
+				addPercept("young" + sid, yahom);
+				System.out.println("Added lhome percept!");
+			} else if (lagent.equals(model.lSports)) {
+				addPercept("young" + sid, yasp);
+				System.out.println("Added lSports percept!");
+			} else if (lagent.equals(model.lSchool)) {
+				addPercept("young" + sid, yasch);
+				System.out.println("Added lSchool percept!");
+			} else if (lagent.equals(model.lPark)) {
+				addPercept("young" + sid, yapk);
+				System.out.println("Added lPark percept!");
+			}
+
+		} else if (ag.startsWith("adult")) {
+			// add agent location to its percepts
+			if (lagent.equals(model.lBar)) {
+				addPercept("adult" + sid, aab);
+				System.out.println("[adult" + sid + "] Added lbar percept!");
+			} else if (lagent.equals(model.lJob)) {
+				addPercept("adult" + sid, aaj);
+				System.out.println("[adult" + sid + "] Added ljob percept!");
+			} else if (lagent.equals(model.lHospital)) {
+				addPercept("adult" + sid, aahos);
+				System.out.println("[adult" + sid + "] Added lhospital percept!");
+			} else if (lagent.equals(model.lHome)) {
+				addPercept("adult" + sid, aahom);
+				System.out.println("[adult" + sid + "] Added lhome percept!");
+			} else if (lagent.equals(model.lSports)) {
+				addPercept("adult" + sid, aasp);
+				System.out.println("[adult" + sid + "] Added lSports percept!");
+			} else if (lagent.equals(model.lSchool)) {
+				addPercept("adult" + sid, aasch);
+				System.out.println("[adult" + sid + "] Added lSchool percept!");
+			} else if (lagent.equals(model.lPark)) {
+				addPercept("adult" + sid, aapk);
+				System.out.println("[adult" + sid + "] Added lPark percept!");
+			}
+		}
+	}
+
 	/**
 	 * Excecution of the action
 	 * 
@@ -377,17 +435,64 @@ public class SpreadEnv extends Environment {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
+			//Remove the literal determining the starting position.
+			if (ag.startsWith("young"))
+			{
+				if (containsPercept(ag, yab)) {
+					removePercept(ag, yab);
+				} else if (containsPercept(ag, yaj)) {
+					removePercept(ag, yaj);
+				} else if (containsPercept(ag, yahos)) {
+					removePercept(ag, yahos);
+				} else if (containsPercept(ag, yahom)) {
+					removePercept(ag, yahom);
+				} else if (containsPercept(ag, yasp)) {
+					removePercept(ag, yasp);
+				} else if (containsPercept(ag, yasch)) {
+					removePercept(ag, yasch);
+				} else if (containsPercept(ag, yapk)) {
+					removePercept(ag, yapk);
+				}
+			}
+			else {
+				if (containsPercept(ag, aab)) {
+					removePercept(ag, aab);
+				} else if (containsPercept(ag, aaj)) {
+					removePercept(ag, aaj);
+				} else if (containsPercept(ag, aahos)) {
+					removePercept(ag, aahos);
+				} else if (containsPercept(ag, aahom)) {
+					removePercept(ag, aahom);
+				} else if (containsPercept(ag, aasp)) {
+					removePercept(ag, aasp);
+				} else if (containsPercept(ag, aasch)) {
+					removePercept(ag, aasch);
+				} else if (containsPercept(ag, aapk)) {
+					removePercept(ag, aapk);
+				}
+			}
+
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch (Exception e) {}
+
+			//Add the literal determining the new position.
+			updatePosition(ag, sid, iid);
+
 		} else {
 			// What to do if action is not defined
 		}
 
-		if (result) {
-			updatePercepts(ag, sid, iid);
-			try {
-				Thread.sleep(100);
-			} catch (Exception e) {
-			}
-		}
+//		if (result) {
+//			updatePercepts(ag, sid, iid);
+//			try {
+//				Thread.sleep(100);
+//			} catch (Exception e) {
+//			}
+//		}
 
 		// DEBUG -- After action, percepts
 		allpercb = consultPercepts(ag);
