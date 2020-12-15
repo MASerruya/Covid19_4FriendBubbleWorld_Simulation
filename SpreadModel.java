@@ -26,8 +26,8 @@ public class SpreadModel extends GridWorldModel {
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
-	public static final int NUMBER_OF_YOUNG = 2;
-	public static final int NUMBER_OF_ADULT = 2;
+	public static final int NUMBER_OF_YOUNG = 4;
+	public static final int NUMBER_OF_ADULT = 4;
 
 	// Grid size
 	public static int GSize = 30;
@@ -54,8 +54,10 @@ public class SpreadModel extends GridWorldModel {
 		setAgPos(1, 3, 3);
 		setAgPos(2, 12, 10);
 		setAgPos(3, 11, 10);
-		// setAgPos(4, 1, 1);
-		// setAgPos(5, 0, 0);
+		setAgPos(4, 1, 1);
+		setAgPos(5, 1, 0);
+		setAgPos(6, 1, 1);
+		setAgPos(7, 2, 10);
 
 		// Initial location of the objects
 		add(JOB, lJob);
