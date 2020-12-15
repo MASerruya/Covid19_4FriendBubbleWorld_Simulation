@@ -70,7 +70,11 @@ public class SpreadEnv extends Environment {
 
 	// Infection
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
-	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
+	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");  
+	
+	//Recovered
+	public static final Literal yrec = Literal.parseLiteral("recovered(young)");
+	public static final Literal arec = Literal.parseLiteral("recovered(adult)"); 	
 
 	// Responsability
 	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
@@ -411,6 +415,7 @@ public class SpreadEnv extends Environment {
 			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
 		}
 		
+		
 		if (action.getFunctor().equals("do_things")) {  
 			
 			try
@@ -420,9 +425,49 @@ public class SpreadEnv extends Environment {
 			catch (Exception e) {
 			      
 			}   
+			
+			String l = action.getTerm(0).toString();
+			boolean infected = false;                    
+			double randomNum = Math.random();
+			
+			if (l.equals("bar")) {
+				if (randomNum < 0.3){ 
+					infected = true;    
+				}                            
+			} else if (l.equals("job")) {
+				if (randomNum < 0.05){ 
+					infected = true;    
+				}                            
+			} else if (l.equals("sports")) {
+				if (randomNum < 0.1){ 
+					infected = true;    
+				}                            
+			} else if (l.equals("school")) {
+				if (randomNum < 0.1){ 
+					infected = true;    
+				}                            
+			} else if (l.equals("park")) {
+				if (randomNum < 0.1){ 
+					infected = true;    
+				}                            
+			} 
+			
+			if (infected){
+				if (ag.startsWith("young")){  
+					addPercept("young"+sid, yinf);
+				}else{
+					addPercept("adult"+sid, ainf);
+				}
+			}             
+			
 			result = true;
 			                                                                                     
-		}	
+		}
+		else if (action.getFunctor().equals("quarentine")){   
+			removePercept("young"+sid, yaj);    
+			addPercept("young"+sid, yrec);  
+			                
+		}           
 		else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
 			Location dest = null;
