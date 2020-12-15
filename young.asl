@@ -33,19 +33,21 @@
 	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: BAJO").
 +!live: is_medium_responsible
 	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: MEDIO").
-+!live: is_high_responsible
++!live: is_high_responsible                                                                            
 	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: ALTO").*/
 
 //Plan to live depending on the week day.
                                                                                                                           
 +!live : is_weekend
 	<- .print("live: WEEKEND");
-	!at(young,bar);
+	!at(young,bar);                                                                                                 
+	do_things(TIME);
 	!at(young,home).
 
 +!live : is_week
 	<- .print("live: WEEKDAY -- Agent located at: " );
-	!at(young,job);
+	!at(young,park);
+	do_things(TIME);
 	!at(young,home).	
 	
 // Plan to move.

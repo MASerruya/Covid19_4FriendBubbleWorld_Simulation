@@ -400,7 +400,7 @@ public class SpreadEnv extends Environment {
 		System.out.println("[" + ag + "] doing: " + action);
 
 		// Variables for getting agent id
-		// String sid = ag.substring(ag.length() - 1);
+		// String sid = ag.substring(ag.length() - 1);                                                                                
 		String sid;
 		int iid;
 		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
@@ -410,8 +410,20 @@ public class SpreadEnv extends Environment {
 			sid = ag.substring(5, ag.length());
 			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
 		}
-
-		if (action.getFunctor().equals("move_towards")) {
+		
+		if (action.getFunctor().equals("do_things")) {  
+			
+			try
+			{
+				Thread.sleep(300);
+			}                                                                                                                    
+			catch (Exception e) {
+			      
+			}   
+			result = true;
+			                                                                                     
+		}	
+		else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
 			Location dest = null;
 			if (l.equals("bar")) {
@@ -477,7 +489,7 @@ public class SpreadEnv extends Environment {
 			{
 				Thread.sleep(100);
 			}
-			catch (Exception e) {}
+			catch (Exception e) {}     
 
 			//Add the literal determining the new position.
 			updatePosition(ag, sid, iid);
@@ -584,4 +596,4 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
-}
+}                                                                                                                                       
