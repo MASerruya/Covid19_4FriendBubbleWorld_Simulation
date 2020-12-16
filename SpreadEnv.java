@@ -440,7 +440,7 @@ public class SpreadEnv extends Environment {
 			String l = action.getTerm(0).toString();
 			boolean infected = false;                    
 			double randomNum = Math.random();
-			
+			  /*    
 			if (l.equals("bar")) {
 				if (randomNum < 0.3){ 
 					infected = true;    
@@ -461,7 +461,7 @@ public class SpreadEnv extends Environment {
 				if (randomNum < 0.1){ 
 					infected = true;    
 				}                            
-			} 
+			} */
 			
 			if (infected){
 				if (ag.startsWith("young")){  
