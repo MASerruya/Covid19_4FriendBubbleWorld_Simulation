@@ -99,11 +99,14 @@ public class SpreadEnv extends Environment {
 		curr_day = (curr_day + 1) % 7;
 		updatePercepts();
 
-		/* has to be done for all agents */
-		addPercept("young1", ynewday);
-		addPercept("young2", ynewday);
-		addPercept("adult1", anewday);
-		addPercept("adult2", anewday);
+		/* has to be done for all agents */ 
+		
+		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
+			addPercept("young" + Integer.toString(i+1), ynewday);
+		}                                          
+		for (int i = 0; i < model.NUMBER_OF_ADULT; i++){ 
+			addPercept("adult" + Integer.toString(i+1), anewday);   	
+		}
 
 		try {
 			Thread.sleep(100);
@@ -447,7 +450,7 @@ public class SpreadEnv extends Environment {
 				}                            
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05){ 
-					infected = true;    
+					infected = true;                                
 				}                            
 			} else if (l.equals("sports")) {
 				if (randomNum < 0.1){ 
