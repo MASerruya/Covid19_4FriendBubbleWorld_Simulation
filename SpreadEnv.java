@@ -410,10 +410,21 @@ public class SpreadEnv extends Environment {
 		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
 			sid = ag.substring(5, ag.length());
 			iid = Integer.parseInt(sid) - 1;
+			
 		} else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
 			sid = ag.substring(5, ag.length());
 			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
 		}
+		                         
+		
+		//every young or adult has to delete its own newday when 1st action is done
+		if (containsPercept(ag, ynewday)) {
+			removePercept(ag, ynewday);  
+		}else if(containsPercept(ag, anewday)){       
+			removePercept(ag, anewday);  
+		}        
+		
+		
 		
 		
 		if (action.getFunctor().equals("do_things")) {  
