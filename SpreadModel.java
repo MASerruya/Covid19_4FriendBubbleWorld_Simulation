@@ -35,7 +35,7 @@ public class SpreadModel extends GridWorldModel {
 	// Object location
 	Location lJob = new Location(4, 0);
 	Location lBar = new Location(22, 7);
-	Location lHospital = new Location(22, 18);
+	Location lHospital = new Location(0, GSize - 1);
 	Location lHome = new Location(GSize - 1, GSize - 1);
 	Location lSports = new Location(5, 28);
 	Location lSchool = new Location(3, 7);

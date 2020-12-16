@@ -33,8 +33,8 @@ public class SpreadEnv extends Environment {
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
 	// A day in the system is turned into 30 seconds.
-	public static final int DAY = 30; 
-	
+	public static final int DAY = 30;
+
 	public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
 
 	/******** LITERALS ************************/
@@ -68,15 +68,15 @@ public class SpreadEnv extends Environment {
 	public static final Literal ju = Literal.parseLiteral("is_thursday");
 	public static final Literal vi = Literal.parseLiteral("is_friday");
 	public static final Literal sa = Literal.parseLiteral("is_saturday");
-	public static final Literal dom = Literal.parseLiteral("is_sunday");                   
+	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
 	// Infection
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
-	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");  
-	
-	//Recovered
+	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
+
+	// Recovered
 	public static final Literal yrec = Literal.parseLiteral("recovered(young)");
-	public static final Literal arec = Literal.parseLiteral("recovered(adult)"); 	
+	public static final Literal arec = Literal.parseLiteral("recovered(adult)");
 
 	// Responsability
 	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
@@ -89,46 +89,10 @@ public class SpreadEnv extends Environment {
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
-	/****************** ENV. METHODS ********************/
-
-	/* Task to execute each day elapsed. Adds the newday perception */
-	private Runnable dayelapsed = () -> {
-
-		//Add newday perception for all agents     
-		//here we just remove perceptions of days and weekend   
-		//updateListOfInfected(); 
-		//here we just remove perceptions of days    
-		//clearAllPercepts();   
 	
-		// Add newday perception for all agents
-
-		curr_day = (curr_day + 1) % 7; 
-		
-		clearDay(); 
-		updatePercepts();
-                                       
-		/* has to be done for all agents */ 
-		
-		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
-			addPercept("young" + Integer.toString(i+1), ynewday);
-		}                                          
-		for (int i = 0; i < model.NUMBER_OF_ADULT; i++){ 
-			addPercept("adult" + Integer.toString(i+1), anewday);   	
-		}
-
-		try {
-			Thread.sleep(100);
-		} catch (Exception e) {
-		}
-
-		// Debug log code, decide if remove in final version.
-		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
-
-		// DEBUG -- Print all percepts at this time
-		Collection<Literal> allperc = consultPercepts("young1");
-		System.out.println("PERCEPS FROM YOUNG1 " + " " + allperc);
-
-	};
+	/********************************************************/
+	/****************** SET UP METHODS **********************/
+	/********************************************************/
 
 	/**
 	 * Initiate the program
@@ -157,14 +121,13 @@ public class SpreadEnv extends Environment {
 
 		// Set initial day to monday
 		curr_day = V;
-  
-                                                          
+
 		// Update the percepts to all the agents
 		updatePercepts();
-                                                                    
+
 		// Set the responsability degree to agents
 		// TODO: get agentlist dinamically
-		   
+
 		setResponsability(allAgents);
 
 		// Infect the patients 0
@@ -176,129 +139,235 @@ public class SpreadEnv extends Environment {
 		// each 'DAY' seconds elapsed
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
-		// each DAY seconds                                                                                                               
+		// each DAY seconds
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
-	} 
-	
-	public void clearDay(){
-        	   
-			if (containsPercept(lu)) {
-				removePercept(lu);                    
-			}      
-			else if (containsPercept(ma)) {
-				removePercept(ma);                    
-			}                                               
-			else if (containsPercept(mi)) {
-				removePercept(mi);                    
-			}                                               
-			else if (containsPercept(ju)) {
-				removePercept(ju);                                                                                               
-			}                                               
-			else if (containsPercept(vi)) {
-				removePercept(vi);                    
-			}                                               
-			else if (containsPercept(sa)) {
-				removePercept(sa);                    
-			}                                               
-			else if (containsPercept(dom)) {
-				removePercept(dom);                    
-			}                                     
-			
-			if (containsPercept(dweek)) {
-				removePercept(dweek);                                                                                             
-			}else if(containsPercept(dweekend)) { 
-				removePercept(dweekend);   
-			}
-	}    
-        
+	}
 
 	/**
-	 * Update the percepts for all the agents
+	 * Method to define which agents are infected at the begining
+	 * 
+	 * @param ag agents to be infected
 	 */
-	public void updatePercepts() {
+	private void infectAtBegining(String[] ags) {
 
-		// clear the percepts of the agents
-		//clearAllPercepts();
+		// Verify not empty array
+		if (ags.length > 0) {
 
-		// Add the percept of the current day
-		addPercept(get_weeklit(curr_day));
+			for (int k = 0; k < ags.length; k++) {
 
-		// Add the percept of week/weekend
-		if (curr_day < S) {
-			addPercept(dweek);
-		} else {
-			System.out.println("WEEKEEEEEEEEEEEEEEEEEEEND");
-			addPercept(dweekend);
-		}
-		// DEBUG -- Print all percepts at this time
-		// Collection<Literal> allperc = consultPercepts("adult1");
-		// System.out.println("************* PERCEPS FROM ADULT1: " + allperc);
+				if (ags[k].startsWith("young")) { // Young case
+					addPercept(ags[k], yinf);
 
-		// Add location percept
-		// get the Young location
-		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
-			String sid = Integer.toString(i + 1);
-			Location lyoung = model.getAgPos(i);
-			/*
-			 * if (i == 0) { addPercept("young" + sid, yinf); }
-			 */
-
-			// add agent location to its percepts                                                                                      
-			if (lyoung.equals(model.lBar)) {
-				addPercept("young" + sid, yab);
-				System.out.println("Added lbar percept!");
-			} else if (lyoung.equals(model.lJob)) {
-				addPercept("young" + sid, yaj);
-				System.out.println("Added ljob percept!");
-			} else if (lyoung.equals(model.lHospital)) {
-				addPercept("young" + sid, yahos);
-				System.out.println("Added lhosp percept!");
-			} else if (lyoung.equals(model.lHome)) {
-				addPercept("young" + sid, yahom);
-				System.out.println("Added lhome percept!");
-			} else if (lyoung.equals(model.lSports)) {
-				addPercept("young" + sid, yasp);
-				System.out.println("Added lSports percept!");
-			} else if (lyoung.equals(model.lSchool)) {
-				addPercept("young" + sid, yasch);
-				System.out.println("Added lSchool percept!");
-			} else if (lyoung.equals(model.lPark)) {
-				addPercept("young" + sid, yapk);
-				System.out.println("Added lSchool percept!");
-			}
-		}
-
-		// get the Adult location
-		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
-			String sid = Integer.toString(i + 1);
-			Location ladult = model.getAgPos(i + model.NUMBER_OF_YOUNG);
-
-			// add agent location to its perceps
-			if (ladult.equals(model.lBar)) {
-				addPercept("adult" + sid, aab);
-				System.out.println("[adult" + sid + "] Added lbar percept!");
-			} else if (ladult.equals(model.lJob)) {
-				addPercept("adult" + sid, aaj);
-				System.out.println("[adult" + sid + "] Added ljob percept!");
-			} else if (ladult.equals(model.lHospital)) {
-				addPercept("adult" + sid, aahos);
-				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (ladult.equals(model.lHome)) {
-				addPercept("adult" + sid, aahom);
-				System.out.println("[adult" + sid + "] Added lhome percept!");
-			} else if (ladult.equals(model.lSports)) {
-				addPercept("adult" + sid, aasp);
-				System.out.println("[adult" + sid + "] Added lSports percept!");
-			} else if (ladult.equals(model.lSchool)) {
-				addPercept("adult" + sid, aasch);
-				System.out.println("[adult" + sid + "] Added lSchool percept!");
-			} else if (ladult.equals(model.lPark)) {
-				addPercept("adult" + sid, aapk);
-				System.out.println("[adult" + sid + "] Added lPark percept!");
+				} else if (ags[k].startsWith("adult")) { // Adult case
+					addPercept(ags[k], ainf);
+				}
 			}
 		}
 	}
 
+	/**
+	 * Method that defines randomly how responsible an agent is
+	 * 
+	 * @param ag agent to be set
+	 */
+	private void setResponsability(String[] ags) {
+
+		// Verify not empty array
+		if (ags.length > 0) {
+
+			Random rand = new Random();
+			int value = 0;
+
+			for (int k = 0; k < ags.length; k++) {
+				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
+				// agente
+				if (ags[k].startsWith("young")) { // Young case: 20%High, 40%Medium, 40%Low
+					value = rand.nextInt(2);
+					addPercept(ags[k], respArray[value]);
+
+				} else if (ags[k].startsWith("adult")) { // Adult case: 40%High, 35%Medium, 25%Low
+					value = rand.nextInt(2);
+					addPercept(ags[k], respArray[value]);
+				}
+			}
+		}
+	}
+
+	
+	/********************************************************/
+	/****************** ACTION METHODS **********************/
+	/********************************************************/
+
+	/**
+	 * Excecution of the action
+	 * 
+	 * @param ag
+	 * @param action
+	 */
+	@Override
+	public boolean executeAction(String ag, Structure action) {
+
+		// DEBUG -- Prior to action, percepts
+		Collection<Literal> allpercb = consultPercepts(ag);
+		System.out.println("PERCEPS FROM BEFORE " + ag + " " + allpercb);
+
+		boolean result = false;
+		System.out.println("[" + ag + "] doing: " + action);
+
+		// Variables for getting agent id
+		// String sid = ag.substring(ag.length() - 1);
+		String sid;
+		int iid;
+		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
+			sid = ag.substring(5, ag.length());
+			iid = Integer.parseInt(sid) - 1;
+
+		} else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
+			sid = ag.substring(5, ag.length());
+			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
+		}
+
+		// every young or adult has to delete its own newday when 1st action is done
+		if (containsPercept(ag, ynewday)) {
+			removePercept(ag, ynewday);
+		} else if (containsPercept(ag, anewday)) {
+			removePercept(ag, anewday);
+		}
+
+		if (action.getFunctor().equals("do_things")) {
+
+			try {
+				Thread.sleep(300);
+			} catch (Exception e) {
+
+			}
+
+			String l = action.getTerm(0).toString();
+			boolean infected = false;
+			double randomNum = Math.random();
+
+			if (l.equals("bar")) {
+				if (randomNum < 0.3) {
+					infected = true;
+				}
+			} else if (l.equals("job")) {
+				if (randomNum < 0.05) {
+					infected = true;
+				}
+			} else if (l.equals("sports")) {
+				if (randomNum < 0.1) {
+					infected = true;
+				}
+			} else if (l.equals("school")) {
+				if (randomNum < 0.1) {
+					infected = true;
+				}
+			} else if (l.equals("park")) {
+				if (randomNum < 0.1) {
+					infected = true;
+				}
+			}
+
+			if (infected) {
+				if (ag.startsWith("young")) {
+					addPercept(ag, yinf);
+				} else {
+					addPercept(ag, ainf);
+				}
+			}
+
+			result = true;
+
+		} else if (action.getFunctor().equals("quarentine")) {
+			removePercept("young" + sid, yaj);
+			addPercept("young" + sid, yrec);
+
+		} else if (action.getFunctor().equals("move_towards")) {
+			String l = action.getTerm(0).toString();
+			Location dest = null;
+			if (l.equals("bar")) {
+				dest = model.lBar;
+			} else if (l.equals("job")) {
+				dest = model.lJob;
+			} else if (l.equals("hospital")) {
+				dest = model.lHospital;
+			} else if (l.equals("home")) {
+				dest = model.lHome;
+			} else if (l.equals("sports")) {
+				dest = model.lSports;
+			} else if (l.equals("school")) {
+				dest = model.lSchool;
+			} else if (l.equals("park")) {
+				dest = model.lPark;
+			}
+			try {
+				result = model.moveTowards(dest, iid);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Remove the literal determining the starting position.
+			if (ag.startsWith("young")) {
+				if (containsPercept(ag, yab)) {
+					removePercept(ag, yab);
+				} else if (containsPercept(ag, yaj)) {
+					removePercept(ag, yaj);
+				} else if (containsPercept(ag, yahos)) {
+					removePercept(ag, yahos);
+				} else if (containsPercept(ag, yahom)) {
+					removePercept(ag, yahom);
+				} else if (containsPercept(ag, yasp)) {
+					removePercept(ag, yasp);
+				} else if (containsPercept(ag, yasch)) {
+					removePercept(ag, yasch);
+				} else if (containsPercept(ag, yapk)) {
+					removePercept(ag, yapk);
+				}
+			} else {
+				if (containsPercept(ag, aab)) {
+					removePercept(ag, aab);
+				} else if (containsPercept(ag, aaj)) {
+					removePercept(ag, aaj);
+				} else if (containsPercept(ag, aahos)) {
+					removePercept(ag, aahos);
+				} else if (containsPercept(ag, aahom)) {
+					removePercept(ag, aahom);
+				} else if (containsPercept(ag, aasp)) {
+					removePercept(ag, aasp);
+				} else if (containsPercept(ag, aasch)) {
+					removePercept(ag, aasch);
+				} else if (containsPercept(ag, aapk)) {
+					removePercept(ag, aapk);
+				}
+			}
+
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+			}
+
+			// Add the literal determining the new position.
+			updatePosition(ag, sid, iid);
+
+		} else {
+			// What to do if action is not defined
+		}
+
+		// DEBUG -- After action, percepts
+		allpercb = consultPercepts(ag);
+		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
+
+		return result;
+	}
+
+	/**
+	 * Updates the position of an agent
+	 * 
+	 * @param ag  whose position is going to be updated
+	 * @param sid
+	 * @param iid
+	 */
 	public void updatePosition(String ag, String sid, int iid) {
 
 		Location lagent = model.getAgPos(iid);
@@ -355,179 +424,170 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
+	
+	/********************************************************/
+	/****************** ROUTINE METHODS *********************/
+	/********************************************************/
+
+	/* Task to execute each day elapsed. Adds the newday perception */
+	private Runnable dayelapsed = () -> {
+
+		// Add newday perception for all agents
+		// here we just remove perceptions of days and weekend
+		// updateListOfInfected();
+		// here we just remove perceptions of days
+		// clearAllPercepts();
+
+		// Add newday perception for all agents
+
+		curr_day = (curr_day + 1) % 7;
+
+		clearDay();
+		updatePercepts();
+
+		/* has to be done for all agents */
+
+		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
+			addPercept("young" + Integer.toString(i + 1), ynewday);
+		}
+		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
+			addPercept("adult" + Integer.toString(i + 1), anewday);
+		}
+
+		try {
+			Thread.sleep(100);
+		} catch (Exception e) {
+		}
+
+		// Debug log code, decide if remove in final version.
+		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
+
+		// DEBUG -- Print all percepts at this time
+		Collection<Literal> allperc = consultPercepts("young1");
+		System.out.println("PERCEPS FROM YOUNG1 " + " " + allperc);
+
+	};
+
 	/**
-	 * Excecution of the action
-	 * 
-	 * @param ag
-	 * @param action
+	 * Method that clear perceptions from the current day
 	 */
-	@Override
-	public boolean executeAction(String ag, Structure action) {
+	public void clearDay() {
 
-		// DEBUG -- Prior to action, percepts
-		Collection<Literal> allpercb = consultPercepts(ag);
-		System.out.println("PERCEPS FROM BEFORE " + ag + " " + allpercb);
-
-		boolean result = false;
-		System.out.println("[" + ag + "] doing: " + action);
-
-		// Variables for getting agent id
-		// String sid = ag.substring(ag.length() - 1);                                                                                
-		String sid;
-		int iid;
-		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
-			sid = ag.substring(5, ag.length());
-			iid = Integer.parseInt(sid) - 1;
-			
-		} else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
-			sid = ag.substring(5, ag.length());
-			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
-		}
-		                         
-		
-		//every young or adult has to delete its own newday when 1st action is done
-		if (containsPercept(ag, ynewday)) {
-			removePercept(ag, ynewday);  
-		}else if(containsPercept(ag, anewday)){       
-			removePercept(ag, anewday);  
-		}        
-		
-		
-		
-		
-		if (action.getFunctor().equals("do_things")) {  
-			
-			try
-			{
-				Thread.sleep(300);
-			}                                                                                                                    
-			catch (Exception e) {
-			      
-			}   
-			
-			String l = action.getTerm(0).toString();
-			boolean infected = false;                    
-			double randomNum = Math.random();  
-			     
-			if (l.equals("bar")) {                                          
-				if (randomNum < 0.3){ 
-					infected = true;    
-				}                            
-			} else if (l.equals("job")) {
-				if (randomNum < 0.05){ 
-					infected = true;                                
-				}                            
-			} else if (l.equals("sports")) {
-				if (randomNum < 0.1){ 
-					infected = true;    
-				}                            
-			} else if (l.equals("school")) {
-				if (randomNum < 0.1){ 
-					infected = true;    
-				}                            
-			} else if (l.equals("park")) {
-				if (randomNum < 0.1){ 
-					infected = true;    
-				}                            
-			}                                    
-			
-			if (infected){
-				if (ag.startsWith("young")){  
-					addPercept(ag, yinf);
-				}else{
-					addPercept(ag, ainf);
-				}
-			}             
-			
-			result = true;
-			                                                                                     
-		}
-		else if (action.getFunctor().equals("quarentine")){   
-			removePercept("young"+sid, yaj);    
-			addPercept("young"+sid, yrec);  
-			                
-		}           
-		else if (action.getFunctor().equals("move_towards")) {
-			String l = action.getTerm(0).toString();
-			Location dest = null;
-			if (l.equals("bar")) {
-				dest = model.lBar;
-			} else if (l.equals("job")) {
-				dest = model.lJob;
-			} else if (l.equals("hospital")) {
-				dest = model.lHospital;
-			} else if (l.equals("home")) {
-				dest = model.lHome;
-			} else if (l.equals("sports")) {
-				dest = model.lSports;
-			} else if (l.equals("school")) {
-				dest = model.lSchool;
-			} else if (l.equals("park")) {
-				dest = model.lPark;
-			}
-			try {
-				result = model.moveTowards(dest, iid);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			//Remove the literal determining the starting position.
-			if (ag.startsWith("young"))
-			{
-				if (containsPercept(ag, yab)) {
-					removePercept(ag, yab);
-				} else if (containsPercept(ag, yaj)) {
-					removePercept(ag, yaj);
-				} else if (containsPercept(ag, yahos)) {
-					removePercept(ag, yahos);
-				} else if (containsPercept(ag, yahom)) {
-					removePercept(ag, yahom);
-				} else if (containsPercept(ag, yasp)) {
-					removePercept(ag, yasp);
-				} else if (containsPercept(ag, yasch)) {
-					removePercept(ag, yasch);
-				} else if (containsPercept(ag, yapk)) {
-					removePercept(ag, yapk);
-				}
-			}
-			else {
-				if (containsPercept(ag, aab)) {
-					removePercept(ag, aab);
-				} else if (containsPercept(ag, aaj)) {
-					removePercept(ag, aaj);
-				} else if (containsPercept(ag, aahos)) {
-					removePercept(ag, aahos);
-				} else if (containsPercept(ag, aahom)) {
-					removePercept(ag, aahom);
-				} else if (containsPercept(ag, aasp)) {
-					removePercept(ag, aasp);
-				} else if (containsPercept(ag, aasch)) {
-					removePercept(ag, aasch);
-				} else if (containsPercept(ag, aapk)) {
-					removePercept(ag, aapk);
-				}
-			}
-
-			try
-			{
-				Thread.sleep(100);
-			}
-			catch (Exception e) {}     
-
-			//Add the literal determining the new position.
-			updatePosition(ag, sid, iid);
-
-		} else {
-			// What to do if action is not defined
+		if (containsPercept(lu)) {
+			removePercept(lu);
+		} else if (containsPercept(ma)) {
+			removePercept(ma);
+		} else if (containsPercept(mi)) {
+			removePercept(mi);
+		} else if (containsPercept(ju)) {
+			removePercept(ju);
+		} else if (containsPercept(vi)) {
+			removePercept(vi);
+		} else if (containsPercept(sa)) {
+			removePercept(sa);
+		} else if (containsPercept(dom)) {
+			removePercept(dom);
 		}
 
-		// DEBUG -- After action, percepts
-		allpercb = consultPercepts(ag);
-		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
-                                                                      
-		return result;
+		if (containsPercept(dweek)) {
+			removePercept(dweek);
+		} else if (containsPercept(dweekend)) {
+			removePercept(dweekend);
+		}
 	}
+
+	/**
+	 * Update the percepts for all the agents
+	 */
+	public void updatePercepts() {
+
+		// clear the percepts of the agents
+		// clearAllPercepts();
+
+		// Add the percept of the current day
+		addPercept(get_weeklit(curr_day));
+
+		// Add the percept of week/weekend
+		if (curr_day < S) {
+			addPercept(dweek);
+		} else {
+			System.out.println("WEEKEEEEEEEEEEEEEEEEEEEND");
+			addPercept(dweekend);
+		}
+		// DEBUG -- Print all percepts at this time
+		// Collection<Literal> allperc = consultPercepts("adult1");
+		// System.out.println("************* PERCEPS FROM ADULT1: " + allperc);
+
+		// Add location percept
+		// get the Young location
+		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
+			String sid = Integer.toString(i + 1);
+			Location lyoung = model.getAgPos(i);
+			/*
+			 * if (i == 0) { addPercept("young" + sid, yinf); }
+			 */
+
+			// add agent location to its percepts
+			if (lyoung.equals(model.lBar)) {
+				addPercept("young" + sid, yab);
+				System.out.println("Added lbar percept!");
+			} else if (lyoung.equals(model.lJob)) {
+				addPercept("young" + sid, yaj);
+				System.out.println("Added ljob percept!");
+			} else if (lyoung.equals(model.lHospital)) {
+				addPercept("young" + sid, yahos);
+				System.out.println("Added lhosp percept!");
+			} else if (lyoung.equals(model.lHome)) {
+				addPercept("young" + sid, yahom);
+				System.out.println("Added lhome percept!");
+			} else if (lyoung.equals(model.lSports)) {
+				addPercept("young" + sid, yasp);
+				System.out.println("Added lSports percept!");
+			} else if (lyoung.equals(model.lSchool)) {
+				addPercept("young" + sid, yasch);
+				System.out.println("Added lSchool percept!");
+			} else if (lyoung.equals(model.lPark)) {
+				addPercept("young" + sid, yapk);
+				System.out.println("Added lSchool percept!");
+			}
+		}
+
+		// get the Adult location
+		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
+			String sid = Integer.toString(i + 1);
+			Location ladult = model.getAgPos(i + model.NUMBER_OF_YOUNG);
+
+			// add agent location to its perceps
+			if (ladult.equals(model.lBar)) {
+				addPercept("adult" + sid, aab);
+				System.out.println("[adult" + sid + "] Added lbar percept!");
+			} else if (ladult.equals(model.lJob)) {
+				addPercept("adult" + sid, aaj);
+				System.out.println("[adult" + sid + "] Added ljob percept!");
+			} else if (ladult.equals(model.lHospital)) {
+				addPercept("adult" + sid, aahos);
+				System.out.println("[adult" + sid + "] Added lhospital percept!");
+			} else if (ladult.equals(model.lHome)) {
+				addPercept("adult" + sid, aahom);
+				System.out.println("[adult" + sid + "] Added lhome percept!");
+			} else if (ladult.equals(model.lSports)) {
+				addPercept("adult" + sid, aasp);
+				System.out.println("[adult" + sid + "] Added lSports percept!");
+			} else if (ladult.equals(model.lSchool)) {
+				addPercept("adult" + sid, aasch);
+				System.out.println("[adult" + sid + "] Added lSchool percept!");
+			} else if (ladult.equals(model.lPark)) {
+				addPercept("adult" + sid, aapk);
+				System.out.println("[adult" + sid + "] Added lPark percept!");
+			}
+		}
+
+	}
+
+	
+	/********************************************************/
+	/****************** AUXILIAR METHODS ********************/
+	/********************************************************/
 
 	/**
 	 * Auxiliar function to translate numbers into weeday literals
@@ -562,54 +622,4 @@ public class SpreadEnv extends Environment {
 		return Literal.parseLiteral("");
 	}
 
-	/**
-	 * Method to define which agents are infected at the begining
-	 * 
-	 * @param ag agents to be infected
-	 */
-	private void infectAtBegining(String[] ags) {
-
-		// Verify not empty array
-		if (ags.length > 0) {
-
-			for (int k = 0; k < ags.length; k++) {
-
-				if (ags[k].startsWith("young")) { // Young case
-					addPercept(ags[k], yinf);
-
-				} else if (ags[k].startsWith("adult")) { // Adult case
-					addPercept(ags[k], ainf);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Method that defines randomly how responsible an agent is
-	 * 
-	 * @param ag agent to be set
-	 */
-	private void setResponsability(String[] ags) {
-
-		// Verify not empty array
-		if (ags.length > 0) {
-
-			Random rand = new Random();
-			int value = 0;
-
-			for (int k = 0; k < ags.length; k++) {
-				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
-				// agente
-				if (ags[k].startsWith("young")) { // Young case: 20%High, 40%Medium, 40%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
-
-				} else if (ags[k].startsWith("adult")) { // Adult case: 40%High, 35%Medium, 25%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
-				}
-			}
-		}
-	}
-
-}                                                                                                                                       
+}
