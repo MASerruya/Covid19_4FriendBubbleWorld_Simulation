@@ -169,7 +169,7 @@ public class SpreadEnv extends Environment {
 		// each 'DAY' seconds elapsed
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
-		// each DAY seconds
+		// each DAY seconds                                                                                                               
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
 	}
 
@@ -468,9 +468,9 @@ public class SpreadEnv extends Environment {
 			
 			if (infected){
 				if (ag.startsWith("young")){  
-					addPercept("young"+sid, yinf);
+					addPercept(ag, yinf);
 				}else{
-					addPercept("adult"+sid, ainf);
+					addPercept(ag, ainf);
 				}
 			}             
 			
