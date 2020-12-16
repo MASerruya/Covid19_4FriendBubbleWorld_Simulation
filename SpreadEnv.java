@@ -92,7 +92,8 @@ public class SpreadEnv extends Environment {
 	/* Task to execute each day elapsed. Adds the newday perception */
 	private Runnable dayelapsed = () -> {
 
-		//Add newday perception for all agents
+		//Add newday perception for all agents                                                                                     
+		//updateListOfInfected();
 		clearAllPercepts();
 		// Add newday perception for all agents
 
@@ -154,10 +155,10 @@ public class SpreadEnv extends Environment {
 
 		// Update the percepts to all the agents
 		updatePercepts();
-
+                                                                    
 		// Set the responsability degree to agents
 		// TODO: get agentlist dinamically
-		String[] allAgents = { "young1", "young2", "adult1", "adult2" };
+		String[] allAgents = { "young1", "young2", "adult1", "adult2" };   
 		setResponsability(allAgents);
 
 		// Infect the patients 0
@@ -173,76 +174,6 @@ public class SpreadEnv extends Environment {
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
 	}
 
-	/**
-	 * Update the percepts of the agent
-	 * 
-	 * @param ag  name of the agent which percepts will be cleared
-	 * @param sid
-	 * @param iid
-	 */
-	public void updatePercepts(String ag, String sid, int iid) {
-
-		// Clear the percepts of the agent ag
-		clearPercepts(ag);
-		// clearPercepts("adult");
-		// DEBUG
-		System.out.println("Removed percepts: " + ag);
-
-		addPercept(get_weeklit(curr_day));
-
-		Location lagent = model.getAgPos(iid);
-
-		if (ag.startsWith("young")) {
-			// add agent location to its percepts
-			if (lagent.equals(model.lBar)) {
-				addPercept("young" + sid, yab);
-				System.out.println("Added lbar percept!");
-			} else if (lagent.equals(model.lJob)) {
-				addPercept("young" + sid, yaj);
-				System.out.println("Added ljob percept!");
-			} else if (lagent.equals(model.lHospital)) {
-				addPercept("young" + sid, yahos);
-				System.out.println("Added lhosp percept!");
-			} else if (lagent.equals(model.lHome)) {
-				addPercept("young" + sid, yahom);
-				System.out.println("Added lhome percept!");
-			} else if (lagent.equals(model.lSports)) {
-				addPercept("young" + sid, yasp);
-				System.out.println("Added lSports percept!");
-			} else if (lagent.equals(model.lSchool)) {
-				addPercept("young" + sid, yasch);
-				System.out.println("Added lSchool percept!");
-			} else if (lagent.equals(model.lPark)) {
-				addPercept("young" + sid, yapk);
-				System.out.println("Added lPark percept!");
-			}
-
-		} else if (ag.startsWith("adult")) {
-			// add agent location to its percepts
-			if (lagent.equals(model.lBar)) {
-				addPercept("adult" + sid, aab);
-				System.out.println("[adult" + sid + "] Added lbar percept!");
-			} else if (lagent.equals(model.lJob)) {
-				addPercept("adult" + sid, aaj);
-				System.out.println("[adult" + sid + "] Added ljob percept!");
-			} else if (lagent.equals(model.lHospital)) {
-				addPercept("adult" + sid, aahos);
-				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (lagent.equals(model.lHome)) {
-				addPercept("adult" + sid, aahom);
-				System.out.println("[adult" + sid + "] Added lhome percept!");
-			} else if (lagent.equals(model.lSports)) {
-				addPercept("adult" + sid, aasp);
-				System.out.println("[adult" + sid + "] Added lSports percept!");
-			} else if (lagent.equals(model.lSchool)) {
-				addPercept("adult" + sid, aasch);
-				System.out.println("[adult" + sid + "] Added lSchool percept!");
-			} else if (lagent.equals(model.lPark)) {
-				addPercept("adult" + sid, aapk);
-				System.out.println("[adult" + sid + "] Added lPark percept!");
-			}
-		}
-	}
 
 	/**
 	 * Update the percepts for all the agents
@@ -442,9 +373,9 @@ public class SpreadEnv extends Environment {
 			
 			String l = action.getTerm(0).toString();
 			boolean infected = false;                    
-			double randomNum = Math.random();
-			  /*    
-			if (l.equals("bar")) {
+			double randomNum = Math.random();  
+			     
+			if (l.equals("bar")) {                                          
 				if (randomNum < 0.3){ 
 					infected = true;    
 				}                            
@@ -464,7 +395,7 @@ public class SpreadEnv extends Environment {
 				if (randomNum < 0.1){ 
 					infected = true;    
 				}                            
-			} */
+			}                                    
 			
 			if (infected){
 				if (ag.startsWith("young")){  
@@ -568,7 +499,7 @@ public class SpreadEnv extends Environment {
 		// DEBUG -- After action, percepts
 		allpercb = consultPercepts(ag);
 		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
-
+                                                                      
 		return result;
 	}
 
