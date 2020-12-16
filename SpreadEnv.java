@@ -33,7 +33,9 @@ public class SpreadEnv extends Environment {
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
 	// A day in the system is turned into 30 seconds.
-	public static final int DAY = 30;
+	public static final int DAY = 30; 
+	
+	public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
 
 	/******** LITERALS ************************/
 
@@ -66,7 +68,7 @@ public class SpreadEnv extends Environment {
 	public static final Literal ju = Literal.parseLiteral("is_thursday");
 	public static final Literal vi = Literal.parseLiteral("is_friday");
 	public static final Literal sa = Literal.parseLiteral("is_saturday");
-	public static final Literal dom = Literal.parseLiteral("is_sunday");
+	public static final Literal dom = Literal.parseLiteral("is_sunday");                   
 
 	// Infection
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
@@ -92,14 +94,19 @@ public class SpreadEnv extends Environment {
 	/* Task to execute each day elapsed. Adds the newday perception */
 	private Runnable dayelapsed = () -> {
 
-		//Add newday perception for all agents                                                                                     
-		//updateListOfInfected();
-		clearAllPercepts();
+		//Add newday perception for all agents     
+		//here we just remove perceptions of days and weekend   
+		//updateListOfInfected(); 
+		//here we just remove perceptions of days    
+		//clearAllPercepts();   
+	
 		// Add newday perception for all agents
 
-		curr_day = (curr_day + 1) % 7;
+		curr_day = (curr_day + 1) % 7; 
+		
+		clearDay(); 
 		updatePercepts();
-
+                                       
 		/* has to be done for all agents */ 
 		
 		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
@@ -150,15 +157,14 @@ public class SpreadEnv extends Environment {
 
 		// Set initial day to monday
 		curr_day = V;
-		// addPercept(vi);
-		// addPercept(dweek);
-
+  
+                                                          
 		// Update the percepts to all the agents
 		updatePercepts();
                                                                     
 		// Set the responsability degree to agents
 		// TODO: get agentlist dinamically
-		String[] allAgents = { "young1", "young2", "adult1", "adult2" };   
+		   
 		setResponsability(allAgents);
 
 		// Infect the patients 0
@@ -172,8 +178,39 @@ public class SpreadEnv extends Environment {
 		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
 		// each DAY seconds                                                                                                               
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
-	}
-
+	} 
+	
+	public void clearDay(){
+        	   
+			if (containsPercept(lu)) {
+				removePercept(lu);                    
+			}      
+			else if (containsPercept(ma)) {
+				removePercept(ma);                    
+			}                                               
+			else if (containsPercept(mi)) {
+				removePercept(mi);                    
+			}                                               
+			else if (containsPercept(ju)) {
+				removePercept(ju);                                                                                               
+			}                                               
+			else if (containsPercept(vi)) {
+				removePercept(vi);                    
+			}                                               
+			else if (containsPercept(sa)) {
+				removePercept(sa);                    
+			}                                               
+			else if (containsPercept(dom)) {
+				removePercept(dom);                    
+			}                                     
+			
+			if (containsPercept(dweek)) {
+				removePercept(dweek);                                                                                             
+			}else if(containsPercept(dweekend)) { 
+				removePercept(dweekend);   
+			}
+	}    
+        
 
 	/**
 	 * Update the percepts for all the agents
@@ -181,10 +218,7 @@ public class SpreadEnv extends Environment {
 	public void updatePercepts() {
 
 		// clear the percepts of the agents
-		clearAllPercepts();
-		// clearPercepts("adult");
-		// DEBUG
-		System.out.println("Removed all percepts!");
+		//clearAllPercepts();
 
 		// Add the percept of the current day
 		addPercept(get_weeklit(curr_day));
@@ -209,7 +243,7 @@ public class SpreadEnv extends Environment {
 			 * if (i == 0) { addPercept("young" + sid, yinf); }
 			 */
 
-			// add agent location to its percepts
+			// add agent location to its percepts                                                                                      
 			if (lyoung.equals(model.lBar)) {
 				addPercept("young" + sid, yab);
 				System.out.println("Added lbar percept!");
@@ -487,14 +521,6 @@ public class SpreadEnv extends Environment {
 		} else {
 			// What to do if action is not defined
 		}
-
-//		if (result) {
-//			updatePercepts(ag, sid, iid);
-//			try {
-//				Thread.sleep(100);
-//			} catch (Exception e) {
-//			}
-//		}
 
 		// DEBUG -- After action, percepts
 		allpercb = consultPercepts(ag);
