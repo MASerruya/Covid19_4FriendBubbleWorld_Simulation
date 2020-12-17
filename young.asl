@@ -1,32 +1,70 @@
 // Initial plan to live
 !live.
 
+// Initial belief
+infected_days(0).
+
 // Starting a new day
 +new_day(young) : true <-
 	.print("NEWDAY!");
 	!live.
-	
-// Live if is infected
-+!live: is_infected(young)	 
-	<- .print("live: YOUNG INFECTED");
-	!at(young,hospital); 
+			
+// Live if is infected: High responsible
++!live: is_infected(young) //& is_high_responsible	 
+	<- .print("live: YOUNG HR INFECTED");
+	!at(young,hospital);	
+	.count(new_day(young),DAYS) 
+	?infected_days(N);
+    -+infected_days(N + DAYS);
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	//.print (infected_days(N));
+	//.print (N);
+	.print (DAYS);
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	.print ("------------------------------------------------------------------------------------");
+	//.print (infected_days(N));
+	//.print (N);
+	?infected_days(N);
+	.wait(N > 3);
 	-is_infected(young);
-	!at(young,home).       
+	!at(young,home).      
 
+	
 // Living if the young is recovered	
 +!live: recovered(young)   
 	<-  !at(young,home).                        
 
 // Plan of living if is a weekend day                                                                                             
 +!live : is_weekend
-	<- .print("live: WEEKEND");
+	<- //.print("live: WEEKEND");
 	!at(young,bar);                                                                                                 
 	do_things(bar);
 	!at(young,home).
 
 // Plan of living if is a week day
 +!live : is_week
-	<- .print("live: WEEKDAY -- Agent located at: " );
+	<- //.print("live: WEEKDAY -- Agent located at: " );
 	!at(young,park);
 	do_things(park);
 	!at(young,home).	
@@ -34,7 +72,7 @@
 // Plan to move.
 +!at(young,P) : at(young,P) <- true.
 +!at(young,P) : not at(young,P)
-	<- .print("MOVE TO: ", P); 
+	<- //.print("MOVE TO: ", P); 
 	move_towards(P);
 	!at(young,P).
 
@@ -47,4 +85,32 @@
 	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: MEDIO").
 +!live: is_high_responsible                                                                            
 	<- .print("live: +++++++++++++++++++++++++++++++++++++++++ Y-RESPONSABLE: ALTO").*/
+	
+	
+/*
+limit_low_responsible(infection_days,1).
+limit_medium_responsible(infection_days,2).
+limit_high_responsible(infection_days,3).*/	
+
+
+
+/*
+// Live if is infected: Low responsible
++!live: is_infected(young) //& is_low_responsible	 
+	<- .print("live: YOUNG LR INFECTED");
+	.count(new_day(young),DAYS) 
+	.print("DIAS................................................" );
+	.print(DAYS);
+	!at(young,hospital);
+	.random(X); .wait(X*5000+2000);
+	-is_infected(young);
+	!at(young,home).  */    
+/*	
+// Live if is infected: Medium responsible
++!live: is_infected(young) & is_medium_responsible
+	<- .print("live: YOUNG MR INFECTED");
+	!at(young,hospital);
+	.random(X); .wait(X*5000+2000);
+	-is_infected(young);
+	!at(young,home).  */   
 	

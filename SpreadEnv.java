@@ -70,6 +70,9 @@ public class SpreadEnv extends Environment {
 	public static final Literal sa = Literal.parseLiteral("is_saturday");
 	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
+	public static final Literal ycountday = Literal.parseLiteral("count_infection_days(young)");
+	public static final Literal acountday = Literal.parseLiteral("count_infection_days(adult)");
+
 	// Infection
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
 	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
@@ -443,16 +446,40 @@ public class SpreadEnv extends Environment {
 		curr_day = (curr_day + 1) % 7;
 
 		clearDay();
+		
 		updatePercepts();
 
 		/* has to be done for all agents */
-
 		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
 			addPercept("young" + Integer.toString(i + 1), ynewday);
+			
 		}
 		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
 			addPercept("adult" + Integer.toString(i + 1), anewday);
 		}
+		
+		/*
+		// If the agent is infected -> add the percept of countday of infection
+		for (int k = 0; k< allAgents.length; k++) {
+			
+			if(allAgents[k].startsWith("young")) { // Young case
+				
+				boolean infected = 	containsPercept(allAgents[k], yinf);
+				System.out.println("-----------------------------------------------------------------------------------");
+				System.out.println("-----------------------------------------------------------------------------------");
+				System.out.println("-----------------------------------------------------------------------------------");
+				System.out.println("-----------------------------------------------------------------------------------");
+				System.out.println(allAgents[k] + ": " + infected);
+				if (infected) { // Add one day of infection
+					addPercept(allAgents[k], ycountday);
+
+				} else {
+					if (containsPercept(allAgents[k], ycountday)) {
+						removePercept(allAgents[k], ycountday);
+					} 
+				}
+			}
+		}*/
 
 		try {
 			Thread.sleep(100);
@@ -622,4 +649,12 @@ public class SpreadEnv extends Environment {
 		return Literal.parseLiteral("");
 	}
 
+
+	
+	/********************************************************/
+	/****************** NO USADOS // EN PRUEBA **************/
+	/********************************************************/	
+	
+	public void routineDay(String ag) {
+	}
 }
