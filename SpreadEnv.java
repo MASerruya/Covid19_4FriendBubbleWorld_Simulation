@@ -92,7 +92,6 @@ public class SpreadEnv extends Environment {
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
-	
 	/********************************************************/
 	/****************** SET UP METHODS **********************/
 	/********************************************************/
@@ -196,7 +195,6 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
-	
 	/********************************************************/
 	/****************** ACTION METHODS **********************/
 	/********************************************************/
@@ -427,7 +425,6 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
-	
 	/********************************************************/
 	/****************** ROUTINE METHODS *********************/
 	/********************************************************/
@@ -446,29 +443,24 @@ public class SpreadEnv extends Environment {
 		curr_day = (curr_day + 1) % 7;
 
 		clearDay();
-		
+
 		updatePercepts();
 
 		/* has to be done for all agents */
 		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
 			addPercept("young" + Integer.toString(i + 1), ynewday);
-			
+
 		}
 		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
 			addPercept("adult" + Integer.toString(i + 1), anewday);
 		}
-		
-		/*
+
 		// If the agent is infected -> add the percept of countday of infection
-		for (int k = 0; k< allAgents.length; k++) {
-			
-			if(allAgents[k].startsWith("young")) { // Young case
-				
-				boolean infected = 	containsPercept(allAgents[k], yinf);
-				System.out.println("-----------------------------------------------------------------------------------");
-				System.out.println("-----------------------------------------------------------------------------------");
-				System.out.println("-----------------------------------------------------------------------------------");
-				System.out.println("-----------------------------------------------------------------------------------");
+		for (int k = 0; k < allAgents.length; k++) {
+
+			if (allAgents[k].startsWith("young")) { // Young case
+
+				boolean infected = containsPercept(allAgents[k], yinf);
 				System.out.println(allAgents[k] + ": " + infected);
 				if (infected) { // Add one day of infection
 					addPercept(allAgents[k], ycountday);
@@ -476,10 +468,10 @@ public class SpreadEnv extends Environment {
 				} else {
 					if (containsPercept(allAgents[k], ycountday)) {
 						removePercept(allAgents[k], ycountday);
-					} 
+					}
 				}
 			}
-		}*/
+		}
 
 		try {
 			Thread.sleep(100);
@@ -611,7 +603,6 @@ public class SpreadEnv extends Environment {
 
 	}
 
-	
 	/********************************************************/
 	/****************** AUXILIAR METHODS ********************/
 	/********************************************************/
@@ -649,12 +640,10 @@ public class SpreadEnv extends Environment {
 		return Literal.parseLiteral("");
 	}
 
-
-	
 	/********************************************************/
 	/****************** NO USADOS // EN PRUEBA **************/
-	/********************************************************/	
-	
+	/********************************************************/
+
 	public void routineDay(String ag) {
 	}
 }
