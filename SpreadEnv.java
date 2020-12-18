@@ -13,6 +13,7 @@ import java.io.*;
 //DEBUG
 import java.util.*;
 
+
 public class SpreadEnv extends Environment {
 
 	/****************** CONSTANTS ********************/
@@ -103,6 +104,10 @@ public class SpreadEnv extends Environment {
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
+	//List of agents of each home
+	private static final int NHOMES = 5;
+	ArrayList<ArrayList<String>>  lhomes;
+
 	/********************************************************/
 	/****************** SET UP METHODS **********************/
 	/********************************************************/
@@ -126,13 +131,18 @@ public class SpreadEnv extends Environment {
 			try {
 				jason.mas2j.parser.mas2j parser = new jason.mas2j.parser.mas2j(new FileInputStream(args[1]));
 				project = parser.mas();
+
 			} catch (Exception e) {
 				// Catch exceptions in project initialization
 				e.printStackTrace();
 			}
 		}
 
-		// Set initial day to monday
+		//Create the homes
+		lhomes = new ArrayList<>();
+		for(int i = 0; i < NHOMES; ++i) lhomes.add(new ArrayList<String>()); 
+
+				// Set initial day to monday
 		curr_day = V;
 
 		// Update the percepts to all the agents
@@ -154,6 +164,17 @@ public class SpreadEnv extends Environment {
 		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
 		// each DAY seconds
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
+
+						//Fill the homes
+		for(AgentParameters agent : project.getAgents()){
+			String initbels = agent.getOption("beliefs");
+			//For every home, if the agent contains the home literal, add it and stop the loop
+			for(int i = 0; i < NHOMES; ++i) if(initbels.contains("is_home"+String.valueOf(i+1))){
+				lhomes.get(i).add(agent.name); break;
+			}
+			
+		}
+
 	}
 
 	/**
@@ -538,7 +559,6 @@ public class SpreadEnv extends Environment {
 		// clearAllPercepts();
 
 		// Add newday perception for all agents
-
 		curr_day = (curr_day + 1) % 7;
 
 		clearDay();
@@ -563,8 +583,6 @@ public class SpreadEnv extends Environment {
 				}
 			}
 			
-			
-			
 		}
 
 		try {
@@ -574,10 +592,6 @@ public class SpreadEnv extends Environment {
 
 		// Debug log code, decide if remove in final version.
 		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
-
-		// DEBUG -- Print all percepts at this time
-		Collection<Literal> allperc = consultPercepts("young1");
-		System.out.println("PERCEPS FROM YOUNG1 " + " " + allperc);
 
 	};
 
