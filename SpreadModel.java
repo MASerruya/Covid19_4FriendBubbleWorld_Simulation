@@ -9,12 +9,14 @@ public class SpreadModel extends GridWorldModel {
 	public static final int JOB = 16;
 	public static final int BAR = 32;
 	public static final int HOSPITAL = 64;
-	public static final int HOME = 128;
-	public static final int SPORTS = 256;
-	public static final int SCHOOL = 512;
-	public static final int PARK = 1024;
-	public static final int HOME1 = 2048;
-	public static final int HOME2 = 4096;
+	public static final int SPORTS = 128;
+	public static final int SCHOOL = 256;
+	public static final int PARK = 512;
+	public static final int HOME1 = 1024;
+	public static final int HOME2 = 2048;
+	public static final int HOME3 = 4096;
+	public static final int HOME4 = 8192;
+	public static final int HOME5 = 16384;
 
 	// Week days
 	/*
@@ -32,18 +34,20 @@ public class SpreadModel extends GridWorldModel {
 	public static final int NUMBER_OF_ADULT = 2;
 
 	// Grid size
-	public static int GSize = 30;
+	public static int GSize = 50;
 
 	// Object location
-	Location lJob = new Location(4, 0);
-	Location lBar = new Location(22, 7);
-	Location lHospital = new Location(1, GSize - 2);
-	Location lHome = new Location(GSize - 1, GSize - 1);
-	Location lHome1 = new Location(10, 1);
-	Location lHome2 = new Location(1, 10);
-	Location lSports = new Location(5, 19);
-	Location lSchool = new Location(3, 7);
-	Location lPark = new Location(15, 12);
+	Location lJob 		= new Location(4, 0);
+	Location lBar 		= new Location(22, 7);
+	Location lHospital 	= new Location(1, GSize - 2);
+	Location lHome1 	= new Location(GSize - 3, GSize - 3);
+	Location lHome2 	= new Location(10, 1);
+	Location lHome3 	= new Location(3, 38);
+	Location lHome4 	= new Location(47, 20);
+	Location lHome5 	= new Location(24, 45);
+	Location lSports 	= new Location(5, 19);
+	Location lSchool 	= new Location(3, 7);
+	Location lPark 		= new Location(15, 12);
 
 	/**
 	 * Class constructor
@@ -65,9 +69,11 @@ public class SpreadModel extends GridWorldModel {
 		add(JOB, lJob);
 		add(BAR, lBar);
 		add(HOSPITAL, lHospital);
-		add(HOME, lHome);
 		add(HOME1, lHome1);
 		add(HOME2, lHome2);
+		add(HOME3, lHome3);
+		add(HOME4, lHome4);
+		add(HOME5, lHome5);
 		add(SPORTS, lSports);
 		add(SCHOOL, lSchool);
 		add(PARK, lPark);
@@ -122,9 +128,11 @@ public class SpreadModel extends GridWorldModel {
 			view.update(lJob.x, lJob.y);
 			view.update(lBar.x, lBar.y);
 			view.update(lHospital.x, lHospital.y);
-			view.update(lHome.x, lHome.y);
 			view.update(lHome1.x, lHome1.y);
 			view.update(lHome2.x, lHome2.y);
+			view.update(lHome3.x, lHome3.y);
+			view.update(lHome4.x, lHome4.y);
+			view.update(lHome5.x, lHome5.y);
 			view.update(lSports.x, lSports.y);
 			view.update(lSchool.x, lSchool.y);
 			view.update(lPark.x, lPark.y);

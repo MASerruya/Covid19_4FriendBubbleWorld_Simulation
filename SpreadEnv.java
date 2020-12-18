@@ -45,9 +45,11 @@ public class SpreadEnv extends Environment {
 	public static final Literal yab 	= Literal.parseLiteral("at(young,bar)");
 	public static final Literal yaj 	= Literal.parseLiteral("at(young,job)");
 	public static final Literal yahos 	= Literal.parseLiteral("at(young,hospital)");
-	public static final Literal yahom 	= Literal.parseLiteral("at(young,home)");
 	public static final Literal yahom1 	= Literal.parseLiteral("at(young,home1)");
 	public static final Literal yahom2 	= Literal.parseLiteral("at(young,home2)");
+	public static final Literal yahom3 	= Literal.parseLiteral("at(young,home3)");
+	public static final Literal yahom4 	= Literal.parseLiteral("at(young,home4)");
+	public static final Literal yahom5 	= Literal.parseLiteral("at(young,home5)");
 	public static final Literal yasp 	= Literal.parseLiteral("at(young,sports)");
 	public static final Literal yasch 	= Literal.parseLiteral("at(young,school)");
 	public static final Literal yapk 	= Literal.parseLiteral("at(young,park)");
@@ -55,9 +57,11 @@ public class SpreadEnv extends Environment {
 	public static final Literal aab 	= Literal.parseLiteral("at(adult,bar)");
 	public static final Literal aaj 	= Literal.parseLiteral("at(adult,job)");
 	public static final Literal aahos 	= Literal.parseLiteral("at(adult,hospital)");
-	public static final Literal aahom 	= Literal.parseLiteral("at(adult,home)");
 	public static final Literal aahom1 	= Literal.parseLiteral("at(adult,home1)");
 	public static final Literal aahom2 	= Literal.parseLiteral("at(adult,home2)");
+	public static final Literal aahom3 	= Literal.parseLiteral("at(adult,home3)");
+	public static final Literal aahom4 	= Literal.parseLiteral("at(adult,home4)");
+	public static final Literal aahom5 	= Literal.parseLiteral("at(adult,home5)");
 	public static final Literal aasp 	= Literal.parseLiteral("at(adult,sports)");
 	public static final Literal aasch 	= Literal.parseLiteral("at(adult,school)");
 	public static final Literal aapk 	= Literal.parseLiteral("at(adult,park)");
@@ -339,12 +343,16 @@ public class SpreadEnv extends Environment {
 				dest = model.lJob;
 			} else if (l.equals("hospital")) {
 				dest = model.lHospital;
-			} else if (l.equals("home")) {
-				dest = model.lHome;
 			} else if (l.equals("home1")) {
 				dest = model.lHome1;
 			} else if (l.equals("home2")) {
 				dest = model.lHome2;
+			} else if (l.equals("home3")) {
+				dest = model.lHome3;
+			} else if (l.equals("home4")) {
+				dest = model.lHome4;
+			} else if (l.equals("home5")) {
+				dest = model.lHome5;
 			} else if (l.equals("sports")) {
 				dest = model.lSports;
 			} else if (l.equals("school")) {
@@ -367,12 +375,16 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, yaj);
 				} else if (containsPercept(ag, yahos)) {
 					removePercept(ag, yahos);
-				} else if (containsPercept(ag, yahom)) {
-					removePercept(ag, yahom);
 				} else if (containsPercept(ag, yahom1)) {
 					removePercept(ag, yahom1);
 				} else if (containsPercept(ag, yahom2)) {
 					removePercept(ag, yahom2);
+				} else if (containsPercept(ag, yahom3)) {
+					removePercept(ag, yahom3);
+				} else if (containsPercept(ag, yahom4)) {
+					removePercept(ag, yahom4);
+				} else if (containsPercept(ag, yahom5)) {
+					removePercept(ag, yahom5);
 				} else if (containsPercept(ag, yasp)) {
 					removePercept(ag, yasp);
 				} else if (containsPercept(ag, yasch)) {
@@ -387,12 +399,16 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, aaj);
 				} else if (containsPercept(ag, aahos)) {
 					removePercept(ag, aahos);
-				} else if (containsPercept(ag, aahom)) {
-					removePercept(ag, aahom);
 				} else if (containsPercept(ag, aahom1)) {
 					removePercept(ag, aahom1);
 				} else if (containsPercept(ag, aahom2)) {
 					removePercept(ag, aahom2);
+				} else if (containsPercept(ag, aahom3)) {
+					removePercept(ag, aahom3);
+				} else if (containsPercept(ag, aahom4)) {
+					removePercept(ag, aahom4);
+				} else if (containsPercept(ag, aahom5)) {
+					removePercept(ag, aahom5);
 				} else if (containsPercept(ag, aasp)) {
 					removePercept(ag, aasp);
 				} else if (containsPercept(ag, aasch)) {
@@ -443,15 +459,21 @@ public class SpreadEnv extends Environment {
 			} else if (lagent.equals(model.lHospital)) {
 				addPercept("young" + sid, yahos);
 				System.out.println("Added lhosp percept!");
-			} else if (lagent.equals(model.lHome)) {
-				addPercept("young" + sid, yahom);
-				System.out.println("Added lhome percept!");
 			} else if (lagent.equals(model.lHome1)) {
 				addPercept("young" + sid, yahom1);
 				System.out.println("Added lhome1 percept!");
 			} else if (lagent.equals(model.lHome2)) {
 				addPercept("young" + sid, yahom2);
 				System.out.println("Added lhome2 percept!");
+			} else if (lagent.equals(model.lHome3)) {
+				addPercept("young" + sid, yahom3);
+				System.out.println("Added lhome3 percept!");
+			} else if (lagent.equals(model.lHome4)) {
+				addPercept("young" + sid, yahom4);
+				System.out.println("Added lhome4 percept!");
+			} else if (lagent.equals(model.lHome5)) {
+				addPercept("young" + sid, yahom5);
+				System.out.println("Added lhome5 percept!");
 			} else if (lagent.equals(model.lSports)) {
 				addPercept("young" + sid, yasp);
 				System.out.println("Added lSports percept!");
@@ -474,15 +496,21 @@ public class SpreadEnv extends Environment {
 			} else if (lagent.equals(model.lHospital)) {
 				addPercept("adult" + sid, aahos);
 				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (lagent.equals(model.lHome)) {
-				addPercept("adult" + sid, aahom);
-				System.out.println("[adult" + sid + "] Added lhome percept!");
 			} else if (lagent.equals(model.lHome1)) {
 				addPercept("adult" + sid, aahom1);
 				System.out.println("[adult" + sid + "] Added lhome1 percept!");
 			} else if (lagent.equals(model.lHome2)) {
 				addPercept("adult" + sid, aahom2);
 				System.out.println("[adult" + sid + "] Added lhome2 percept!");
+			} else if (lagent.equals(model.lHome3)) {
+				addPercept("adult" + sid, aahom3);
+				System.out.println("[adult" + sid + "] Added lhome3 percept!");
+			} else if (lagent.equals(model.lHome4)) {
+				addPercept("adult" + sid, aahom4);
+				System.out.println("[adult" + sid + "] Added lhome4 percept!");
+			} else if (lagent.equals(model.lHome5)) {
+				addPercept("adult" + sid, aahom5);
+				System.out.println("[adult" + sid + "] Added lhome5 percept!");
 			} else if (lagent.equals(model.lSports)) {
 				addPercept("adult" + sid, aasp);
 				System.out.println("[adult" + sid + "] Added lSports percept!");
@@ -622,15 +650,21 @@ public class SpreadEnv extends Environment {
 			} else if (lyoung.equals(model.lHospital)) {
 				addPercept("young" + sid, yahos);
 				System.out.println("Added lhosp percept!");
-			} else if (lyoung.equals(model.lHome)) {
-				addPercept("young" + sid, yahom);
-				System.out.println("Added lhome percept!");
 			} else if (lyoung.equals(model.lHome1)) {
 				addPercept("young" + sid, yahom1);
 				System.out.println("Added lhome1 percept!");
 			} else if (lyoung.equals(model.lHome2)) {
 				addPercept("young" + sid, yahom2);
 				System.out.println("Added lhome2 percept!");
+			} else if (lyoung.equals(model.lHome3)) {
+				addPercept("young" + sid, yahom3);
+				System.out.println("Added lhome3 percept!");
+			} else if (lyoung.equals(model.lHome4)) {
+				addPercept("young" + sid, yahom4);
+				System.out.println("Added lhome4 percept!");
+			} else if (lyoung.equals(model.lHome5)) {
+				addPercept("young" + sid, yahom5);
+				System.out.println("Added lhome5 percept!");
 			} else if (lyoung.equals(model.lSports)) {
 				addPercept("young" + sid, yasp);
 				System.out.println("Added lSports percept!");
@@ -658,15 +692,21 @@ public class SpreadEnv extends Environment {
 			} else if (ladult.equals(model.lHospital)) {
 				addPercept("adult" + sid, aahos);
 				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (ladult.equals(model.lHome)) {
-				addPercept("adult" + sid, aahom);
-				System.out.println("[adult" + sid + "] Added lhome percept!");
 			} else if (ladult.equals(model.lHome1)) {
 				addPercept("adult" + sid, aahom1);
 				System.out.println("[adult" + sid + "] Added lhome1 percept!");
 			} else if (ladult.equals(model.lHome2)) {
 				addPercept("adult" + sid, aahom2);
 				System.out.println("[adult" + sid + "] Added lhome2 percept!");
+			} else if (ladult.equals(model.lHome3)) {
+				addPercept("adult" + sid, aahom3);
+				System.out.println("[adult" + sid + "] Added lhome3 percept!");
+			} else if (ladult.equals(model.lHome4)) {
+				addPercept("adult" + sid, aahom4);
+				System.out.println("[adult" + sid + "] Added lhome4 percept!");
+			} else if (ladult.equals(model.lHome5)) {
+				addPercept("adult" + sid, aahom5);
+				System.out.println("[adult" + sid + "] Added lhome5 percept!");
 			} else if (ladult.equals(model.lSports)) {
 				addPercept("adult" + sid, aasp);
 				System.out.println("[adult" + sid + "] Added lSports percept!");
