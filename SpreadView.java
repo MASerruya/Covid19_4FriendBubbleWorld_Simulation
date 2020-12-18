@@ -139,70 +139,37 @@ public class SpreadView extends GridWorldView {
 		Location lAgent = sModel.getAgPos(id);
 		// Location lAdult = sModel.getAgPos(1);
 
-		if (id < sModel.NUMBER_OF_YOUNG) { // young case
-			if (lAgent.equals(sModel.lJob)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lJob)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lBar)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHospital)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome1)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome2)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome3)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome4)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome5)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lSports)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lSchool)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lPark)) {
-				c = Color.yellow;
-			} else {
-				c = Color.magenta;
-			}
-			super.drawAgent(g, x, y, c, -1);
-			g.setColor(Color.black);
-			super.drawString(g, x, y, defaultFont, "Young");
-
-		} else { // adult case
-			if (lAgent.equals(sModel.lJob)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lJob)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lBar)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHospital)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome1)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome2)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome3)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome4)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome5)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lSports)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lSchool)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lPark)) {
-				c = Color.yellow;
-			} else {
-				c = Color.pink;
-			}
-			super.drawAgent(g, x, y, c, -1);
-			g.setColor(Color.black);
-			super.drawString(g, x, y, defaultFont, "Adult");
+		if (lAgent.equals(sModel.lJob)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lJob)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lBar)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHospital)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHome1)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHome2)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHome3)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHome4)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lHome5)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lSports)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lSchool)) {
+			c = Color.yellow;
+		} else if (lAgent.equals(sModel.lPark)) {
+			c = Color.yellow;
+		} else {
+			c = Color.blue;
 		}
+		super.drawAgent(g, x, y, c, -1);
+		g.setColor(Color.black);
+		super.drawString(g, x, y, defaultFont, "");
+
 	}
 
 }

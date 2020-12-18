@@ -30,7 +30,8 @@ public class SpreadModel extends GridWorldModel {
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
-	public static final int NUMBER_OF_YOUNG = 2;
+	public static final int NUMBER_OF_PEOPLE = 5;
+	public static final int NUMBER_OF_YOUNG = 3;
 	public static final int NUMBER_OF_ADULT = 2;
 
 	// Grid size
@@ -55,13 +56,14 @@ public class SpreadModel extends GridWorldModel {
 	public SpreadModel() {
 
 		// Create a GSize grid with n mobile agents
-		super(GSize, GSize, NUMBER_OF_YOUNG + NUMBER_OF_ADULT);
+		super(GSize, GSize, NUMBER_OF_PEOPLE);
 
 		// Agents location by order
-		setAgPos(0, 13, 10);
-		setAgPos(1, 3, 3);
-		setAgPos(2, 12, 10);
-		setAgPos(3, 11, 10);
+		setAgPos(0, GSize/2, GSize/2);
+		setAgPos(1, 13, 10);
+		setAgPos(2, 3, 3);
+		setAgPos(3, 12, 10);
+		setAgPos(4, 11, 10);
 		// setAgPos(4, 1, 1);
 		// setAgPos(5, 0, 0);
 

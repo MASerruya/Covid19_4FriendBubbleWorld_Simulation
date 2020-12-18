@@ -13,7 +13,6 @@ import java.io.*;
 //DEBUG
 import java.util.*;
 
-
 public class SpreadEnv extends Environment {
 
 	/****************** CONSTANTS ********************/
@@ -36,77 +35,61 @@ public class SpreadEnv extends Environment {
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
-	public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
-	public int[] daysInfected = {0, 0, 0, 0}; 
-	public int[] daysCanInfect = {0, 0, 0, 0};
+	public String[] allAgents = { "person1", "person2", "person3", "person4", "person5" };
+	public int[] daysInfected = { 0, 0, 0, 0, 0 };
+	public int[] daysCanInfect = { 0, 0, 0, 0, 0 };
 
-	/******** LITERALS ************************/              
+	/******** LITERALS ************************/
 
-	// Location young
-	public static final Literal yab 	= Literal.parseLiteral("at(young,bar)");
-	public static final Literal yaj 	= Literal.parseLiteral("at(young,job)");
-	public static final Literal yahos 	= Literal.parseLiteral("at(young,hospital)");
-	public static final Literal yahom1 	= Literal.parseLiteral("at(young,home1)");
-	public static final Literal yahom2 	= Literal.parseLiteral("at(young,home2)");
-	public static final Literal yahom3 	= Literal.parseLiteral("at(young,home3)");
-	public static final Literal yahom4 	= Literal.parseLiteral("at(young,home4)");
-	public static final Literal yahom5 	= Literal.parseLiteral("at(young,home5)");
-	public static final Literal yasp 	= Literal.parseLiteral("at(young,sports)");
-	public static final Literal yasch 	= Literal.parseLiteral("at(young,school)");
-	public static final Literal yapk 	= Literal.parseLiteral("at(young,park)");
-	// Location adult
-	public static final Literal aab 	= Literal.parseLiteral("at(adult,bar)");
-	public static final Literal aaj 	= Literal.parseLiteral("at(adult,job)");
-	public static final Literal aahos 	= Literal.parseLiteral("at(adult,hospital)");
-	public static final Literal aahom1 	= Literal.parseLiteral("at(adult,home1)");
-	public static final Literal aahom2 	= Literal.parseLiteral("at(adult,home2)");
-	public static final Literal aahom3 	= Literal.parseLiteral("at(adult,home3)");
-	public static final Literal aahom4 	= Literal.parseLiteral("at(adult,home4)");
-	public static final Literal aahom5 	= Literal.parseLiteral("at(adult,home5)");
-	public static final Literal aasp 	= Literal.parseLiteral("at(adult,sports)");
-	public static final Literal aasch 	= Literal.parseLiteral("at(adult,school)");
-	public static final Literal aapk 	= Literal.parseLiteral("at(adult,park)");
+	// Location person
+	public static final Literal pab = Literal.parseLiteral("at(person,bar)");
+	public static final Literal paj = Literal.parseLiteral("at(person,job)");
+	public static final Literal pahos = Literal.parseLiteral("at(person,hospital)");
+	public static final Literal pahom1 = Literal.parseLiteral("at(person,home1)");
+	public static final Literal pahom2 = Literal.parseLiteral("at(person,home2)");
+	public static final Literal pahom3 = Literal.parseLiteral("at(person,home3)");
+	public static final Literal pahom4 = Literal.parseLiteral("at(person,home4)");
+	public static final Literal pahom5 = Literal.parseLiteral("at(person,home5)");
+	public static final Literal pasp = Literal.parseLiteral("at(person,sports)");
+	public static final Literal pasch = Literal.parseLiteral("at(person,school)");
+	public static final Literal papk = Literal.parseLiteral("at(person,park)");
 
 	// Weekdays and time
-	public static final Literal dweek 	= Literal.parseLiteral("is_week");
-	public static final Literal dweekend 	= Literal.parseLiteral("is_weekend");
-	public static final Literal ynewday 	= Literal.parseLiteral("new_day(young)");
-	public static final Literal anewday 	= Literal.parseLiteral("new_day(adult)");
+	public static final Literal dweek = Literal.parseLiteral("is_week");
+	public static final Literal dweekend = Literal.parseLiteral("is_weekend");
+	public static final Literal pnewday = Literal.parseLiteral("new_day(person)");
 
-	public static final Literal lu 	= Literal.parseLiteral("is_monday");
-	public static final Literal ma 	= Literal.parseLiteral("is_tuesday");
-	public static final Literal mi 	= Literal.parseLiteral("is_wednesday");
-	public static final Literal ju 	= Literal.parseLiteral("is_thursday");
-	public static final Literal vi 	= Literal.parseLiteral("is_friday");
-	public static final Literal sa 	= Literal.parseLiteral("is_saturday");
+	public static final Literal lu = Literal.parseLiteral("is_monday");
+	public static final Literal ma = Literal.parseLiteral("is_tuesday");
+	public static final Literal mi = Literal.parseLiteral("is_wednesday");
+	public static final Literal ju = Literal.parseLiteral("is_thursday");
+	public static final Literal vi = Literal.parseLiteral("is_friday");
+	public static final Literal sa = Literal.parseLiteral("is_saturday");
 	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
-	public static final Literal ycountday = Literal.parseLiteral("count_infection_days(young)");
-	public static final Literal acountday = Literal.parseLiteral("count_infection_days(adult)");
-
 	// Infection
-	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
-	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
-                                                                               
-	// Recovered
-	public static final Literal rec = Literal.parseLiteral("recovered");  
-	
+	public static final Literal pinf = Literal.parseLiteral("is_infected(person)");
+	public static final Literal pcountday = Literal.parseLiteral("count_infection_days(person)");
 	public static final Literal caninfect = Literal.parseLiteral("can_infect");
 
+	// Recovered
+	public static final Literal rec = Literal.parseLiteral("recovered");
+
 	// Responsability
-	public static final Literal resp1 	= Literal.parseLiteral("is_low_responsible");
-	public static final Literal resp2 	= Literal.parseLiteral("is_medium_responsible");
-	public static final Literal resp3 	= Literal.parseLiteral("is_high_responsible");
+	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
+	public static final Literal resp2 = Literal.parseLiteral("is_medium_responsible");
+	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
 	public static final Literal[] respArray = { resp1, resp2, resp3 };
 
+	// Project object
 	private static MAS2JProject project;
 
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
-	//List of agents of each home
+	// List of agents of each home
 	private static final int NHOMES = 5;
-	ArrayList<ArrayList<String>>  lhomes;
+	ArrayList<ArrayList<String>> lhomes;
 
 	/********************************************************/
 	/****************** SET UP METHODS **********************/
@@ -138,24 +121,22 @@ public class SpreadEnv extends Environment {
 			}
 		}
 
-		//Create the homes
+		// Create the homes
 		lhomes = new ArrayList<>();
-		for(int i = 0; i < NHOMES; ++i) lhomes.add(new ArrayList<String>()); 
+		for (int i = 0; i < NHOMES; ++i)
+			lhomes.add(new ArrayList<String>());
 
-				// Set initial day to monday
+		// Set initial day to monday
 		curr_day = V;
 
 		// Update the percepts to all the agents
 		updatePercepts();
 
-		// Set the responsability degree to agents
-		// TODO: get agentlist dinamically
-
+		// Set the resposability
 		setResponsability(allAgents);
 
 		// Infect the patients 0
-		// addPercept("young1", yinf);
-		String[] infectedAtBegining = { "young1" };
+		String[] infectedAtBegining = { "person1" };
 		infectAtBegining(infectedAtBegining);
 
 		// Creating a executor sevice to schedule a task that adds the newday belief
@@ -165,14 +146,16 @@ public class SpreadEnv extends Environment {
 		// each DAY seconds
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
 
-						//Fill the homes
-		for(AgentParameters agent : project.getAgents()){
+		// Fill the homes
+		for (AgentParameters agent : project.getAgents()) {
 			String initbels = agent.getOption("beliefs");
-			//For every home, if the agent contains the home literal, add it and stop the loop
-			for(int i = 0; i < NHOMES; ++i) if(initbels.contains("is_home"+String.valueOf(i+1))){
-				lhomes.get(i).add(agent.name); break;
-			}
-			
+			// For every home, if the agent contains the home literal, add it and stop the
+			// loop
+			for (int i = 0; i < NHOMES; ++i)
+				if (initbels.contains("is_home" + String.valueOf(i + 1))) {
+					lhomes.get(i).add(agent.name);
+					break;
+				}
 		}
 
 	}
@@ -188,13 +171,7 @@ public class SpreadEnv extends Environment {
 		if (ags.length > 0) {
 
 			for (int k = 0; k < ags.length; k++) {
-
-				if (ags[k].startsWith("young")) { // Young case
-					addPercept(ags[k], yinf);
-
-				} else if (ags[k].startsWith("adult")) { // Adult case
-					addPercept(ags[k], ainf);
-				}
+				addPercept(ags[k], pinf);
 			}
 		}
 	}
@@ -215,14 +192,8 @@ public class SpreadEnv extends Environment {
 			for (int k = 0; k < ags.length; k++) {
 				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
 				// agente
-				if (ags[k].startsWith("young")) { // Young case: 20%High, 40%Medium, 40%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
-
-				} else if (ags[k].startsWith("adult")) { // Adult case: 40%High, 35%Medium, 25%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
-				}
+				value = rand.nextInt(2);
+				addPercept(ags[k], respArray[value]);
 			}
 		}
 	}
@@ -251,25 +222,28 @@ public class SpreadEnv extends Environment {
 		// String sid = ag.substring(ag.length() - 1);
 		String sid;
 		int iid;
-		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
-			sid = ag.substring(5, ag.length());
-			iid = Integer.parseInt(sid) - 1;
+		sid = ag.substring(6, ag.length());
+		iid = Integer.parseInt(sid) - 1;
 
-		} else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
-			sid = ag.substring(5, ag.length());
-			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
-		}
+		/*
+		 * if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0 sid
+		 * = ag.substring(5, ag.length()); iid = Integer.parseInt(sid) - 1;
+		 * 
+		 * } else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1 sid =
+		 * ag.substring(5, ag.length()); iid = Integer.parseInt(sid) - 1 +
+		 * model.NUMBER_OF_YOUNG; }
+		 */
 
 		// every young or adult has to delete its own newday when 1st action is done
-		if (containsPercept(ag, ynewday)) {
-			removePercept(ag, ynewday);
-		} else if (containsPercept(ag, anewday)) {
-			removePercept(ag, anewday);
+		/*
+		 * if (containsPercept(ag, ynewday)) { removePercept(ag, ynewday); } else if
+		 * (containsPercept(ag, anewday)) { removePercept(ag, anewday); }
+		 */
+		if (containsPercept(ag, pnewday)) {
+			removePercept(ag, pnewday);
 		}
 
 		if (action.getFunctor().equals("do_things")) {
-
-			
 
 			try {
 				Thread.sleep(300);
@@ -278,17 +252,17 @@ public class SpreadEnv extends Environment {
 			}
 
 			String l = action.getTerm(0).toString();
-			getNumInfected (ag,l);
+			getNumInfected(ag, l);
 			boolean infected = false;
 			double randomNum = Math.random();
-			int numInfected = getNumInfected(ag,l);
-			randomNum = randomNum/numInfected;
-			
+			int numInfected = getNumInfected(ag, l);
+			randomNum = randomNum / numInfected;
+
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
-					
+
 					infected = true;
-					
+
 				}
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05) {
@@ -306,63 +280,60 @@ public class SpreadEnv extends Environment {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
-			} else if(l.equals("home")){ 
-			    if (containsPercept(ag, rec)){
+			} else if (l.equals("home")) {
+				if (containsPercept(ag, rec)) {
 					removePercept(ag, rec);
 				}
-		
-			} else if (l.equals("hospital")){  //What if you are in hospital   
-				int i = 0;    
-				for (i = 0; i < allAgents.length; i++){                                                                          
-					if (allAgents[i].equals(ag)){   
-						break;        
+
+			} else if (l.equals("hospital")) { // What if you are in hospital
+				int i = 0;
+				for (i = 0; i < allAgents.length; i++) {
+					if (allAgents[i].equals(ag)) {
+						break;
 					}
-				}    
-				
-				daysInfected[i] = daysInfected[i]+1;
-				
-				if(containsPercept(ag, resp1) && daysInfected[i] >= 1)  {
-					if (containsPercept(ag, yinf)){
-						removePercept(ag, yinf);
-					}     
+				}
+
+				daysInfected[i] = daysInfected[i] + 1;
+
+				if (containsPercept(ag, resp1) && daysInfected[i] >= 1) {
+					if (containsPercept(ag, pinf)) {
+						removePercept(ag, pinf);
+					}
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
-					daysCanInfect[i]= 3;
-				}   
-				if(containsPercept(ag, resp2) && daysInfected[i] >= 2)  {
-					if (containsPercept(ag, yinf)){
-						removePercept(ag, yinf);
-					}   
-					addPercept(ag,caninfect); 
+					daysCanInfect[i] = 3;
+				}
+				if (containsPercept(ag, resp2) && daysInfected[i] >= 2) {
+					if (containsPercept(ag, pinf)) {
+						removePercept(ag, pinf);
+					}
+					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
-					daysCanInfect[i] = 2; 
-				}  
-				if(containsPercept(ag, resp3) && daysInfected[i] >= 3)  {
-					if (containsPercept(ag, yinf)){
-						removePercept(ag, yinf);
-					} 
+					daysCanInfect[i] = 2;
+				}
+				if (containsPercept(ag, resp3) && daysInfected[i] >= 3) {
+					if (containsPercept(ag, pinf)) {
+						removePercept(ag, pinf);
+					}
 					addPercept(ag, rec);
-					daysInfected[i] = 0; 
-				}                                                              
-				     
+					daysInfected[i] = 0;
+				}
+
 			}
-			
 
 			if (infected) {
-				if (ag.startsWith("young")) {
-					addPercept(ag, yinf);
-				} else {
-					addPercept(ag, ainf);
-				}
+				addPercept(ag, pinf);
+				/*
+				 * if (ag.startsWith("young")) { addPercept(ag, yinf); } else { addPercept(ag,
+				 * ainf); }
+				 */
 			}
-			
-			
 
 			result = true;
 
-		}  else if (action.getFunctor().equals("move_towards")) {
+		} else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
 			Location dest = null;
 			if (l.equals("bar")) {
@@ -396,55 +367,54 @@ public class SpreadEnv extends Environment {
 			}
 
 			// Remove the literal determining the starting position.
-			if (ag.startsWith("young")) {
-				if (containsPercept(ag, yab)) {
-					removePercept(ag, yab);
-				} else if (containsPercept(ag, yaj)) {
-					removePercept(ag, yaj);
-				} else if (containsPercept(ag, yahos)) {
-					removePercept(ag, yahos);
-				} else if (containsPercept(ag, yahom1)) {
-					removePercept(ag, yahom1);
-				} else if (containsPercept(ag, yahom2)) {
-					removePercept(ag, yahom2);
-				} else if (containsPercept(ag, yahom3)) {
-					removePercept(ag, yahom3);
-				} else if (containsPercept(ag, yahom4)) {
-					removePercept(ag, yahom4);
-				} else if (containsPercept(ag, yahom5)) {
-					removePercept(ag, yahom5);
-				} else if (containsPercept(ag, yasp)) {
-					removePercept(ag, yasp);
-				} else if (containsPercept(ag, yasch)) {
-					removePercept(ag, yasch);
-				} else if (containsPercept(ag, yapk)) {
-					removePercept(ag, yapk);
-				}
-			} else {
-				if (containsPercept(ag, aab)) {
-					removePercept(ag, aab);
-				} else if (containsPercept(ag, aaj)) {
-					removePercept(ag, aaj);
-				} else if (containsPercept(ag, aahos)) {
-					removePercept(ag, aahos);
-				} else if (containsPercept(ag, aahom1)) {
-					removePercept(ag, aahom1);
-				} else if (containsPercept(ag, aahom2)) {
-					removePercept(ag, aahom2);
-				} else if (containsPercept(ag, aahom3)) {
-					removePercept(ag, aahom3);
-				} else if (containsPercept(ag, aahom4)) {
-					removePercept(ag, aahom4);
-				} else if (containsPercept(ag, aahom5)) {
-					removePercept(ag, aahom5);
-				} else if (containsPercept(ag, aasp)) {
-					removePercept(ag, aasp);
-				} else if (containsPercept(ag, aasch)) {
-					removePercept(ag, aasch);
-				} else if (containsPercept(ag, aapk)) {
-					removePercept(ag, aapk);
-				}
+			if (containsPercept(ag, pab)) {
+				removePercept(ag, pab);
+			} else if (containsPercept(ag, paj)) {
+				removePercept(ag, paj);
+			} else if (containsPercept(ag, pahos)) {
+				removePercept(ag, pahos);
+			} else if (containsPercept(ag, pahom1)) {
+				removePercept(ag, pahom1);
+			} else if (containsPercept(ag, pahom2)) {
+				removePercept(ag, pahom2);
+			} else if (containsPercept(ag, pahom3)) {
+				removePercept(ag, pahom3);
+			} else if (containsPercept(ag, pahom4)) {
+				removePercept(ag, pahom4);
+			} else if (containsPercept(ag, pahom5)) {
+				removePercept(ag, pahom5);
+			} else if (containsPercept(ag, pasp)) {
+				removePercept(ag, pasp);
+			} else if (containsPercept(ag, pasch)) {
+				removePercept(ag, pasch);
+			} else if (containsPercept(ag, papk)) {
+				removePercept(ag, papk);
 			}
+			/*
+			 * if (ag.startsWith("young")) { if (containsPercept(ag, yab)) {
+			 * removePercept(ag, yab); } else if (containsPercept(ag, yaj)) {
+			 * removePercept(ag, yaj); } else if (containsPercept(ag, yahos)) {
+			 * removePercept(ag, yahos); } else if (containsPercept(ag, yahom1)) {
+			 * removePercept(ag, yahom1); } else if (containsPercept(ag, yahom2)) {
+			 * removePercept(ag, yahom2); } else if (containsPercept(ag, yahom3)) {
+			 * removePercept(ag, yahom3); } else if (containsPercept(ag, yahom4)) {
+			 * removePercept(ag, yahom4); } else if (containsPercept(ag, yahom5)) {
+			 * removePercept(ag, yahom5); } else if (containsPercept(ag, yasp)) {
+			 * removePercept(ag, yasp); } else if (containsPercept(ag, yasch)) {
+			 * removePercept(ag, yasch); } else if (containsPercept(ag, yapk)) {
+			 * removePercept(ag, yapk); } } else { if (containsPercept(ag, aab)) {
+			 * removePercept(ag, aab); } else if (containsPercept(ag, aaj)) {
+			 * removePercept(ag, aaj); } else if (containsPercept(ag, aahos)) {
+			 * removePercept(ag, aahos); } else if (containsPercept(ag, aahom1)) {
+			 * removePercept(ag, aahom1); } else if (containsPercept(ag, aahom2)) {
+			 * removePercept(ag, aahom2); } else if (containsPercept(ag, aahom3)) {
+			 * removePercept(ag, aahom3); } else if (containsPercept(ag, aahom4)) {
+			 * removePercept(ag, aahom4); } else if (containsPercept(ag, aahom5)) {
+			 * removePercept(ag, aahom5); } else if (containsPercept(ag, aasp)) {
+			 * removePercept(ag, aasp); } else if (containsPercept(ag, aasch)) {
+			 * removePercept(ag, aasch); } else if (containsPercept(ag, aapk)) {
+			 * removePercept(ag, aapk); } }
+			 */
 
 			try {
 				Thread.sleep(100);
@@ -476,80 +446,89 @@ public class SpreadEnv extends Environment {
 
 		Location lagent = model.getAgPos(iid);
 
-		if (ag.startsWith("young")) {
-			// add agent location to its percepts
-			if (lagent.equals(model.lBar)) {
-				addPercept("young" + sid, yab);
-				System.out.println("Added lbar percept!");
-			} else if (lagent.equals(model.lJob)) {
-				addPercept("young" + sid, yaj);
-				System.out.println("Added ljob percept!");
-			} else if (lagent.equals(model.lHospital)) {
-				addPercept("young" + sid, yahos);
-				System.out.println("Added lhosp percept!");
-			} else if (lagent.equals(model.lHome1)) {
-				addPercept("young" + sid, yahom1);
-				System.out.println("Added lhome1 percept!");
-			} else if (lagent.equals(model.lHome2)) {
-				addPercept("young" + sid, yahom2);
-				System.out.println("Added lhome2 percept!");
-			} else if (lagent.equals(model.lHome3)) {
-				addPercept("young" + sid, yahom3);
-				System.out.println("Added lhome3 percept!");
-			} else if (lagent.equals(model.lHome4)) {
-				addPercept("young" + sid, yahom4);
-				System.out.println("Added lhome4 percept!");
-			} else if (lagent.equals(model.lHome5)) {
-				addPercept("young" + sid, yahom5);
-				System.out.println("Added lhome5 percept!");
-			} else if (lagent.equals(model.lSports)) {
-				addPercept("young" + sid, yasp);
-				System.out.println("Added lSports percept!");
-			} else if (lagent.equals(model.lSchool)) {
-				addPercept("young" + sid, yasch);
-				System.out.println("Added lSchool percept!");
-			} else if (lagent.equals(model.lPark)) {
-				addPercept("young" + sid, yapk);
-				System.out.println("Added lPark percept!");
-			}
-
-		} else if (ag.startsWith("adult")) {
-			// add agent location to its percepts
-			if (lagent.equals(model.lBar)) {
-				addPercept("adult" + sid, aab);
-				System.out.println("[adult" + sid + "] Added lbar percept!");
-			} else if (lagent.equals(model.lJob)) {
-				addPercept("adult" + sid, aaj);
-				System.out.println("[adult" + sid + "] Added ljob percept!");
-			} else if (lagent.equals(model.lHospital)) {
-				addPercept("adult" + sid, aahos);
-				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (lagent.equals(model.lHome1)) {
-				addPercept("adult" + sid, aahom1);
-				System.out.println("[adult" + sid + "] Added lhome1 percept!");
-			} else if (lagent.equals(model.lHome2)) {
-				addPercept("adult" + sid, aahom2);
-				System.out.println("[adult" + sid + "] Added lhome2 percept!");
-			} else if (lagent.equals(model.lHome3)) {
-				addPercept("adult" + sid, aahom3);
-				System.out.println("[adult" + sid + "] Added lhome3 percept!");
-			} else if (lagent.equals(model.lHome4)) {
-				addPercept("adult" + sid, aahom4);
-				System.out.println("[adult" + sid + "] Added lhome4 percept!");
-			} else if (lagent.equals(model.lHome5)) {
-				addPercept("adult" + sid, aahom5);
-				System.out.println("[adult" + sid + "] Added lhome5 percept!");
-			} else if (lagent.equals(model.lSports)) {
-				addPercept("adult" + sid, aasp);
-				System.out.println("[adult" + sid + "] Added lSports percept!");
-			} else if (lagent.equals(model.lSchool)) {
-				addPercept("adult" + sid, aasch);
-				System.out.println("[adult" + sid + "] Added lSchool percept!");
-			} else if (lagent.equals(model.lPark)) {
-				addPercept("adult" + sid, aapk);
-				System.out.println("[adult" + sid + "] Added lPark percept!");
-			}
+		if (lagent.equals(model.lBar)) {
+			addPercept("person" + sid, pab);
+			System.out.println("Added lbar percept!");
+		} else if (lagent.equals(model.lJob)) {
+			addPercept("person" + sid, paj);
+			System.out.println("Added ljob percept!");
+		} else if (lagent.equals(model.lHospital)) {
+			addPercept("person" + sid, pahos);
+			System.out.println("Added lhosp percept!");
+		} else if (lagent.equals(model.lHome1)) {
+			addPercept("person" + sid, pahom1);
+			System.out.println("Added lhome1 percept!");
+		} else if (lagent.equals(model.lHome2)) {
+			addPercept("person" + sid, pahom2);
+			System.out.println("Added lhome2 percept!");
+		} else if (lagent.equals(model.lHome3)) {
+			addPercept("person" + sid, pahom3);
+			System.out.println("Added lhome3 percept!");
+		} else if (lagent.equals(model.lHome4)) {
+			addPercept("person" + sid, pahom4);
+			System.out.println("Added lhome4 percept!");
+		} else if (lagent.equals(model.lHome5)) {
+			addPercept("person" + sid, pahom5);
+			System.out.println("Added lhome5 percept!");
+		} else if (lagent.equals(model.lSports)) {
+			addPercept("person" + sid, pasp);
+			System.out.println("Added lSports percept!");
+		} else if (lagent.equals(model.lSchool)) {
+			addPercept("person" + sid, pasch);
+			System.out.println("Added lSchool percept!");
+		} else if (lagent.equals(model.lPark)) {
+			addPercept("person" + sid, papk);
+			System.out.println("Added lPark percept!");
 		}
+		/*
+		 * if (ag.startsWith("young")) { // add agent location to its percepts if
+		 * (lagent.equals(model.lBar)) { addPercept("young" + sid, yab);
+		 * System.out.println("Added lbar percept!"); } else if
+		 * (lagent.equals(model.lJob)) { addPercept("young" + sid, yaj);
+		 * System.out.println("Added ljob percept!"); } else if
+		 * (lagent.equals(model.lHospital)) { addPercept("young" + sid, yahos);
+		 * System.out.println("Added lhosp percept!"); } else if
+		 * (lagent.equals(model.lHome1)) { addPercept("young" + sid, yahom1);
+		 * System.out.println("Added lhome1 percept!"); } else if
+		 * (lagent.equals(model.lHome2)) { addPercept("young" + sid, yahom2);
+		 * System.out.println("Added lhome2 percept!"); } else if
+		 * (lagent.equals(model.lHome3)) { addPercept("young" + sid, yahom3);
+		 * System.out.println("Added lhome3 percept!"); } else if
+		 * (lagent.equals(model.lHome4)) { addPercept("young" + sid, yahom4);
+		 * System.out.println("Added lhome4 percept!"); } else if
+		 * (lagent.equals(model.lHome5)) { addPercept("young" + sid, yahom5);
+		 * System.out.println("Added lhome5 percept!"); } else if
+		 * (lagent.equals(model.lSports)) { addPercept("young" + sid, yasp);
+		 * System.out.println("Added lSports percept!"); } else if
+		 * (lagent.equals(model.lSchool)) { addPercept("young" + sid, yasch);
+		 * System.out.println("Added lSchool percept!"); } else if
+		 * (lagent.equals(model.lPark)) { addPercept("young" + sid, yapk);
+		 * System.out.println("Added lPark percept!"); }
+		 * 
+		 * } else if (ag.startsWith("adult")) { // add agent location to its percepts if
+		 * (lagent.equals(model.lBar)) { addPercept("adult" + sid, aab);
+		 * System.out.println("[adult" + sid + "] Added lbar percept!"); } else if
+		 * (lagent.equals(model.lJob)) { addPercept("adult" + sid, aaj);
+		 * System.out.println("[adult" + sid + "] Added ljob percept!"); } else if
+		 * (lagent.equals(model.lHospital)) { addPercept("adult" + sid, aahos);
+		 * System.out.println("[adult" + sid + "] Added lhospital percept!"); } else if
+		 * (lagent.equals(model.lHome1)) { addPercept("adult" + sid, aahom1);
+		 * System.out.println("[adult" + sid + "] Added lhome1 percept!"); } else if
+		 * (lagent.equals(model.lHome2)) { addPercept("adult" + sid, aahom2);
+		 * System.out.println("[adult" + sid + "] Added lhome2 percept!"); } else if
+		 * (lagent.equals(model.lHome3)) { addPercept("adult" + sid, aahom3);
+		 * System.out.println("[adult" + sid + "] Added lhome3 percept!"); } else if
+		 * (lagent.equals(model.lHome4)) { addPercept("adult" + sid, aahom4);
+		 * System.out.println("[adult" + sid + "] Added lhome4 percept!"); } else if
+		 * (lagent.equals(model.lHome5)) { addPercept("adult" + sid, aahom5);
+		 * System.out.println("[adult" + sid + "] Added lhome5 percept!"); } else if
+		 * (lagent.equals(model.lSports)) { addPercept("adult" + sid, aasp);
+		 * System.out.println("[adult" + sid + "] Added lSports percept!"); } else if
+		 * (lagent.equals(model.lSchool)) { addPercept("adult" + sid, aasch);
+		 * System.out.println("[adult" + sid + "] Added lSchool percept!"); } else if
+		 * (lagent.equals(model.lPark)) { addPercept("adult" + sid, aapk);
+		 * System.out.println("[adult" + sid + "] Added lPark percept!"); } }
+		 */
 	}
 
 	/********************************************************/
@@ -570,32 +549,30 @@ public class SpreadEnv extends Environment {
 
 		clearDay();
 
-		updatePercepts();  
+		updatePercepts();
 
-		
-		for (int i = 0; i < allAgents.length; i++){
+		for (int i = 0; i < allAgents.length; i++) {
 			String ag = allAgents[i];
-			
-			if (ag.startsWith("young")){
-				addPercept(ag, ynewday);
-			}
-			else if (ag.startsWith("adult")){
-				addPercept(ag, anewday);
-			}
-			
-			if (containsPercept(ag, caninfect)){
-				daysCanInfect[i] = daysCanInfect[i]-1;
-				if (daysCanInfect[i] == 0){   
+			addPercept(ag, pnewday);
+
+			/*
+			 * if (ag.startsWith("young")) { addPercept(ag, ynewday); } else if
+			 * (ag.startsWith("adult")) { addPercept(ag, anewday); }
+			 */
+
+			if (containsPercept(ag, caninfect)) {
+				daysCanInfect[i] = daysCanInfect[i] - 1;
+				if (daysCanInfect[i] == 0) {
 					removePercept(ag, caninfect);
 				}
 			}
-			
+
 		}
 
 		try {
 			Thread.sleep(100);
 		} catch (Exception e) {
-		}       
+		}
 
 		// Debug log code, decide if remove in final version.
 		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
@@ -653,92 +630,108 @@ public class SpreadEnv extends Environment {
 		// System.out.println("************* PERCEPS FROM ADULT1: " + allperc);
 
 		// Add location percept
-		// get the Young location
-		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {                                    
+		for (int i = 0; i < model.NUMBER_OF_PEOPLE; i++) {
 			String sid = Integer.toString(i + 1);
-			Location lyoung = model.getAgPos(i);
+			Location lpeople = model.getAgPos(i);
 			/*
 			 * if (i == 0) { addPercept("young" + sid, yinf); }
 			 */
 
 			// add agent location to its percepts
-			if (lyoung.equals(model.lBar)) {
-				addPercept("young" + sid, yab);
+			if (lpeople.equals(model.lBar)) {
+				addPercept("person" + sid, pab);
 				System.out.println("Added lbar percept!");
-			} else if (lyoung.equals(model.lJob)) {
-				addPercept("young" + sid, yaj);
+			} else if (lpeople.equals(model.lJob)) {
+				addPercept("person" + sid, paj);
 				System.out.println("Added ljob percept!");
-			} else if (lyoung.equals(model.lHospital)) {
-				addPercept("young" + sid, yahos);
+			} else if (lpeople.equals(model.lHospital)) {
+				addPercept("person" + sid, pahos);
 				System.out.println("Added lhosp percept!");
-			} else if (lyoung.equals(model.lHome1)) {
-				addPercept("young" + sid, yahom1);
+			} else if (lpeople.equals(model.lHome1)) {
+				addPercept("person" + sid, pahom1);
 				System.out.println("Added lhome1 percept!");
-			} else if (lyoung.equals(model.lHome2)) {
-				addPercept("young" + sid, yahom2);
+			} else if (lpeople.equals(model.lHome2)) {
+				addPercept("person" + sid, pahom2);
 				System.out.println("Added lhome2 percept!");
-			} else if (lyoung.equals(model.lHome3)) {
-				addPercept("young" + sid, yahom3);
+			} else if (lpeople.equals(model.lHome3)) {
+				addPercept("person" + sid, pahom3);
 				System.out.println("Added lhome3 percept!");
-			} else if (lyoung.equals(model.lHome4)) {
-				addPercept("young" + sid, yahom4);
+			} else if (lpeople.equals(model.lHome4)) {
+				addPercept("person" + sid, pahom4);
 				System.out.println("Added lhome4 percept!");
-			} else if (lyoung.equals(model.lHome5)) {
-				addPercept("young" + sid, yahom5);
+			} else if (lpeople.equals(model.lHome5)) {
+				addPercept("person" + sid, pahom5);
 				System.out.println("Added lhome5 percept!");
-			} else if (lyoung.equals(model.lSports)) {
-				addPercept("young" + sid, yasp);
+			} else if (lpeople.equals(model.lSports)) {
+				addPercept("person" + sid, pasp);
 				System.out.println("Added lSports percept!");
-			} else if (lyoung.equals(model.lSchool)) {
-				addPercept("young" + sid, yasch);
+			} else if (lpeople.equals(model.lSchool)) {
+				addPercept("person" + sid, pasch);
 				System.out.println("Added lSchool percept!");
-			} else if (lyoung.equals(model.lPark)) {
-				addPercept("young" + sid, yapk);
+			} else if (lpeople.equals(model.lPark)) {
+				addPercept("person" + sid, papk);
 				System.out.println("Added lSchool percept!");
 			}
 		}
 
-		// get the Adult location
-		for (int i = 0; i < model.NUMBER_OF_ADULT; i++) {
-			String sid = Integer.toString(i + 1);
-			Location ladult = model.getAgPos(i + model.NUMBER_OF_YOUNG);
+		/*
+		 * // get the Young location for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
+		 * String sid = Integer.toString(i + 1); Location lyoung = model.getAgPos(i);
+		 * 
+		 * 
+		 * // add agent location to its percepts if (lyoung.equals(model.lBar)) {
+		 * addPercept("young" + sid, yab); System.out.println("Added lbar percept!"); }
+		 * else if (lyoung.equals(model.lJob)) { addPercept("young" + sid, yaj);
+		 * System.out.println("Added ljob percept!"); } else if
+		 * (lyoung.equals(model.lHospital)) { addPercept("young" + sid, yahos);
+		 * System.out.println("Added lhosp percept!"); } else if
+		 * (lyoung.equals(model.lHome1)) { addPercept("young" + sid, yahom1);
+		 * System.out.println("Added lhome1 percept!"); } else if
+		 * (lyoung.equals(model.lHome2)) { addPercept("young" + sid, yahom2);
+		 * System.out.println("Added lhome2 percept!"); } else if
+		 * (lyoung.equals(model.lHome3)) { addPercept("young" + sid, yahom3);
+		 * System.out.println("Added lhome3 percept!"); } else if
+		 * (lyoung.equals(model.lHome4)) { addPercept("young" + sid, yahom4);
+		 * System.out.println("Added lhome4 percept!"); } else if
+		 * (lyoung.equals(model.lHome5)) { addPercept("young" + sid, yahom5);
+		 * System.out.println("Added lhome5 percept!"); } else if
+		 * (lyoung.equals(model.lSports)) { addPercept("young" + sid, yasp);
+		 * System.out.println("Added lSports percept!"); } else if
+		 * (lyoung.equals(model.lSchool)) { addPercept("young" + sid, yasch);
+		 * System.out.println("Added lSchool percept!"); } else if
+		 * (lyoung.equals(model.lPark)) { addPercept("young" + sid, yapk);
+		 * System.out.println("Added lSchool percept!"); } }
+		 */
 
-			// add agent location to its perceps
-			if (ladult.equals(model.lBar)) {
-				addPercept("adult" + sid, aab);
-				System.out.println("[adult" + sid + "] Added lbar percept!");
-			} else if (ladult.equals(model.lJob)) {
-				addPercept("adult" + sid, aaj);
-				System.out.println("[adult" + sid + "] Added ljob percept!");
-			} else if (ladult.equals(model.lHospital)) {
-				addPercept("adult" + sid, aahos);
-				System.out.println("[adult" + sid + "] Added lhospital percept!");
-			} else if (ladult.equals(model.lHome1)) {
-				addPercept("adult" + sid, aahom1);
-				System.out.println("[adult" + sid + "] Added lhome1 percept!");
-			} else if (ladult.equals(model.lHome2)) {
-				addPercept("adult" + sid, aahom2);
-				System.out.println("[adult" + sid + "] Added lhome2 percept!");
-			} else if (ladult.equals(model.lHome3)) {
-				addPercept("adult" + sid, aahom3);
-				System.out.println("[adult" + sid + "] Added lhome3 percept!");
-			} else if (ladult.equals(model.lHome4)) {
-				addPercept("adult" + sid, aahom4);
-				System.out.println("[adult" + sid + "] Added lhome4 percept!");
-			} else if (ladult.equals(model.lHome5)) {
-				addPercept("adult" + sid, aahom5);
-				System.out.println("[adult" + sid + "] Added lhome5 percept!");
-			} else if (ladult.equals(model.lSports)) {
-				addPercept("adult" + sid, aasp);
-				System.out.println("[adult" + sid + "] Added lSports percept!");
-			} else if (ladult.equals(model.lSchool)) {
-				addPercept("adult" + sid, aasch);
-				System.out.println("[adult" + sid + "] Added lSchool percept!");
-			} else if (ladult.equals(model.lPark)) {
-				addPercept("adult" + sid, aapk);
-				System.out.println("[adult" + sid + "] Added lPark percept!");
-			}
-		}
+		/*
+		 * // get the Adult location for(int i = 0;i<model.NUMBER_OF_ADULT;i++) { String
+		 * sid = Integer.toString(i + 1); Location ladult = model.getAgPos(i +
+		 * model.NUMBER_OF_YOUNG);
+		 * 
+		 * // add agent location to its perceps if (ladult.equals(model.lBar)) {
+		 * addPercept("adult" + sid, aab); System.out.println("[adult" + sid +
+		 * "] Added lbar percept!"); } else if (ladult.equals(model.lJob)) {
+		 * addPercept("adult" + sid, aaj); System.out.println("[adult" + sid +
+		 * "] Added ljob percept!"); } else if (ladult.equals(model.lHospital)) {
+		 * addPercept("adult" + sid, aahos); System.out.println("[adult" + sid +
+		 * "] Added lhospital percept!"); } else if (ladult.equals(model.lHome1)) {
+		 * addPercept("adult" + sid, aahom1); System.out.println("[adult" + sid +
+		 * "] Added lhome1 percept!"); } else if (ladult.equals(model.lHome2)) {
+		 * addPercept("adult" + sid, aahom2); System.out.println("[adult" + sid +
+		 * "] Added lhome2 percept!"); } else if (ladult.equals(model.lHome3)) {
+		 * addPercept("adult" + sid, aahom3); System.out.println("[adult" + sid +
+		 * "] Added lhome3 percept!"); } else if (ladult.equals(model.lHome4)) {
+		 * addPercept("adult" + sid, aahom4); System.out.println("[adult" + sid +
+		 * "] Added lhome4 percept!"); } else if (ladult.equals(model.lHome5)) {
+		 * addPercept("adult" + sid, aahom5); System.out.println("[adult" + sid +
+		 * "] Added lhome5 percept!"); } else if (ladult.equals(model.lSports)) {
+		 * addPercept("adult" + sid, aasp); System.out.println("[adult" + sid +
+		 * "] Added lSports percept!"); } else if (ladult.equals(model.lSchool)) {
+		 * addPercept("adult" + sid, aasch); System.out.println("[adult" + sid +
+		 * "] Added lSchool percept!"); } else if (ladult.equals(model.lPark)) {
+		 * addPercept("adult" + sid, aapk); System.out.println("[adult" + sid +
+		 * "] Added lPark percept!"); } }
+		 */
 
 	}
 
@@ -785,26 +778,26 @@ public class SpreadEnv extends Environment {
 
 	public void routineDay(String ag) {
 	}
-	
-	public int getNumInfected (String ag, String l){
+
+	public int getNumInfected(String ag, String l) {
 		int res = 0;
-		for (int i = 0; i< allAgents.length; i++){
+		for (int i = 0; i < allAgents.length; i++) {
 			String auxAgent = allAgents[i];
 			Collection<Literal> allperc = consultPercepts(auxAgent);
 			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();) {
 				String value = iterator.next().toString();
 				System.out.println("-------------------------------");
-				if (value.contains("at")&& value.contains(l)){
-					if (containsPercept(auxAgent,caninfect)){
+				if (value.contains("at") && value.contains(l)) {
+					if (containsPercept(auxAgent, caninfect)) {
 						res++;
 					}
 					System.out.println("PERCEPTS INFECTED = " + value);
-					
+
 				}
 			}
 		}
-		System.out.println("NUM INFECTED IN " + l  + ",CHECKED BY " + ag + " = " + res);
+		System.out.println("NUM INFECTED IN " + l + ",CHECKED BY " + ag + " = " + res);
 		return res;
 	}
-	
+
 }
