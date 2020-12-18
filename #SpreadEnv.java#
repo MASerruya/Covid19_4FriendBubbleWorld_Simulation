@@ -271,7 +271,7 @@ public class SpreadEnv extends Environment {
 				if (randomNum < 0.1) {
 					infected = true;
 				}                                 
-			} else if (l.equals("hospital")){  
+			} else if (l.equals("hospital")){  //What if 
 				if (containsPercept(ag, yinf)){
 					removePercept(ag, yinf);
 				}
