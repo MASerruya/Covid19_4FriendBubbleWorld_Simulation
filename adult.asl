@@ -38,6 +38,12 @@
 	<- !at(adult,home1).
 +!go_home : is_home2
 	<- !at(adult,home2).
++!go_home : is_home3
+	<- !at(adult,home3).
++!go_home : is_home4
+	<- !at(adult,home4).
++!go_home : is_home5
+	<- !at(adult,home5).
 
 // Plan to move.
 +!at(adult,P) : at(adult,P) <- true.
