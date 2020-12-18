@@ -10,13 +10,13 @@
 +!live: is_infected(young) //& is_high_responsible	 
 	<- .print("live: YOUNG HR INFECTED");
 	!at(young,hospital);
-	do_things(hospital);
-	!at(young,home).      
-
+	do_things(hospital).
+                                                  
 	
 // Living if the young is recovered	
-+!live: recovered(young)   
-	<-  !at(young,home).                        
++!live: recovered  
+	<-  !at(young,home)
+	do_things(home).                        
 
 // Plan of living if is a weekend day                                                                                             
 +!live : is_weekend
