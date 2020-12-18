@@ -65,6 +65,22 @@ public class SpreadView extends GridWorldView {
 			g.setColor(Color.green);
 			drawString(g, x, y, defaultFont, "HOME");
 			break;
+		case SpreadModel.HOME1:
+			// if (lRobot.equals(hmodel.lOwner)) {
+			// super.drawAgent(g, x, y, Color.yellow, -1);
+			// }
+			// super.drawAgent(g, x, y, Color.green, -1);
+			g.setColor(Color.green);
+			drawString(g, x, y, defaultFont, "HOME_1");
+			break;
+		case SpreadModel.HOME2:
+			// if (lRobot.equals(hmodel.lOwner)) {
+			// super.drawAgent(g, x, y, Color.yellow, -1);
+			// }
+			// super.drawAgent(g, x, y, Color.green, -1);
+			g.setColor(Color.green);
+			drawString(g, x, y, defaultFont, "HOME_2");
+			break;
 		case SpreadModel.SPORTS:
 			// if (lRobot.equals(hmodel.lOwner)) {
 			// super.drawAgent(g, x, y, Color.yellow, -1);
@@ -118,6 +134,10 @@ public class SpreadView extends GridWorldView {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lHome)) {
 				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lHome1)) {
+				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lHome2)) {
+				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSports)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSchool)) {
@@ -141,6 +161,10 @@ public class SpreadView extends GridWorldView {
 			} else if (lAgent.equals(sModel.lHospital)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lHome)) {
+				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lHome1)) {
+				c = Color.yellow;
+			} else if (lAgent.equals(sModel.lHome2)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSports)) {
 				c = Color.yellow;

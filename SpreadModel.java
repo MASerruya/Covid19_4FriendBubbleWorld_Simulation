@@ -13,6 +13,8 @@ public class SpreadModel extends GridWorldModel {
 	public static final int SPORTS = 256;
 	public static final int SCHOOL = 512;
 	public static final int PARK = 1024;
+	public static final int HOME1 = 2048;
+	public static final int HOME2 = 4096;
 
 	// Week days
 	/*
@@ -37,6 +39,8 @@ public class SpreadModel extends GridWorldModel {
 	Location lBar = new Location(22, 7);
 	Location lHospital = new Location(1, GSize - 2);
 	Location lHome = new Location(GSize - 1, GSize - 1);
+	Location lHome1 = new Location(10, 1);
+	Location lHome2 = new Location(1, 10);
 	Location lSports = new Location(5, 19);
 	Location lSchool = new Location(3, 7);
 	Location lPark = new Location(15, 12);
@@ -62,6 +66,8 @@ public class SpreadModel extends GridWorldModel {
 		add(BAR, lBar);
 		add(HOSPITAL, lHospital);
 		add(HOME, lHome);
+		add(HOME1, lHome1);
+		add(HOME2, lHome2);
 		add(SPORTS, lSports);
 		add(SCHOOL, lSchool);
 		add(PARK, lPark);
@@ -117,6 +123,8 @@ public class SpreadModel extends GridWorldModel {
 			view.update(lBar.x, lBar.y);
 			view.update(lHospital.x, lHospital.y);
 			view.update(lHome.x, lHome.y);
+			view.update(lHome1.x, lHome1.y);
+			view.update(lHome2.x, lHome2.y);
 			view.update(lSports.x, lSports.y);
 			view.update(lSchool.x, lSchool.y);
 			view.update(lPark.x, lPark.y);

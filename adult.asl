@@ -10,28 +10,34 @@
 +!live: is_infected(adult)	 
 	<- .print("live: ADULT INFECTED");
 	!at(adult,hospital);
-	!at(adult,home).
+	!go_home.
 
 // Live on saturday
 +!live : is_saturday
 	<- .print("live: SATURDAY");
 	!at(adult,sports);
-	!at(adult,home);
+	!go_home;
 	!at(adult,bar);
-	!at(adult,home).
+	!go_home.
 
 // Live on sunday
 +!live : is_sunday
 	<- .print("live: SUNDAY");
 	!at(adult,park);
-	!at(adult,home).	
+	!go_home.	
 
 // Live during week-day	
 +!live : is_week
 	<- .print("live: WEEKDAY -- Agent located at: " );
 		!at(adult,job);
 		!at(adult,school);
-		!at(adult,home).
+		!go_home.
+
+//Plan to move to each agent's home
++!go_home : is_home1
+	<- !at(adult,home1).
++!go_home : is_home2
+	<- !at(adult,home2).
 
 // Plan to move.
 +!at(adult,P) : at(adult,P) <- true.

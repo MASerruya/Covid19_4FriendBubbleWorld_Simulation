@@ -40,34 +40,38 @@ public class SpreadEnv extends Environment {
 	/******** LITERALS ************************/
 
 	// Location young
-	public static final Literal yab = Literal.parseLiteral("at(young,bar)");
-	public static final Literal yaj = Literal.parseLiteral("at(young,job)");
-	public static final Literal yahos = Literal.parseLiteral("at(young,hospital)");
-	public static final Literal yahom = Literal.parseLiteral("at(young,home)");
-	public static final Literal yasp = Literal.parseLiteral("at(young,sports)");
-	public static final Literal yasch = Literal.parseLiteral("at(young,school)");
-	public static final Literal yapk = Literal.parseLiteral("at(young,park)");
+	public static final Literal yab 	= Literal.parseLiteral("at(young,bar)");
+	public static final Literal yaj 	= Literal.parseLiteral("at(young,job)");
+	public static final Literal yahos 	= Literal.parseLiteral("at(young,hospital)");
+	public static final Literal yahom 	= Literal.parseLiteral("at(young,home)");
+	public static final Literal yahom1 	= Literal.parseLiteral("at(young,home1)");
+	public static final Literal yahom2 	= Literal.parseLiteral("at(young,home2)");
+	public static final Literal yasp 	= Literal.parseLiteral("at(young,sports)");
+	public static final Literal yasch 	= Literal.parseLiteral("at(young,school)");
+	public static final Literal yapk 	= Literal.parseLiteral("at(young,park)");
 	// Location adult
-	public static final Literal aab = Literal.parseLiteral("at(adult,bar)");
-	public static final Literal aaj = Literal.parseLiteral("at(adult,job)");
-	public static final Literal aahos = Literal.parseLiteral("at(adult,hospital)");
-	public static final Literal aahom = Literal.parseLiteral("at(adult,home)");
-	public static final Literal aasp = Literal.parseLiteral("at(adult,sports)");
-	public static final Literal aasch = Literal.parseLiteral("at(adult,school)");
-	public static final Literal aapk = Literal.parseLiteral("at(adult,park)");
+	public static final Literal aab 	= Literal.parseLiteral("at(adult,bar)");
+	public static final Literal aaj 	= Literal.parseLiteral("at(adult,job)");
+	public static final Literal aahos 	= Literal.parseLiteral("at(adult,hospital)");
+	public static final Literal aahom 	= Literal.parseLiteral("at(adult,home)");
+	public static final Literal aahom1 	= Literal.parseLiteral("at(adult,home1)");
+	public static final Literal aahom2 	= Literal.parseLiteral("at(adult,home2)");
+	public static final Literal aasp 	= Literal.parseLiteral("at(adult,sports)");
+	public static final Literal aasch 	= Literal.parseLiteral("at(adult,school)");
+	public static final Literal aapk 	= Literal.parseLiteral("at(adult,park)");
 
 	// Weekdays and time
-	public static final Literal dweek = Literal.parseLiteral("is_week");
-	public static final Literal dweekend = Literal.parseLiteral("is_weekend");
-	public static final Literal ynewday = Literal.parseLiteral("new_day(young)");
-	public static final Literal anewday = Literal.parseLiteral("new_day(adult)");
+	public static final Literal dweek 	= Literal.parseLiteral("is_week");
+	public static final Literal dweekend 	= Literal.parseLiteral("is_weekend");
+	public static final Literal ynewday 	= Literal.parseLiteral("new_day(young)");
+	public static final Literal anewday 	= Literal.parseLiteral("new_day(adult)");
 
-	public static final Literal lu = Literal.parseLiteral("is_monday");
-	public static final Literal ma = Literal.parseLiteral("is_tuesday");
-	public static final Literal mi = Literal.parseLiteral("is_wednesday");
-	public static final Literal ju = Literal.parseLiteral("is_thursday");
-	public static final Literal vi = Literal.parseLiteral("is_friday");
-	public static final Literal sa = Literal.parseLiteral("is_saturday");
+	public static final Literal lu 	= Literal.parseLiteral("is_monday");
+	public static final Literal ma 	= Literal.parseLiteral("is_tuesday");
+	public static final Literal mi 	= Literal.parseLiteral("is_wednesday");
+	public static final Literal ju 	= Literal.parseLiteral("is_thursday");
+	public static final Literal vi 	= Literal.parseLiteral("is_friday");
+	public static final Literal sa 	= Literal.parseLiteral("is_saturday");
 	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
 	public static final Literal ycountday = Literal.parseLiteral("count_infection_days(young)");
@@ -82,9 +86,9 @@ public class SpreadEnv extends Environment {
 	public static final Literal arec = Literal.parseLiteral("recovered(adult)");
 
 	// Responsability
-	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
-	public static final Literal resp2 = Literal.parseLiteral("is_medium_responsible");
-	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
+	public static final Literal resp1 	= Literal.parseLiteral("is_low_responsible");
+	public static final Literal resp2 	= Literal.parseLiteral("is_medium_responsible");
+	public static final Literal resp3 	= Literal.parseLiteral("is_high_responsible");
 	public static final Literal[] respArray = { resp1, resp2, resp3 };
 
 	private static MAS2JProject project;
@@ -294,6 +298,10 @@ public class SpreadEnv extends Environment {
 				dest = model.lHospital;
 			} else if (l.equals("home")) {
 				dest = model.lHome;
+			} else if (l.equals("home1")) {
+				dest = model.lHome1;
+			} else if (l.equals("home2")) {
+				dest = model.lHome2;
 			} else if (l.equals("sports")) {
 				dest = model.lSports;
 			} else if (l.equals("school")) {
@@ -318,6 +326,10 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, yahos);
 				} else if (containsPercept(ag, yahom)) {
 					removePercept(ag, yahom);
+				} else if (containsPercept(ag, yahom1)) {
+					removePercept(ag, yahom1);
+				} else if (containsPercept(ag, yahom2)) {
+					removePercept(ag, yahom2);
 				} else if (containsPercept(ag, yasp)) {
 					removePercept(ag, yasp);
 				} else if (containsPercept(ag, yasch)) {
@@ -334,6 +346,10 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, aahos);
 				} else if (containsPercept(ag, aahom)) {
 					removePercept(ag, aahom);
+				} else if (containsPercept(ag, aahom1)) {
+					removePercept(ag, aahom1);
+				} else if (containsPercept(ag, aahom2)) {
+					removePercept(ag, aahom2);
 				} else if (containsPercept(ag, aasp)) {
 					removePercept(ag, aasp);
 				} else if (containsPercept(ag, aasch)) {
@@ -387,6 +403,12 @@ public class SpreadEnv extends Environment {
 			} else if (lagent.equals(model.lHome)) {
 				addPercept("young" + sid, yahom);
 				System.out.println("Added lhome percept!");
+			} else if (lagent.equals(model.lHome1)) {
+				addPercept("young" + sid, yahom1);
+				System.out.println("Added lhome1 percept!");
+			} else if (lagent.equals(model.lHome2)) {
+				addPercept("young" + sid, yahom2);
+				System.out.println("Added lhome2 percept!");
 			} else if (lagent.equals(model.lSports)) {
 				addPercept("young" + sid, yasp);
 				System.out.println("Added lSports percept!");
@@ -412,6 +434,12 @@ public class SpreadEnv extends Environment {
 			} else if (lagent.equals(model.lHome)) {
 				addPercept("adult" + sid, aahom);
 				System.out.println("[adult" + sid + "] Added lhome percept!");
+			} else if (lagent.equals(model.lHome1)) {
+				addPercept("adult" + sid, aahom1);
+				System.out.println("[adult" + sid + "] Added lhome1 percept!");
+			} else if (lagent.equals(model.lHome2)) {
+				addPercept("adult" + sid, aahom2);
+				System.out.println("[adult" + sid + "] Added lhome2 percept!");
 			} else if (lagent.equals(model.lSports)) {
 				addPercept("adult" + sid, aasp);
 				System.out.println("[adult" + sid + "] Added lSports percept!");
@@ -559,6 +587,12 @@ public class SpreadEnv extends Environment {
 			} else if (lyoung.equals(model.lHome)) {
 				addPercept("young" + sid, yahom);
 				System.out.println("Added lhome percept!");
+			} else if (lyoung.equals(model.lHome1)) {
+				addPercept("young" + sid, yahom1);
+				System.out.println("Added lhome1 percept!");
+			} else if (lyoung.equals(model.lHome2)) {
+				addPercept("young" + sid, yahom2);
+				System.out.println("Added lhome2 percept!");
 			} else if (lyoung.equals(model.lSports)) {
 				addPercept("young" + sid, yasp);
 				System.out.println("Added lSports percept!");
@@ -589,6 +623,12 @@ public class SpreadEnv extends Environment {
 			} else if (ladult.equals(model.lHome)) {
 				addPercept("adult" + sid, aahom);
 				System.out.println("[adult" + sid + "] Added lhome percept!");
+			} else if (ladult.equals(model.lHome1)) {
+				addPercept("adult" + sid, aahom1);
+				System.out.println("[adult" + sid + "] Added lhome1 percept!");
+			} else if (ladult.equals(model.lHome2)) {
+				addPercept("adult" + sid, aahom2);
+				System.out.println("[adult" + sid + "] Added lhome2 percept!");
 			} else if (ladult.equals(model.lSports)) {
 				addPercept("adult" + sid, aasp);
 				System.out.println("[adult" + sid + "] Added lSports percept!");
