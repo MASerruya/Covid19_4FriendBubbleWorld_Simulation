@@ -37,6 +37,12 @@
 	<- !at(young,home1).
 +!go_home : is_home2
 	<- !at(young,home2).
++!go_home : is_home3
+	<- !at(young,home3).
++!go_home : is_home4
+	<- !at(young,home4).
++!go_home : is_home5
+	<- !at(young,home5).
 	
 // Plan to move.
 +!at(young,P) : at(young,P) <- true.
