@@ -269,6 +269,8 @@ public class SpreadEnv extends Environment {
 
 		if (action.getFunctor().equals("do_things")) {
 
+			
+
 			try {
 				Thread.sleep(300);
 			} catch (Exception e) {
@@ -276,12 +278,17 @@ public class SpreadEnv extends Environment {
 			}
 
 			String l = action.getTerm(0).toString();
+			getNumInfected (ag,l);
 			boolean infected = false;
 			double randomNum = Math.random();
-
+			int numInfected = getNumInfected(ag,l);
+			randomNum = randomNum/numInfected;
+			
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
+					
 					infected = true;
+					
 				}
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05) {
@@ -778,4 +785,26 @@ public class SpreadEnv extends Environment {
 
 	public void routineDay(String ag) {
 	}
+	
+	public int getNumInfected (String ag, String l){
+		int res = 0;
+		for (int i = 0; i< allAgents.length; i++){
+			String auxAgent = allAgents[i];
+			Collection<Literal> allperc = consultPercepts(auxAgent);
+			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();) {
+				String value = iterator.next().toString();
+				System.out.println("-------------------------------");
+				if (value.contains("at")&& value.contains(l)){
+					if (containsPercept(auxAgent,caninfect)){
+						res++;
+					}
+					System.out.println("PERCEPTS INFECTED = " + value);
+					
+				}
+			}
+		}
+		System.out.println("NUM INFECTED IN " + l  + ",CHECKED BY " + ag + " = " + res);
+		return res;
+	}
+	
 }
