@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.awt.Color;
 import java.io.*;
 //DEBUG
 import java.util.*;
-
 
 public class SpreadEnv extends Environment {
 
@@ -33,80 +33,86 @@ public class SpreadEnv extends Environment {
 	// Cases to check if it is someday between L & V or between S & D.
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
+
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
-	public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
-	public int[] daysInfected = {0, 0, 0, 0}; 
-	public int[] daysCanInfect = {0, 0, 0, 0};
+	public String[] allAgents;
+	// public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
+	public int[] daysInfected;
+	public int[] daysCanInfect;
 
-	/******** LITERALS ************************/              
+	/******** LITERALS ************************/
 
 	// Location young
-	public static final Literal yab 	= Literal.parseLiteral("at(young,bar)");
-	public static final Literal yaj 	= Literal.parseLiteral("at(young,job)");
-	public static final Literal yahos 	= Literal.parseLiteral("at(young,hospital)");
-	public static final Literal yahom1 	= Literal.parseLiteral("at(young,home1)");
-	public static final Literal yahom2 	= Literal.parseLiteral("at(young,home2)");
-	public static final Literal yahom3 	= Literal.parseLiteral("at(young,home3)");
-	public static final Literal yahom4 	= Literal.parseLiteral("at(young,home4)");
-	public static final Literal yahom5 	= Literal.parseLiteral("at(young,home5)");
-	public static final Literal yasp 	= Literal.parseLiteral("at(young,sports)");
-	public static final Literal yasch 	= Literal.parseLiteral("at(young,school)");
-	public static final Literal yapk 	= Literal.parseLiteral("at(young,park)");
+	public static final Literal yab = Literal.parseLiteral("at(young,bar)");
+	public static final Literal yaj = Literal.parseLiteral("at(young,job)");
+	public static final Literal yahos = Literal.parseLiteral("at(young,hospital)");
+	public static final Literal yahom1 = Literal.parseLiteral("at(young,home1)");
+	public static final Literal yahom2 = Literal.parseLiteral("at(young,home2)");
+	public static final Literal yahom3 = Literal.parseLiteral("at(young,home3)");
+	public static final Literal yahom4 = Literal.parseLiteral("at(young,home4)");
+	public static final Literal yahom5 = Literal.parseLiteral("at(young,home5)");
+	public static final Literal yasp = Literal.parseLiteral("at(young,sports)");
+	public static final Literal yasch = Literal.parseLiteral("at(young,school)");
+	public static final Literal yapk = Literal.parseLiteral("at(young,park)");
+
 	// Location adult
-	public static final Literal aab 	= Literal.parseLiteral("at(adult,bar)");
-	public static final Literal aaj 	= Literal.parseLiteral("at(adult,job)");
-	public static final Literal aahos 	= Literal.parseLiteral("at(adult,hospital)");
-	public static final Literal aahom1 	= Literal.parseLiteral("at(adult,home1)");
-	public static final Literal aahom2 	= Literal.parseLiteral("at(adult,home2)");
-	public static final Literal aahom3 	= Literal.parseLiteral("at(adult,home3)");
-	public static final Literal aahom4 	= Literal.parseLiteral("at(adult,home4)");
-	public static final Literal aahom5 	= Literal.parseLiteral("at(adult,home5)");
-	public static final Literal aasp 	= Literal.parseLiteral("at(adult,sports)");
-	public static final Literal aasch 	= Literal.parseLiteral("at(adult,school)");
-	public static final Literal aapk 	= Literal.parseLiteral("at(adult,park)");
+	public static final Literal aab = Literal.parseLiteral("at(adult,bar)");
+	public static final Literal aaj = Literal.parseLiteral("at(adult,job)");
+	public static final Literal aahos = Literal.parseLiteral("at(adult,hospital)");
+	public static final Literal aahom1 = Literal.parseLiteral("at(adult,home1)");
+	public static final Literal aahom2 = Literal.parseLiteral("at(adult,home2)");
+	public static final Literal aahom3 = Literal.parseLiteral("at(adult,home3)");
+	public static final Literal aahom4 = Literal.parseLiteral("at(adult,home4)");
+	public static final Literal aahom5 = Literal.parseLiteral("at(adult,home5)");
+	public static final Literal aasp = Literal.parseLiteral("at(adult,sports)");
+	public static final Literal aasch = Literal.parseLiteral("at(adult,school)");
+	public static final Literal aapk = Literal.parseLiteral("at(adult,park)");
 
 	// Weekdays and time
-	public static final Literal dweek 	= Literal.parseLiteral("is_week");
-	public static final Literal dweekend 	= Literal.parseLiteral("is_weekend");
-	public static final Literal ynewday 	= Literal.parseLiteral("new_day(young)");
-	public static final Literal anewday 	= Literal.parseLiteral("new_day(adult)");
+	public static final Literal dweek = Literal.parseLiteral("is_week");
+	public static final Literal dweekend = Literal.parseLiteral("is_weekend");
+	public static final Literal ynewday = Literal.parseLiteral("new_day(young)");
+	public static final Literal anewday = Literal.parseLiteral("new_day(adult)");
 
-	public static final Literal lu 	= Literal.parseLiteral("is_monday");
-	public static final Literal ma 	= Literal.parseLiteral("is_tuesday");
-	public static final Literal mi 	= Literal.parseLiteral("is_wednesday");
-	public static final Literal ju 	= Literal.parseLiteral("is_thursday");
-	public static final Literal vi 	= Literal.parseLiteral("is_friday");
-	public static final Literal sa 	= Literal.parseLiteral("is_saturday");
+	public static final Literal lu = Literal.parseLiteral("is_monday");
+	public static final Literal ma = Literal.parseLiteral("is_tuesday");
+	public static final Literal mi = Literal.parseLiteral("is_wednesday");
+	public static final Literal ju = Literal.parseLiteral("is_thursday");
+	public static final Literal vi = Literal.parseLiteral("is_friday");
+	public static final Literal sa = Literal.parseLiteral("is_saturday");
 	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
+	// Infection
 	public static final Literal ycountday = Literal.parseLiteral("count_infection_days(young)");
 	public static final Literal acountday = Literal.parseLiteral("count_infection_days(adult)");
 
-	// Infection
 	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
 	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
-                                                                               
+
+	public static final Literal pat0 = Literal.parseLiteral("is_patient0");
+
 	// Recovered
-	public static final Literal rec = Literal.parseLiteral("recovered");  
-	
+	public static final Literal rec = Literal.parseLiteral("recovered");
+
 	public static final Literal caninfect = Literal.parseLiteral("can_infect");
 
 	// Responsability
-	public static final Literal resp1 	= Literal.parseLiteral("is_low_responsible");
-	public static final Literal resp2 	= Literal.parseLiteral("is_medium_responsible");
-	public static final Literal resp3 	= Literal.parseLiteral("is_high_responsible");
+	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
+	public static final Literal resp2 = Literal.parseLiteral("is_medium_responsible");
+	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
 	public static final Literal[] respArray = { resp1, resp2, resp3 };
 
+	// Project
 	private static MAS2JProject project;
 
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
-	//List of agents of each home
+	// List of agents of each home
 	private static final int NHOMES = 5;
-	ArrayList<ArrayList<String>>  lhomes;
+	ArrayList<ArrayList<String>> lhomes;
 
 	/********************************************************/
 	/****************** SET UP METHODS **********************/
@@ -138,25 +144,51 @@ public class SpreadEnv extends Environment {
 			}
 		}
 
-		//Create the homes
-		lhomes = new ArrayList<>();
-		for(int i = 0; i < NHOMES; ++i) lhomes.add(new ArrayList<String>()); 
-
-				// Set initial day to monday
+		// Set initial day to monday
 		curr_day = V;
+
+		// Fill the arrays
+		List<AgentParameters> agp = project.getAgents();
+		int numberOfAgents = agp.size();
+
+		// Initialize arrays
+		allAgents = new String[numberOfAgents];
+		daysInfected = new int[numberOfAgents]; // automatically filled with zeros
+		daysCanInfect = new int[numberOfAgents];
+		// Getting the names to save into allAgents array
+		for (AgentParameters ap : agp) {
+			allAgents[agp.indexOf(ap)] = ap.name;
+		}
 
 		// Update the percepts to all the agents
 		updatePercepts();
 
 		// Set the responsability degree to agents
-		// TODO: get agentlist dinamically
-
 		setResponsability(allAgents);
 
-		// Infect the patients 0
-		// addPercept("young1", yinf);
-		String[] infectedAtBegining = { "young1" };
+		// Infect the patients at begining
+		String[] infectedAtBegining = { allAgents[0] };
 		infectAtBegining(infectedAtBegining);
+
+		// Infect the patient 0 - It will not be recovered nor going to hospital
+		addPercept(allAgents[0], pat0);
+
+		// Create the homes
+		lhomes = new ArrayList<>();
+		for (int i = 0; i < NHOMES; ++i)
+			lhomes.add(new ArrayList<String>());
+
+		// Fill the homes
+		for (AgentParameters agent : project.getAgents()) {
+			String initbels = agent.getOption("beliefs");
+			// For every home, if the agent contains the home literal, add it and stop the
+			// loop
+			for (int i = 0; i < NHOMES; ++i)
+				if (initbels.contains("is_home" + String.valueOf(i + 1))) {
+					lhomes.get(i).add(agent.name);
+					break;
+				}
+		}
 
 		// Creating a executor sevice to schedule a task that adds the newday belief
 		// each 'DAY' seconds elapsed
@@ -164,16 +196,6 @@ public class SpreadEnv extends Environment {
 		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
 		// each DAY seconds
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
-
-						//Fill the homes
-		for(AgentParameters agent : project.getAgents()){
-			String initbels = agent.getOption("beliefs");
-			//For every home, if the agent contains the home literal, add it and stop the loop
-			for(int i = 0; i < NHOMES; ++i) if(initbels.contains("is_home"+String.valueOf(i+1))){
-				lhomes.get(i).add(agent.name); break;
-			}
-			
-		}
 
 	}
 
@@ -269,8 +291,6 @@ public class SpreadEnv extends Environment {
 
 		if (action.getFunctor().equals("do_things")) {
 
-			
-
 			try {
 				Thread.sleep(300);
 			} catch (Exception e) {
@@ -278,17 +298,17 @@ public class SpreadEnv extends Environment {
 			}
 
 			String l = action.getTerm(0).toString();
-			getNumInfected (ag,l);
+			getNumInfected(ag, l);
 			boolean infected = false;
 			double randomNum = Math.random();
-			int numInfected = getNumInfected(ag,l);
-			randomNum = randomNum/numInfected;
-			
+			int numInfected = getNumInfected(ag, l);
+			randomNum = randomNum / numInfected;
+
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
-					
+
 					infected = true;
-					
+
 				}
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05) {
@@ -306,49 +326,48 @@ public class SpreadEnv extends Environment {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
-			} else if(l.equals("home")){ 
-			    if (containsPercept(ag, rec)){
+			} else if (l.equals("home")) {
+				if (containsPercept(ag, rec)) {
 					removePercept(ag, rec);
 				}
-		
-			} else if (l.equals("hospital")){  //What if you are in hospital   
-				int i = 0;    
-				for (i = 0; i < allAgents.length; i++){                                                                          
-					if (allAgents[i].equals(ag)){   
-						break;        
+
+			} else if (l.equals("hospital")) { // What if you are in hospital
+				int i = 0;
+				for (i = 0; i < allAgents.length; i++) {
+					if (allAgents[i].equals(ag)) {
+						break;
 					}
-				}    
-				
-				daysInfected[i] = daysInfected[i]+1;
-				
-				if(containsPercept(ag, resp1) && daysInfected[i] >= 1)  {
-					if (containsPercept(ag, yinf)){
+				}
+
+				daysInfected[i] = daysInfected[i] + 1;
+
+				if (containsPercept(ag, resp1) && daysInfected[i] >= 1) {
+					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
-					}     
+					}
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
-					daysCanInfect[i]= 3;
-				}   
-				if(containsPercept(ag, resp2) && daysInfected[i] >= 2)  {
-					if (containsPercept(ag, yinf)){
+					daysCanInfect[i] = 3;
+				}
+				if (containsPercept(ag, resp2) && daysInfected[i] >= 2) {
+					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
-					}   
-					addPercept(ag,caninfect); 
+					}
+					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
-					daysCanInfect[i] = 2; 
-				}  
-				if(containsPercept(ag, resp3) && daysInfected[i] >= 3)  {
-					if (containsPercept(ag, yinf)){
+					daysCanInfect[i] = 2;
+				}
+				if (containsPercept(ag, resp3) && daysInfected[i] >= 3) {
+					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
-					} 
+					}
 					addPercept(ag, rec);
-					daysInfected[i] = 0; 
-				}                                                              
-				     
+					daysInfected[i] = 0;
+				}
+
 			}
-			
 
 			if (infected) {
 				if (ag.startsWith("young")) {
@@ -357,12 +376,10 @@ public class SpreadEnv extends Environment {
 					addPercept(ag, ainf);
 				}
 			}
-			
-			
 
 			result = true;
 
-		}  else if (action.getFunctor().equals("move_towards")) {
+		} else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
 			Location dest = null;
 			if (l.equals("bar")) {
@@ -570,32 +587,30 @@ public class SpreadEnv extends Environment {
 
 		clearDay();
 
-		updatePercepts();  
+		updatePercepts();
 
-		
-		for (int i = 0; i < allAgents.length; i++){
+		for (int i = 0; i < allAgents.length; i++) {
 			String ag = allAgents[i];
-			
-			if (ag.startsWith("young")){
+
+			if (ag.startsWith("young")) {
 				addPercept(ag, ynewday);
-			}
-			else if (ag.startsWith("adult")){
+			} else if (ag.startsWith("adult")) {
 				addPercept(ag, anewday);
 			}
-			
-			if (containsPercept(ag, caninfect)){
-				daysCanInfect[i] = daysCanInfect[i]-1;
-				if (daysCanInfect[i] == 0){   
+
+			if (containsPercept(ag, caninfect)) {
+				daysCanInfect[i] = daysCanInfect[i] - 1;
+				if (daysCanInfect[i] == 0) {
 					removePercept(ag, caninfect);
 				}
 			}
-			
+
 		}
 
 		try {
 			Thread.sleep(100);
 		} catch (Exception e) {
-		}       
+		}
 
 		// Debug log code, decide if remove in final version.
 		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
@@ -654,7 +669,7 @@ public class SpreadEnv extends Environment {
 
 		// Add location percept
 		// get the Young location
-		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {                                    
+		for (int i = 0; i < model.NUMBER_OF_YOUNG; i++) {
 			String sid = Integer.toString(i + 1);
 			Location lyoung = model.getAgPos(i);
 			/*
@@ -783,28 +798,25 @@ public class SpreadEnv extends Environment {
 	/****************** NO USADOS // EN PRUEBA **************/
 	/********************************************************/
 
-	public void routineDay(String ag) {
-	}
-	
-	public int getNumInfected (String ag, String l){
+	public int getNumInfected(String ag, String l) {
 		int res = 0;
-		for (int i = 0; i< allAgents.length; i++){
+		for (int i = 0; i < allAgents.length; i++) {
 			String auxAgent = allAgents[i];
 			Collection<Literal> allperc = consultPercepts(auxAgent);
 			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();) {
 				String value = iterator.next().toString();
 				System.out.println("-------------------------------");
-				if (value.contains("at")&& value.contains(l)){
-					if (containsPercept(auxAgent,caninfect)){
+				if (value.contains("at") && value.contains(l)) {
+					if (containsPercept(auxAgent, caninfect)) {
 						res++;
 					}
 					System.out.println("PERCEPTS INFECTED = " + value);
-					
+
 				}
 			}
 		}
-		System.out.println("NUM INFECTED IN " + l  + ",CHECKED BY " + ag + " = " + res);
+		System.out.println("NUM INFECTED IN " + l + ",CHECKED BY " + ag + " = " + res);
 		return res;
 	}
-	
+
 }

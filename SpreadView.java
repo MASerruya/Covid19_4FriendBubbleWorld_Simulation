@@ -1,5 +1,4 @@
 import jason.environment.grid.*;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -140,6 +139,7 @@ public class SpreadView extends GridWorldView {
 		// Location lAdult = sModel.getAgPos(1);
 
 		if (id < sModel.NUMBER_OF_YOUNG) { // young case
+
 			if (lAgent.equals(sModel.lJob)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lJob)) {
@@ -167,6 +167,7 @@ public class SpreadView extends GridWorldView {
 			} else {
 				c = Color.magenta;
 			}
+
 			super.drawAgent(g, x, y, c, -1);
 			g.setColor(Color.black);
 			super.drawString(g, x, y, defaultFont, "Young");

@@ -7,7 +7,7 @@
 	!live.
 			
 // Live if is infected: High responsible
-+!live: is_infected(young) //& is_high_responsible	 
++!live: is_infected(young) & not is_patient0 //& is_high_responsible	 
 	<- .print("live: YOUNG HR INFECTED");
 	!at(young,hospital);
 	do_things(hospital).
