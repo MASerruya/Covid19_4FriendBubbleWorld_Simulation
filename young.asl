@@ -15,7 +15,7 @@
 	
 // Living if the young is recovered	
 +!live: recovered  
-	<-  !at(young,home)
+	<-  !go_home
 	do_things(home).                        
 
 // Plan of living if is a weekend day                                                                                             
@@ -23,14 +23,20 @@
 	<- //.print("live: WEEKEND");
 	!at(young,bar);                                                                                                 
 	do_things(bar);
-	!at(young,home).
+	!go_home.
 
 // Plan of living if is a week day
 +!live : is_week
 	<- //.print("live: WEEKDAY -- Agent located at: " );
 	!at(young,park);
 	do_things(park);
-	!at(young,home).	
+	!go_home.	
+
+//Plan to move to each agent's home
++!go_home : is_home1
+	<- !at(young,home1).
++!go_home : is_home2
+	<- !at(young,home2).
 	
 // Plan to move.
 +!at(young,P) : at(young,P) <- true.
