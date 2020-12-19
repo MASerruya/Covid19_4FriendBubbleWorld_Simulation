@@ -43,7 +43,7 @@ public class SpreadEnv extends Environment {
 	public int[] daysCanInfect;
 
 	// List of agents of each home
-	private static final int NHOMES = 5; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
+	private static final int NHOMES = 6; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
 	ArrayList<ArrayList<String>> lhomes;
 
 	//Control string for further comparisons.

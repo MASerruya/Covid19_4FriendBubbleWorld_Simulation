@@ -13,7 +13,7 @@ public class SpreadModel extends GridWorldModel {
 	public static final int SPORTS = 128;
 	public static final int SCHOOL = 256;
 	public static final int PARK = 512;
-	private static final int NHOMES = 5; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
+	private static final int NHOMES = 6; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
 	public static int[] HOMES = new int[NHOMES];
 
 	// Week days
@@ -75,7 +75,7 @@ public class SpreadModel extends GridWorldModel {
 			if (provisional_loc.equals(lJob)    || provisional_loc.equals(lBar)  || provisional_loc.equals(lHospital) ||
 			    provisional_loc.equals(lSports) || provisional_loc.equals(lPark) || provisional_loc.equals(lSchool)) {
 
-				break;	
+				continue;	
 			}
 
 			int iit;
@@ -88,7 +88,7 @@ public class SpreadModel extends GridWorldModel {
 					break;
 				}
 
-			} if (iit == -1)  break;
+			} if (iit == -1)  continue;
 
 			//If the location was free, positionate the new home.
 			lHomes[it] = provisional_loc;

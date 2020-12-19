@@ -20,7 +20,7 @@ public class SpreadView extends GridWorldView {
 	}
 
 	// Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
-	private static final int NHOMES = 5;
+	private static final int NHOMES = 6;
 
 	/**
 	 * Draw applcation objects
