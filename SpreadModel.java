@@ -13,7 +13,7 @@ public class SpreadModel extends GridWorldModel {
 	public static final int SPORTS = 128;
 	public static final int SCHOOL = 256;
 	public static final int PARK = 512;
-	private static final int NHOMES = 6; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
+	public static final int NHOMES = 6;
 	public static int[] HOMES = new int[NHOMES];
 
 	// Week days

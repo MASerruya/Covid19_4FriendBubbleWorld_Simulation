@@ -19,9 +19,6 @@ public class SpreadView extends GridWorldView {
 		repaint();
 	}
 
-	// Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
-	private static final int NHOMES = 6;
-
 	/**
 	 * Draw applcation objects
 	 * 
@@ -85,7 +82,7 @@ public class SpreadView extends GridWorldView {
 			break;
 		default:
 
-			for (int i = 0; i < NHOMES; i++)
+			for (int i = 0; i < sModel.NHOMES; i++)
 			{
 				if (object == SpreadModel.HOMES[i])
 				{
@@ -133,7 +130,7 @@ public class SpreadView extends GridWorldView {
 			} else {
 
 				int i;
-				for (i = 0; i < NHOMES; i++)
+				for (i = 0; i < sModel.NHOMES; i++)
 				{
 					if (lAgent.equals(sModel.lHomes[i]))
 					{
@@ -170,7 +167,7 @@ public class SpreadView extends GridWorldView {
 			} else {
 
 				int i;
-				for (i = 0; i < NHOMES; i++)
+				for (i = 0; i < sModel.NHOMES; i++)
 				{
 					if (lAgent.equals(sModel.lHomes[i]))
 					{

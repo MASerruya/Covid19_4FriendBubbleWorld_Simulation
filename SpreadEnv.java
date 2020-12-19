@@ -43,7 +43,6 @@ public class SpreadEnv extends Environment {
 	public int[] daysCanInfect;
 
 	// List of agents of each home
-	private static final int NHOMES = 6; //WARNING! Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
 	ArrayList<ArrayList<String>> lhomes;
 
 	//Control string for further comparisons.
@@ -59,7 +58,7 @@ public class SpreadEnv extends Environment {
 	public static final Literal yasp = Literal.parseLiteral("at(young,sports)");
 	public static final Literal yasch = Literal.parseLiteral("at(young,school)");
 	public static final Literal yapk = Literal.parseLiteral("at(young,park)");
-	public static Literal[] yahom = new Literal[NHOMES];
+	public static Literal[] yahom;
 
 	// Location adult
 	public static final Literal aab = Literal.parseLiteral("at(adult,bar)");
@@ -68,7 +67,7 @@ public class SpreadEnv extends Environment {
 	public static final Literal aasp = Literal.parseLiteral("at(adult,sports)");
 	public static final Literal aasch = Literal.parseLiteral("at(adult,school)");
 	public static final Literal aapk = Literal.parseLiteral("at(adult,park)");
-	public static Literal[] aahom = new Literal[NHOMES];
+	public static Literal[] aahom;
 
 	// Weekdays and time
 	public static final Literal dweek = Literal.parseLiteral("is_week");
@@ -122,15 +121,18 @@ public class SpreadEnv extends Environment {
 	@Override
 	public void init(String[] args) {
 
+		// Instance of SpreadModel class
+		model = new SpreadModel();
+
+		yahom = new Literal[model.NHOMES];
+		aahom = new Literal[model.NHOMES];
 		//Create the at home literals.
-		for (int i = 0; i < NHOMES; i++)
+		for (int i = 0; i < model.NHOMES; i++)
 		{
 			yahom[i] = Literal.parseLiteral("at(young,home" +(i+1)+ ")");
 			aahom[i] = Literal.parseLiteral("at(adult,home" +(i+1)+ ")");
 		}
 
-		// Instance of SpreadModel class
-		model = new SpreadModel();
 
 		if (args.length == 2 && args[0].equals("gui")) {
 			view = new SpreadView(model);
@@ -178,7 +180,7 @@ public class SpreadEnv extends Environment {
 
 		// Create the homes
 		lhomes = new ArrayList<>();
-		for (int i = 0; i < NHOMES; ++i)
+		for (int i = 0; i < model.NHOMES; ++i)
 			lhomes.add(new ArrayList<String>());
 
 		// Fill the homes
@@ -186,7 +188,7 @@ public class SpreadEnv extends Environment {
 			String initbels = agent.getOption("beliefs");
 			// For every home, if the agent contains the home literal, add it and stop the
 			// loop
-			for (int i = 0; i < NHOMES; ++i)
+			for (int i = 0; i < model.NHOMES; ++i)
 				if (initbels.contains("is_home" + String.valueOf(i + 1))) {
 					lhomes.get(i).add(agent.name);
 					break;
@@ -399,7 +401,7 @@ public class SpreadEnv extends Environment {
 				dest = model.lPark;
 			} else if (home.equals(l.substring(0,4))) {
 
-				for (int i = 0; i < NHOMES; i++)
+				for (int i = 0; i < model.NHOMES; i++)
 				{
 					if (l.equals("home"+(i+1)))
 					{
@@ -431,7 +433,7 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, yapk);
 				} else {
 
-					for (int i = 0; i < NHOMES; i++)
+					for (int i = 0; i < model.NHOMES; i++)
 					{
 						if (containsPercept(ag, yahom[i]))
 						{
@@ -455,7 +457,7 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, aapk);
 				} else {
 
-					for (int i = 0; i < NHOMES; i++)
+					for (int i = 0; i < model.NHOMES; i++)
 					{
 						if (containsPercept(ag, aahom[i]))
 						{
@@ -518,7 +520,7 @@ public class SpreadEnv extends Environment {
 				System.out.println("Added lPark percept!");
 			} else {
 
-				for (int i = 0; i < NHOMES; i++)
+				for (int i = 0; i < model.NHOMES; i++)
 				{
 					if (lagent.equals(model.lHomes[i]))
 					{
@@ -551,7 +553,7 @@ public class SpreadEnv extends Environment {
 				System.out.println("[adult" + sid + "] Added lPark percept!");
 			} else {
 
-				for (int i = 0; i < NHOMES; i++)
+				for (int i = 0; i < model.NHOMES; i++)
 				{
 					if (lagent.equals(model.lHomes[i]))
 					{
@@ -692,7 +694,7 @@ public class SpreadEnv extends Environment {
 				System.out.println("Added lSchool percept!");
 			} else {
 
-				for (int j = 0; j < NHOMES; j++)
+				for (int j = 0; j < model.NHOMES; j++)
 				{
 					if (lyoung.equals(model.lHomes[j]))
 					{
@@ -730,7 +732,7 @@ public class SpreadEnv extends Environment {
 				System.out.println("[adult" + sid + "] Added lPark percept!");
 			} else {
 
-				for (int j = 0; j < NHOMES; j++)
+				for (int j = 0; j < model.NHOMES; j++)
 				{
 					if (ladult.equals(model.lHomes[j]))
 					{
