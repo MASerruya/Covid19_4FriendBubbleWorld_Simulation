@@ -85,12 +85,11 @@ public class SpreadView extends GridWorldView {
 			break;
 		default:
 
-			g.setColor(Color.green);
-
 			for (int i = 0; i < NHOMES; i++)
 			{
 				if (object == SpreadModel.HOMES[i])
 				{
+					g.setColor(Color.green);
 					drawString(g, x, y, defaultFont, "HOME_"+(i+1));
 					break;
 				}
