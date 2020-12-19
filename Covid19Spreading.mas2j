@@ -5,7 +5,7 @@ MAS covid_city{
 	infrastructure: Centralised
 	environment: SpreadEnv(gui, "Covid19Spreading.mas2j")
 	agents:
-		young1 young.asl [beliefs="is_home1"];
+		young1 young.asl [beliefs="is_home3"];
 		young2 young.asl [beliefs="is_home2"];
 		adult1 adult.asl [beliefs="is_home1"];
 		adult2 adult.asl [beliefs="is_home2"];

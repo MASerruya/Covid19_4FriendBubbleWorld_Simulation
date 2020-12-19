@@ -92,6 +92,9 @@ public class SpreadEnv extends Environment {
 
 	public static final Literal pat0 = Literal.parseLiteral("is_patient0");
 
+	//Quarentine literal
+	public static final Literal quar = Literal.parseLiteral("quarentine");
+
 	// Recovered
 	public static final Literal rec = Literal.parseLiteral("recovered");
 
@@ -254,6 +257,24 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
+	/**
+	 * Removes a quarentine belief from all the agents in a home.
+	 *
+	 * @param      agent  The recovered agent
+	 */
+
+	public void remove_quarentine(String agent){
+
+		//Identify home index
+		int home_i = 0;
+		//For each home, check if the agent on it.
+		while(!lhomes.get(home_i).contains(agent)) ++home_i;
+
+		//Remove quarentine for all the agents (but the revovered)
+		for(String ag : lhomes.get(home_i)) if(!ag.equals(agent)) removePercept(ag, quar);
+
+	}
+
 	/********************************************************/
 	/****************** ACTION METHODS **********************/
 	/********************************************************/
@@ -278,6 +299,10 @@ public class SpreadEnv extends Environment {
 		// String sid = ag.substring(ag.length() - 1);
 		String sid;
 		int iid;
+
+		//Variable modified in those actions that do not want to wait
+		boolean nowait = false;
+
 		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
 			sid = ag.substring(5, ag.length());
 			iid = Integer.parseInt(sid) - 1;
@@ -349,6 +374,7 @@ public class SpreadEnv extends Environment {
 				if (containsPercept(ag, resp1) && daysInfected[i] >= 1) {
 					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
+						remove_quarentine(ag);
 					}
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
@@ -358,6 +384,7 @@ public class SpreadEnv extends Environment {
 				if (containsPercept(ag, resp2) && daysInfected[i] >= 2) {
 					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
+						remove_quarentine(ag);
 					}
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
@@ -367,6 +394,7 @@ public class SpreadEnv extends Environment {
 				if (containsPercept(ag, resp3) && daysInfected[i] >= 3) {
 					if (containsPercept(ag, yinf)) {
 						removePercept(ag, yinf);
+						remove_quarentine(ag);
 					}
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
@@ -442,7 +470,17 @@ public class SpreadEnv extends Environment {
 						}
 					}
 				}
-			} else {
+			} 
+
+			else if (action.getFunctor().equals("add_quarentine")){
+
+				//Action to add the quarentine belief to an agent
+				nowait = true;
+				addPercept(ag, quar);
+
+			}
+
+			else {
 				if (containsPercept(ag, aab)) {
 					removePercept(ag, aab);
 				} else if (containsPercept(ag, aaj)) {
@@ -469,9 +507,12 @@ public class SpreadEnv extends Environment {
 			}
 
 			try {
-				Thread.sleep(100);
+				//In case the action has to set the nowait flag, sleep the thread.
+				if(!nowait) Thread.sleep(100);
 			} catch (Exception e) {
 			}
+
+
 
 			// Add the literal determining the new position.
 			updatePosition(ag, sid, iid);
