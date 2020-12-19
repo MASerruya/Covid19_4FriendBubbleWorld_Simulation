@@ -19,6 +19,9 @@ public class SpreadView extends GridWorldView {
 		repaint();
 	}
 
+	// Esta variable se encuentra en los ficheros Env, Model y View. Si se cambia aquí hay que modificarla en el resto.
+	private static final int NHOMES = 5;
+
 	/**
 	 * Draw applcation objects
 	 * 
@@ -56,46 +59,6 @@ public class SpreadView extends GridWorldView {
 			g.setColor(Color.red);
 			drawString(g, x, y, defaultFont, "HOSPITAL");
 			break;
-		case SpreadModel.HOME1:
-			// if (lRobot.equals(hmodel.lOwner)) {
-			// super.drawAgent(g, x, y, Color.yellow, -1);
-			// }
-			// super.drawAgent(g, x, y, Color.green, -1);
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "HOME_1");
-			break;
-		case SpreadModel.HOME2:
-			// if (lRobot.equals(hmodel.lOwner)) {
-			// super.drawAgent(g, x, y, Color.yellow, -1);
-			// }
-			// super.drawAgent(g, x, y, Color.green, -1);
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "HOME_2");
-			break;
-		case SpreadModel.HOME3:
-			// if (lRobot.equals(hmodel.lOwner)) {
-			// super.drawAgent(g, x, y, Color.yellow, -1);
-			// }
-			// super.drawAgent(g, x, y, Color.green, -1);
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "HOME_3");
-			break;
-		case SpreadModel.HOME4:
-			// if (lRobot.equals(hmodel.lOwner)) {
-			// super.drawAgent(g, x, y, Color.yellow, -1);
-			// }
-			// super.drawAgent(g, x, y, Color.green, -1);
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "HOME_4");
-			break;
-		case SpreadModel.HOME5:
-			// if (lRobot.equals(hmodel.lOwner)) {
-			// super.drawAgent(g, x, y, Color.yellow, -1);
-			// }
-			// super.drawAgent(g, x, y, Color.green, -1);
-			g.setColor(Color.green);
-			drawString(g, x, y, defaultFont, "HOME_5");
-			break;
 		case SpreadModel.SPORTS:
 			// if (lRobot.equals(hmodel.lOwner)) {
 			// super.drawAgent(g, x, y, Color.yellow, -1);
@@ -119,6 +82,20 @@ public class SpreadView extends GridWorldView {
 			// super.drawAgent(g, x, y, Color.green, -1);
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "PARK");
+			break;
+		default:
+
+			g.setColor(Color.green);
+
+			for (int i = 0; i < NHOMES; i++)
+			{
+				if (object == SpreadModel.HOMES[i])
+				{
+					drawString(g, x, y, defaultFont, "HOME_"+(i+1));
+					break;
+				}
+			}
+
 			break;
 		}
 		repaint();
@@ -148,16 +125,6 @@ public class SpreadView extends GridWorldView {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lHospital)) {
 				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome1)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome2)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome3)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome4)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome5)) {
-				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSports)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSchool)) {
@@ -165,7 +132,21 @@ public class SpreadView extends GridWorldView {
 			} else if (lAgent.equals(sModel.lPark)) {
 				c = Color.yellow;
 			} else {
-				c = Color.magenta;
+
+				int i;
+				for (i = 0; i < NHOMES; i++)
+				{
+					if (lAgent.equals(sModel.lHomes[i]))
+					{
+						c = Color.yellow;
+						i = -1;
+						break;
+					}
+				}
+
+				if (i != -1)
+
+					c = Color.magenta;
 			}
 
 			super.drawAgent(g, x, y, c, -1);
@@ -181,16 +162,6 @@ public class SpreadView extends GridWorldView {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lHospital)) {
 				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome1)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome2)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome3)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome4)) {
-				c = Color.yellow;
-			} else if (lAgent.equals(sModel.lHome5)) {
-				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSports)) {
 				c = Color.yellow;
 			} else if (lAgent.equals(sModel.lSchool)) {
@@ -198,8 +169,23 @@ public class SpreadView extends GridWorldView {
 			} else if (lAgent.equals(sModel.lPark)) {
 				c = Color.yellow;
 			} else {
-				c = Color.pink;
+
+				int i;
+				for (i = 0; i < NHOMES; i++)
+				{
+					if (lAgent.equals(sModel.lHomes[i]))
+					{
+						c = Color.yellow;
+						i = -1;
+						break;
+					}
+				}
+
+				if (i != -1)
+
+					c = Color.pink;
 			}
+
 			super.drawAgent(g, x, y, c, -1);
 			g.setColor(Color.black);
 			super.drawString(g, x, y, defaultFont, "Adult");
