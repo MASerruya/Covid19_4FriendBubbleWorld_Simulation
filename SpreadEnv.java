@@ -38,7 +38,7 @@ public class SpreadEnv extends Environment {
 	public static final int WEEKEND = 8;
 
 	// A day in the system is turned into 30 seconds.
-	public static final int DAY = 60;
+	public static final int DAY = 75;
 
 	// Agents management arrays
 	public String[] allAgents;
@@ -331,7 +331,7 @@ public class SpreadEnv extends Environment {
 			int numInfected = getNumInfected(ag, l);
 			randomNum = randomNum - numInfected*0.1;
 
-			if (l.equals("bar")) {
+			if (l.equals("bar") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
 				if (randomNum < 0.2) {
 					infected = true;
 				}
@@ -340,24 +340,24 @@ public class SpreadEnv extends Environment {
 
 				}
 
-			} else if (l.equals("job")) {
+			} else if (l.equals("job") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
 				if (randomNum < 0.05) {
 					infected = true;
 				}
 
-			} else if (l.equals("sports")) {
+			} else if (l.equals("sports") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
 
-			} else if (l.equals("school")) {
+			} else if (l.equals("school") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
 				if (randomNum < 0.1) {
 					infected = true;
 				} else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 
-			} else if (l.equals("park")) {
+			} else if (l.equals("park") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
 				if (randomNum < 0.1) {
 					infected = true;
 				} else if (randomNum < 0.2 && ag.startsWith("young")){
@@ -381,7 +381,7 @@ public class SpreadEnv extends Environment {
 				daysInfected[i] = daysInfected[i] + 1;
 
 				// Act according responsability of the user: High, Medium, Low
-				if (containsPercept(ag, resp1) && daysInfected[i] >= 1) {
+				if (containsPercept(ag, resp1) && daysInfected[i] >= 2) {
 					if (containsPercept(ag, aginf)) {
 						removePercept(ag, aginf);
 						remove_quarentine(ag);
@@ -393,7 +393,7 @@ public class SpreadEnv extends Environment {
 					daysCanInfect[i] = 3;
 				}
 
-				if (containsPercept(ag, resp2) && daysInfected[i] >= 2) {
+				if (containsPercept(ag, resp2) && daysInfected[i] >= 4) {
 					if (containsPercept(ag, aginf)) {
 						removePercept(ag, aginf);
 						remove_quarentine(ag);
@@ -404,7 +404,7 @@ public class SpreadEnv extends Environment {
 					daysCanInfect[i] = 2;
 				}
 
-				if (containsPercept(ag, resp3) && daysInfected[i] >= 3) {
+				if (containsPercept(ag, resp3) && daysInfected[i] >= 5) {
 					if (containsPercept(ag, aginf)) {
 						removePercept(ag, aginf);
 						remove_quarentine(ag);
@@ -592,15 +592,48 @@ public class SpreadEnv extends Environment {
 		// Remove previous day-perceptions
 		clearDay();
 
-		// Update percepts
-		updatePercepts();
-
-		for (int i = 0; i < model.NHOMES; i++)
+		for (int i = 0; i < lhomes.size(); i++)
 		{
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < lhomes.get(i).size(); j++)
 			{
 				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
 				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
+			}
+		}
+
+		// Update percepts
+		updatePercepts();
+
+		for (ArrayList<String> home : lhomes)
+		{
+			for (String ag : home)
+			{
+				if ((containsPercept(ag, aginf) || containsPercept(ag, caninfect)) && !containsPercept(ag, quar))
+				{
+					for (String ag_ : home)
+					{
+						if (!containsPercept(ag_, aginf) && !containsPercept(ag_, caninfect))
+						{
+							Random rand = new Random();
+							int x = rand.nextInt(100);
+
+							if (ag_.startsWith("young") && x < 30)
+							{
+								addPercept(ag_, aginf);
+							}
+							else if (ag_.startsWith("young") && x < 60)
+							{
+								addPercept(ag_, caninfect);
+							}
+							else if (ag_.startsWith("adult") && x < 60)
+							{
+								addPercept(ag_, aginf);
+							}
+						}
+					}
+
+					break;
+				}
 			}
 		}
 
@@ -620,6 +653,15 @@ public class SpreadEnv extends Environment {
 			}
 		}
 
+		for (int i = 0; i < lhomes.size(); i++)
+		{
+			for (int j = 0; j < lhomes.get(i).size(); j++)
+			{
+				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
+				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
+			}
+		}
+
 		try {
 			Thread.sleep(100);
 		} catch (Exception e) {
@@ -627,6 +669,7 @@ public class SpreadEnv extends Environment {
 
 		// Debug log code, decide if remove in final version.
 		System.out.println("Newday starting -> " + new java.util.Date());
+
 	};
 
 	/**
@@ -791,7 +834,7 @@ public class SpreadEnv extends Environment {
 
 		for (String ag : lhomes.get(home_i))
 			if (!ag.equals(agent) && containsPercept(ag, aginf))
-				return
+				return;
 
 		// Remove quarentine for all the agents (but the revovered)
 		for (String ag : lhomes.get(home_i))
