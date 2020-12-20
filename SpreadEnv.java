@@ -652,7 +652,7 @@ public class SpreadEnv extends Environment {
 				System.out.println("Added lSchool percept!");
 			} else {
 
-				for (int j = 0; j < model.NHOMES; j++) {
+				for (int j = 0; j < model.NHOMES; ++j) {
 					if (lagent.equals(model.lHomes[j])) {
 						addPercept(allAgents[i], agahom[j]);
 						System.out.println("Added lHome percept!");
