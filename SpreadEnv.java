@@ -428,12 +428,11 @@ public class SpreadEnv extends Environment {
 				}
 					addPercept(ag, caninfect);
 					daysCanInfect[i] = 3;
-					System.out.println("ASINTOMÃ?TICO: " + ag);
 				}
 			
 
 			result = true;
-
+                                   
 			// Move_towards
 		} else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
