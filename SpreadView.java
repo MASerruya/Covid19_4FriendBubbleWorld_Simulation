@@ -9,8 +9,8 @@ public class SpreadView extends GridWorldView {
 	SpreadModel sModel;
 
 	// Variables for agent drawing management
-	public String[] allAgents;
-	public boolean[] allAgentsInfectionStatus;
+	public String[] allAgents = null;
+	public boolean[] allAgentsInfectionStatus = null;
 
 	/**
 	 * Class constructor
@@ -105,40 +105,6 @@ public class SpreadView extends GridWorldView {
 		} else if (isInfected(id) == false) {
 			c = Color.green;
 		}
-	//	else if (lAgent.equals(sModel.lJob)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lJob)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lBar)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lHospital)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lSports)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lSchool)) {
-	//		c = Color.yellow;
-	//	} else if (lAgent.equals(sModel.lPark)) {
-	//		c = Color.yellow;
-	//	} else {
-
-	//		int i;
-	//		for (i = 0; i < sModel.NHOMES; ++i) {
-	//			if (lAgent.equals(sModel.lHomes[i])) {
-	//				c = Color.yellow;
-	//				i = -1;
-	//				break;
-	//			}
-	//		}
-
-	//		//if (i != -1) {
-	//		//	if (isInfected(id)) {
-	//		//		c = Color.red;
-	//		//	} else {
-	//		//		c = Color.green;
-	//		//	}
-
-	//		//}
-	//	}
 
 		super.drawAgent(g, x, y, c, -1);
 		g.setColor(Color.black);
@@ -179,6 +145,8 @@ public class SpreadView extends GridWorldView {
 	 * @param id of the agent to be verified
 	 */
 	public boolean isInfected(int id) {
+
+		if(allAgents == null || allAgentsInfectionStatus == null) return false;
 
 		String sid = allAgents[id];
 

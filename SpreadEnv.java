@@ -219,6 +219,7 @@ public class SpreadEnv extends Environment {
 				addPercept(ags[k], aginf);
 				addPercept(ags[k], caninfect);
 				daysCanInfect[k] = 3;
+				System.out.println("[" + ags[k] + "] " + "Agent infected! (Patient 0)");
 			}
 		}
 	}
@@ -289,7 +290,8 @@ public class SpreadEnv extends Environment {
 		boolean nowait = false;
 
 		// Telling the user what the agents are doing
-		System.out.println("[" + ag + "] doing: " + action);
+		// Only for debug purposes.
+		//System.out.println("[" + ag + "] doing: " + action);
 
 		// Variables for getting agent id
 		String sid;
@@ -397,6 +399,7 @@ public class SpreadEnv extends Environment {
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
 					daysCanInfect[i] = 3;
+					System.out.println("[" + ag + "] " + "Agent cured! (Still infects!)");
 				}
 
 				if (containsPercept(ag, resp2) && daysInfected[i] >= 4) {
@@ -408,11 +411,13 @@ public class SpreadEnv extends Environment {
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
 					daysCanInfect[i] = 2;
+					System.out.println("[" + ag + "] " + "Agent cured! (Still infects!)");
 				}
 
 				if (containsPercept(ag, resp3) && daysInfected[i] >= 5) {
 					if (containsPercept(ag, aginf)) {
 						removePercept(ag, aginf);
+						System.out.println("[" + ag + "] " + "Agent cured!");
 						remove_quarentine(ag);
 					}
 					addPercept(ag, rec);
@@ -427,6 +432,7 @@ public class SpreadEnv extends Environment {
 				removePercept(ag, quar);
 				//And infect
 				addPercept(ag, aginf);
+				System.out.println("[" + ag + "] " + "Agent infected at " + l + "!");
 			}
 			if (asymptomatic && ag.startsWith("young")) {
 				int i = 0;
@@ -436,6 +442,7 @@ public class SpreadEnv extends Environment {
 					}
 				}
 					addPercept(ag, caninfect);
+					System.out.println("[" + ag + "] " + "Agent infected! (No synthoms)");
 					daysCanInfect[i] = 3;
 				}
 			
@@ -508,7 +515,10 @@ public class SpreadEnv extends Environment {
 			// Action to add the quarentine belief to an agent
 			nowait = true;
 			result = true;
-			if(!containsPercept(ag, aginf)) addPercept(ag, quar);
+			if(!containsPercept(ag, aginf)){
+				addPercept(ag, quar);
+				System.out.println("[" + ag + "] " + "Agent quarentine!");
+			} 
 
 		} else {
 			// What to do if action is not defined
@@ -598,46 +608,49 @@ public class SpreadEnv extends Environment {
 		// Remove previous day-perceptions
 		clearDay();
 
-		for (int i = 0; i < lhomes.size(); i++)
-		{
-			for (int j = 0; j < lhomes.get(i).size(); j++)
-			{
-				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
-				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
-			}
-		}
-
 		// Update percepts
 		updatePercepts();
 
+
+		//Manage House infections
+		//For each home
 		for (ArrayList<String> home : lhomes)
-		{
+		{	//For each agent in a gome
 			for (String ag : home)
-			{
+			{	//In case he/she/they can infect and is not quareentined
 				if ((containsPercept(ag, aginf) || containsPercept(ag, caninfect)) && !containsPercept(ag, quar))
-				{
+				{	//Infect each agent
 					for (String ag_ : home)
-					{
-						if (!containsPercept(ag_, aginf) && !containsPercept(ag_, caninfect))
+					{	//In case the agent is not quareentined or infected
+						if (!containsPercept(ag_, aginf) && !containsPercept(ag_, caninfect)  && !containsPercept(ag_, quar))
 						{
 							Random rand = new Random();
 							int x = rand.nextInt(100);
 
+							//Young agents: * Infect with no synthoms (0.3/1)
+							//				* Infect (0.3/1)
+
 							if (ag_.startsWith("young") && x < 30)
 							{
 								addPercept(ag_, aginf);
+								System.out.println("[" + ag_ + "] " + "Agent infected at home!");
 							}
 							else if (ag_.startsWith("young") && x < 60)
 							{
 								addPercept(ag_, caninfect);
+								System.out.println("[" + ag_ + "] " + "Agent infected at home -> Asynthomatic!");
 							}
+
+							//Adult agents: * Infect (0.6/1)
+
 							else if (ag_.startsWith("adult") && x < 60)
 							{
 								addPercept(ag_, aginf);
+								System.out.println("[" + ag_ + "] " + "Agent infected at home!");
 							}
 						}
 					}
-
+					//Once reached the first infected in a house stop and jump to next
 					break;
 				}
 			}
@@ -655,18 +668,11 @@ public class SpreadEnv extends Environment {
 				if (daysCanInfect[i] == 0) {
 					removePercept(ag, caninfect);
 					removePercept(ag, aginf);
+					System.out.println("[" + ag + "] " + "Agent stop infecting!");
 				}
 			}
 		}
 
-		for (int i = 0; i < lhomes.size(); i++)
-		{
-			for (int j = 0; j < lhomes.get(i).size(); j++)
-			{
-				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
-				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
-			}
-		}
 
 		try {
 			Thread.sleep(100);
@@ -702,28 +708,28 @@ public class SpreadEnv extends Environment {
 			// add agent location to its percepts
 			if (lagent.equals(model.lBar)) {
 				addPercept(allAgents[i], agab);
-				System.out.println("Added lbar percept!");
+				//[DEBUG] System.out.println("Added lbar percept!");
 			} else if (lagent.equals(model.lJob)) {
 				addPercept(allAgents[i], agaj);
-				System.out.println("Added ljob percept!");
+				//[DEBUG] System.out.println("Added ljob percept!");
 			} else if (lagent.equals(model.lHospital)) {
 				addPercept(allAgents[i], agahos);
-				System.out.println("Added lhosp percept!");
+				//[DEBUG] System.out.println("Added lhosp percept!");
 			} else if (lagent.equals(model.lSports)) {
 				addPercept(allAgents[i], agasp);
-				System.out.println("Added lSports percept!");
+				//[DEBUG] System.out.println("Added lSports percept!");
 			} else if (lagent.equals(model.lSchool)) {
 				addPercept(allAgents[i], agasch);
-				System.out.println("Added lSchool percept!");
+				//[DEBUG] System.out.println("Added lSchool percept!");
 			} else if (lagent.equals(model.lPark)) {
 				addPercept(allAgents[i], agapk);
-				System.out.println("Added lSchool percept!");
+				//[DEBUG] System.out.println("Added lSchool percept!");
 			} else {
 
 				for (int j = 0; j < model.NHOMES; ++j) {
 					if (lagent.equals(model.lHomes[j])) {
 						addPercept(allAgents[i], agahom[j]);
-						System.out.println("Added lHome percept!");
+						//[DEBUG] System.out.println("Added lHome percept!");
 						break;
 					}
 				}
@@ -844,8 +850,10 @@ public class SpreadEnv extends Environment {
 
 		// Remove quarentine for all the agents (but the revovered)
 		for (String ag : lhomes.get(home_i))
-			if (!ag.equals(agent))
+			if (!ag.equals(agent)){
+				System.out.println("[" + ag + "] " + "Agent removed from quarentine!");
 				removePercept(ag, quar);
+			}
 
 	}
 
