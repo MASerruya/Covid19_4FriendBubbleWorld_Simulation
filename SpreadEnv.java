@@ -154,10 +154,11 @@ public class SpreadEnv extends Environment {
 		setResponsability(allAgents);
 
 		// Infect the patients at begining and communicate it to the spreadView
-		String[] infectedAtBegining = { allAgents[0], allAgents[1] };
+		String[] infectedAtBegining = { allAgents[0] };
 		infectAtBegining(infectedAtBegining);
+		//In case we add new agents, it is necessary to initialize their values.
 		allAgentsInfectionStatus[0] = true;
-		allAgentsInfectionStatus[1] = true;
+		allAgentsInfectionStatus[1] = false;
 		view.setAllAgents(allAgents);
 		view.setInformationOfInfections(allAgentsInfectionStatus);
 
@@ -491,6 +492,7 @@ public class SpreadEnv extends Environment {
 
 			// Action to add the quarentine belief to an agent
 			nowait = true;
+			result = true;
 			addPercept(ag, quar);
 
 		} else {

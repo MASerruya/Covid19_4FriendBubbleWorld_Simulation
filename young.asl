@@ -69,12 +69,16 @@
 +!quarantine(home3) : is_home3 & is_high_responsible <- add_quarentine; !go_home.
 +!quarantine(home4) : is_home4 & is_high_responsible <- add_quarentine; !go_home.
 +!quarantine(home5) : is_home5 & is_high_responsible <- add_quarentine; !go_home.
-
-//If the agent is medium responsible, it will only quarentine next day
+//; .print("CUARENTENA").//If the agent is medium responsible, it will only quarentine next da; .print("CUARENTENA").
 +!quarantine(home1) : is_home1 & is_medium_responsible <- add_quarentine.
 +!quarantine(home2) : is_home2 & is_medium_responsible <- add_quarentine.
 +!quarantine(home3) : is_home3 & is_medium_responsible <- add_quarentine.
 +!quarantine(home4) : is_home4 & is_medium_responsible <- add_quarentine.
 +!quarantine(home5) : is_home5 & is_medium_responsible <- add_quarentine.
 
-//Low responsible keep moving
+//Low responsible keep movin or not the case
++!quarantine(home1) : true <- true.
++!quarantine(home2) : true <- true.
++!quarantine(home3) : true <- true.
++!quarantine(home4) : true <- true.
++!quarantine(home5) : true <- true.
