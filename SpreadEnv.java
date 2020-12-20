@@ -33,6 +33,8 @@ public class SpreadEnv extends Environment {
 	public static final int V = 4;
 	public static final int S = 5;
 	public static final int D = 6;
+	// Day counter.
+	public static int day_counter = 0;
 	// Cases to check if it is someday between L & V or between S & D.
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
@@ -673,6 +675,56 @@ public class SpreadEnv extends Environment {
 			}
 		}
 
+
+		double infected 		= 0;
+		double asymptomatic 		= 0;
+		double quarentine 		= 0;
+		double at_hospital 		= 0;
+		double quarentine_inf		= 0;
+		double quarentine_not_inf	= 0;
+
+		//Calculating statistics to be printed at the end of the day.
+		for (String ag : allAgents)
+		{
+			//Number of infected agents.
+			if (containsPercept(ag, aginf)) infected++;
+
+			//Number of asymptomatic agents.
+			if (containsPercept(ag, caninfect) && !containsPercept(ag, aginf)) asymptomatic++;
+
+			//Number of quarantined agents.
+			if (containsPercept(ag, quar)) quarentine++;
+
+			//Number of agents quarantined and infected.
+			if (containsPercept(ag, quar) && containsPercept(ag, aginf)) quarentine_inf++;
+
+			//Number of agents quarantined but not infected.
+			if (containsPercept(ag, quar) && !containsPercept(ag, aginf)) quarentine_not_inf++;
+
+			//Number of agents in hospital.
+			if (containsPercept(ag, agahos)) at_hospital++;
+		}
+
+		//Number of irresponsible agents: infected but not quarentined.
+		double irresponsible = infected - quarentine;
+
+		System.out.println("***********************************************************************************************************************");
+		System.out.println("***********************************************************************************************************************");
+		System.out.println("\t\t\t STATISTICS DAY " +day_counter);
+		System.out.println();
+		System.out.println("Total number of agents:\t\t\t"+15);
+		System.out.println("Infected agents:\t\t\t"+infected+" (" +((infected*100)/allAgents.length)+ "% of all agents)");
+		System.out.println("Asymptomatic agents:\t\t\t"+asymptomatic+ " (" +((asymptomatic*100)/infected)+ "% of all infected agents)");
+		System.out.println("Agents in hospital:\t\t\t"+at_hospital);
+		System.out.println("Agents in quarantine:\t\t\t"+quarentine);
+		System.out.println("Agents in quarantine and infected:\t\t"+quarentine_inf+" ("+((quarentine_inf*100)/infected)+"% of all infected agents)");
+		System.out.println("Agents in quarantine but not infected:\t\t"+quarentine_not_inf);
+		System.out.println("Unconscious agents (infected and not quarantined):\t"+irresponsible);
+		System.out.println("***********************************************************************************************************************");
+		System.out.println("***********************************************************************************************************************");
+
+		//Increase by one the day counter.
+		day_counter++;
 
 		try {
 			Thread.sleep(100);
