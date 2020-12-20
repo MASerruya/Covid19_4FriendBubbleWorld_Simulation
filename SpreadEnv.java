@@ -33,6 +33,8 @@ public class SpreadEnv extends Environment {
 	public static final int V = 4;
 	public static final int S = 5;
 	public static final int D = 6;
+	// Day counter.
+	public static int day_counter = 0;
 	// Cases to check if it is someday between L & V or between S & D.
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
@@ -667,6 +669,55 @@ public class SpreadEnv extends Environment {
 				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
 			}
 		}
+
+		double infected 		= 0;
+		double asymptomatic 		= 0;
+		double quarentine 		= 0;
+		double at_hospital 		= 0;
+		double quarentine_inf		= 0;
+		double quarentine_not_inf	= 0;
+
+		//Calculating statistics to be printed at the end of the day.
+		for (String ag : allAgents)
+		{
+			//Number of infected agents.
+			if (containsPercept(ag, aginf)) infected++;
+
+			//Number of asymptomatic agents.
+			if (containsPercept(ag, caninfect) && !containsPercept(ag, aginf)) asymptomatic++;
+
+			//Number of quarantined agents.
+			if (containsPercept(ag, quar)) quarentine++;
+
+			//Number of agents quarantined and infected.
+			if (containsPercept(ag, quar) && containsPercept(ag, aginf)) quarentine_inf++;
+
+			//Number of agents quarantined but not infected.
+			if (containsPercept(ag, quar) && !containsPercept(ag, aginf)) quarentine_not_inf++;
+
+			//Number of agents in hospital.
+			if (containsPercept(ag, agahos)) at_hospital++;
+		}
+
+		//Number of irresponsible agents: infected but not quarentined.
+		double irresponsible = infected - quarentine;
+
+		System.out.println("******************************************************");
+		System.out.println("****************** STATISTICS DAY " +day_counter+ " ******************");
+		System.out.println("******************************************************");
+		System.out.println();
+		System.out.println("Infected agents:\t"+infected+" (" +((infected*100)/allAgents.length)+ " of all agents)");
+		System.out.println("Asymptomatic agents:\t"+asymptomatic+ " (" +((asymptomatic*100)/infected)+ " of infected agents)");
+		System.out.println("Agents in hospital:\t"+at_hospital);
+		System.out.println("Agents in quarantine:\t"+quarentine);
+		System.out.println("Agents in quarantine and infected:\t"+quarentine_inf);
+		System.out.println("Agents in quarantine but not infected:\t"+quarentine_not_inf);
+		System.out.println("Irresponsible agents (infected but not quarantined):\t"+irresponsible);
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+
+		//Increase by one the day counter.
+		day_counter++;
 
 		try {
 			Thread.sleep(100);
