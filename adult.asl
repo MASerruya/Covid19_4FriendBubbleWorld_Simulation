@@ -9,7 +9,7 @@
 // Live if is infected
 +!live: is_infected	 
 	<- .print("live: ADULT INFECTED");
-	!at(adult,hospital);
+	!at(hospital);
 	!go_home.
 
 // Live if the agent is in quarentine, stay at home
@@ -17,46 +17,46 @@
 
 // Live on saturday
 +!live : is_saturday
-	<-!at(adult,sports);
+	<-!at(sports);
 	!go_home;
-	!at(adult,bar);
+	!at(bar);
 	!go_home.
 
 // Live on sunday
 +!live : is_sunday
-	<-!at(adult,park);
+	<-!at(park);
 	!go_home.	
 
 // Live during week-day	
 +!live : is_week
-	<- !at(adult,job);
-	!at(adult,school);
+	<- !at(job);
+	!at(school);
 	!go_home.
 
 //Plan to move to each agent's home
 +!go_home : is_home1
-	<- !at(adult,home1).
+	<- !at(home1).
 +!go_home : is_home2
-	<- !at(adult,home2).
+	<- !at(home2).
 +!go_home : is_home3
-	<- !at(adult,home3).
+	<- !at(home3).
 +!go_home : is_home4
-	<- !at(adult,home4).
+	<- !at(home4).
 +!go_home : is_home5
-	<- !at(adult,home5).
+	<- !at(home5).
 
 // Plan to move.
-+!at(adult,P) : at(adult,P) <- true.
-+!at(adult,P) : not at(adult,P)
++!at(P) : at(P) <- true.
++!at(P) : not at(P)
 	<-move_towards(P);
-	!at(adult,P).
+	!at(P).
 
 	//Plans to tell the other agent that i am infected
-+is_infected(adult) : is_home1 <- .broadcast(achieve, quarantine(home1)).
-+is_infected(adult) : is_home2 <- .broadcast(achieve, quarantine(home2)).
-+is_infected(adult) : is_home3 <- .broadcast(achieve, quarantine(home3)).
-+is_infected(adult) : is_home4 <- .broadcast(achieve, quarantine(home4)).
-+is_infected(adult) : is_home5 <- .broadcast(achieve, quarantine(home5)).
++is_infected: is_home1 <- .broadcast(achieve, quarantine(home1)).
++is_infected: is_home2 <- .broadcast(achieve, quarantine(home2)).
++is_infected: is_home3 <- .broadcast(achieve, quarantine(home3)).
++is_infected: is_home4 <- .broadcast(achieve, quarantine(home4)).
++is_infected: is_home5 <- .broadcast(achieve, quarantine(home5)).
 
 //Plans by home when quarentine
 //When the broadcast is received, in case there is house 

@@ -9,7 +9,7 @@
 // Live if is infected
 +!live: is_infected & not is_patient0	 
 	<- .print("live: YOUNG INFECTED");
-	!at(young,hospital);
+	!at(hospital);
 	do_things(hospital).
 
 // Live if the agent is in quarentine, stay at home
@@ -22,40 +22,40 @@
 
 // Plan of living if is a weekend day                                                                                             
 +!live : is_weekend
-	<-!at(young,bar);                                                                                                 
+	<-!at(bar);                                                                                                 
 	do_things(bar);
 	!go_home.
 
 // Plan of living if is a week day
 +!live : is_week
-	<-!at(young,park);
+	<-!at(park);
 	do_things(park);
 	!go_home.	
 
 //Plan to move to each agent's home
 +!go_home : is_home1
-	<- !at(young,home1).
+	<- !at(home1).
 +!go_home : is_home2
-	<- !at(young,home2).
+	<- !at(home2).
 +!go_home : is_home3
-	<- !at(young,home3).
+	<- !at(home3).
 +!go_home : is_home4
-	<- !at(young,home4).
+	<- !at(home4).
 +!go_home : is_home5
-	<- !at(young,home5).
+	<- !at(home5).
 	
 // Plan to move.
-+!at(young,P) : at(young,P) <- true.
-+!at(young,P) : not at(young,P)
++!at(P) : at(P) <- true.
++!at(P) : not at(P)
 	<-move_towards(P);
-	!at(young,P).
+	!at(P).
 
 //Plans to tell the other agent that i am infected
-+is_infected(young) : is_home1 <- .broadcast(achieve, quarantine(home1)).
-+is_infected(young) : is_home2 <- .broadcast(achieve, quarantine(home2)).
-+is_infected(young) : is_home3 <- .broadcast(achieve, quarantine(home3)).
-+is_infected(young) : is_home4 <- .broadcast(achieve, quarantine(home4)).
-+is_infected(young) : is_home5 <- .broadcast(achieve, quarantine(home5)).
++is_infected: is_home1 <- .broadcast(achieve, quarantine(home1)).
++is_infected: is_home2 <- .broadcast(achieve, quarantine(home2)).
++is_infected: is_home3 <- .broadcast(achieve, quarantine(home3)).
++is_infected: is_home4 <- .broadcast(achieve, quarantine(home4)).
++is_infected: is_home5 <- .broadcast(achieve, quarantine(home5)).
 
 //Plans by home when quarentine
 //When the broadcast is received, in case there is house 

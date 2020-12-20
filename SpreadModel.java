@@ -52,7 +52,7 @@ public class SpreadModel extends GridWorldModel {
 
 		int it = 0;
 		Random rand = new Random();
-		
+
 		// Calculate the actual homes.
 		while (it < NHOMES) {
 			// Generate two random numbers avoiding the borders so the names are easily read
