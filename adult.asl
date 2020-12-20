@@ -62,11 +62,11 @@
 //When the broadcast is received, in case there is house 
 
 //IF the agent is high responsible, it goes home and quarentines
-+!quarantine(home1) : is_home1 & is_high_responsible <- add_quarentine; !go_home.
-+!quarantine(home2) : is_home2 & is_high_responsible <- add_quarentine; !go_home.
-+!quarantine(home3) : is_home3 & is_high_responsible <- add_quarentine; !go_home.
-+!quarantine(home4) : is_home4 & is_high_responsible <- add_quarentine; !go_home.
-+!quarantine(home5) : is_home5 & is_high_responsible <- add_quarentine; !go_home.
++!quarantine(home1) : is_home1 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
++!quarantine(home2) : is_home2 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
++!quarantine(home3) : is_home3 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
++!quarantine(home4) : is_home4 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
++!quarantine(home5) : is_home5 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
 //; .print("CUARENTENA").//If the agent is medium responsible, it will only quarentine next da; .print("CUARENTENA").
 +!quarantine(home1) : is_home1 & is_medium_responsible <- add_quarentine.
 +!quarantine(home2) : is_home2 & is_medium_responsible <- add_quarentine.

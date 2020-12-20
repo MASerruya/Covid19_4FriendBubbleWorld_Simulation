@@ -95,9 +95,7 @@ public class SpreadView extends GridWorldView {
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
 
-		if (id < 0)
-
-			return;
+		if (id < 0) return;
 
 		Location lAgent = sModel.getAgPos(id);
 
