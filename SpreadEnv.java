@@ -786,6 +786,10 @@ public class SpreadEnv extends Environment {
 		while (!lhomes.get(home_i).contains(agent))
 			++home_i;
 
+		for (String ag : lhomes.get(home_i))
+			if (!ag.equals(agent) && containsPercept(ag, aginf))
+				return
+
 		// Remove quarentine for all the agents (but the revovered)
 		for (String ag : lhomes.get(home_i))
 			if (!ag.equals(agent))
