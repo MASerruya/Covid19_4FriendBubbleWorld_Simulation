@@ -330,15 +330,17 @@ public class SpreadEnv extends Environment {
 			String l = action.getTerm(0).toString();
 			getNumInfected(ag, l);
 			boolean infected = false;
+			boolean asymptomatic = false;
 			double randomNum = Math.random();
 			int numInfected = getNumInfected(ag, l);
-			randomNum = randomNum / numInfected;
+			randomNum = randomNum - numInfected*0.1;
 
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
-
 					infected = true;
-
+				}
+				else if (randomNum < 0.5 && ag.startsWith("young")){
+					asymptomatic = true;
 				}
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05) {
@@ -351,10 +353,14 @@ public class SpreadEnv extends Environment {
 			} else if (l.equals("school")) {
 				if (randomNum < 0.1) {
 					infected = true;
+				} else if (randomNum < 0.3 && ag.startsWith("young")){
+					asymptomatic = true;
 				}
 			} else if (l.equals("park")) {
 				if (randomNum < 0.1) {
 					infected = true;
+				} else if (randomNum < 0.2 && ag.startsWith("young")){
+					asymptomatic = true;
 				}
 			} else if (l.equals("home")) {
 				if (containsPercept(ag, rec)) {
@@ -409,6 +415,18 @@ public class SpreadEnv extends Environment {
 					addPercept(ag, ainf);
 				}
 			}
+			if (asymptomatic && ag.startsWith("young")) {
+				int i = 0;
+				for (i = 0; i < allAgents.length; i++) {
+					if (allAgents[i].equals(ag)) {
+						break;
+					}
+				}
+					addPercept(ag, caninfect);
+					daysCanInfect[i] = 3;
+					System.out.println("ASINTOMÁTICO: " + ag);
+				}
+			
 
 			result = true;
 

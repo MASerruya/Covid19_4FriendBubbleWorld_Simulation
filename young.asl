@@ -9,6 +9,7 @@
 // Live if is infected: High responsible
 +!live: is_infected(young) & not is_patient0 //& is_high_responsible	 
 	<- .print("live: YOUNG HR INFECTED");
+	
 	!at(young,hospital);
 	do_things(hospital).
 
@@ -31,6 +32,8 @@
 // Plan of living if is a week day
 +!live : is_week
 	<- //.print("live: WEEKDAY -- Agent located at: " );
+	!at(young,school);
+	do_things(school);
 	!at(young,park);
 	do_things(park);
 	!go_home.	
