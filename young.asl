@@ -6,6 +6,7 @@
 	.print("NEWDAY for Youngs");
 	!live.
 			
+
 // Live if is infected
 +!live: is_infected & not is_patient0	 
 	<- .print("live: YOUNG INFECTED");
@@ -28,7 +29,9 @@
 
 // Plan of living if is a week day
 +!live : is_week
-	<-!at(park);
+	<- !at(school);
+	do_things(school);
+	!at(park);
 	do_things(park);
 	!go_home.	
 

@@ -224,7 +224,7 @@ public class SpreadEnv extends Environment {
 			int respons = 0;
 
 			for (int k = 0; k < ags.length; k++) {
-				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
+				// TODO: Asignar probabilidades a que sea High, Medium o Low segÃºn cada tipo de
 				// agente
 				if (ags[k].startsWith("young")) { // Young case: 50%Low, 40%Medium, 10%High
 					value = rand.nextInt(9) + 1;
@@ -318,13 +318,18 @@ public class SpreadEnv extends Environment {
 			// agent in the location -> simulate more agents than they are)
 			getNumInfected(ag, l);
 			boolean infected = false;
+			boolean asymptomatic = false;
 			double randomNum = Math.random();
 			int numInfected = getNumInfected(ag, l);
-			randomNum = randomNum / numInfected;
+			randomNum = randomNum - numInfected*0.1;
 
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
 					infected = true;
+				}
+				else if (randomNum < 0.5 && ag.startsWith("young")){
+					asymptomatic = true;
+
 				}
 
 			} else if (l.equals("job")) {
@@ -340,11 +345,15 @@ public class SpreadEnv extends Environment {
 			} else if (l.equals("school")) {
 				if (randomNum < 0.1) {
 					infected = true;
+				} else if (randomNum < 0.3 && ag.startsWith("young")){
+					asymptomatic = true;
 				}
 
 			} else if (l.equals("park")) {
 				if (randomNum < 0.1) {
 					infected = true;
+				} else if (randomNum < 0.2 && ag.startsWith("young")){
+					asymptomatic = true;
 				}
 
 			} else if (l.equals("home")) {
@@ -402,6 +411,18 @@ public class SpreadEnv extends Environment {
 			if (infected) {
 				addPercept(ag, aginf);
 			}
+			if (asymptomatic && ag.startsWith("young")) {
+				int i = 0;
+				for (i = 0; i < allAgents.length; i++) {
+					if (allAgents[i].equals(ag)) {
+						break;
+					}
+				}
+					addPercept(ag, caninfect);
+					daysCanInfect[i] = 3;
+					System.out.println("ASINTOMÁTICO: " + ag);
+				}
+			
 
 			result = true;
 
