@@ -38,7 +38,7 @@ public class SpreadEnv extends Environment {
 	public static final int WEEKEND = 8;
 
 	// A day in the system is turned into 30 seconds.
-	public static final int DAY = 30;
+	public static final int DAY = 60;
 
 	// Agents management arrays
 	public String[] allAgents;
@@ -591,6 +591,15 @@ public class SpreadEnv extends Environment {
 
 		// Update percepts
 		updatePercepts();
+
+		for (int i = 0; i < model.NHOMES; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
+				System.out.println("Family " +i+ +" "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
+			}
+		}
 
 		for (int i = 0; i < allAgents.length; i++) {
 			String ag = allAgents[i];
