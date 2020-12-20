@@ -7,6 +7,17 @@ MAS covid_city{
 	agents:
 		young1 young.asl [beliefs="is_home1"];
 		young2 young.asl [beliefs="is_home2"];
+		young3 young.asl [beliefs="is_home3"];
+		young4 young.asl [beliefs="is_home4"];
+		young5 young.asl [beliefs="is_home5"];
+		young6 young.asl [beliefs="is_home1"];
+		young7 young.asl [beliefs="is_home2"];
+		young8 young.asl [beliefs="is_home3"];
+		young9 young.asl [beliefs="is_home4"];
+		young10 young.asl [beliefs="is_home5"];
 		adult1 adult.asl [beliefs="is_home1"];
 		adult2 adult.asl [beliefs="is_home2"];
+		adult3 adult.asl [beliefs="is_home3"];
+		adult4 adult.asl [beliefs="is_home4"];
+		adult5 adult.asl [beliefs="is_home5"];
 }

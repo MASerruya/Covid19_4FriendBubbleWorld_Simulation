@@ -95,43 +95,52 @@ public class SpreadView extends GridWorldView {
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
 
+		if (id < 0)
+
+			return;
+
 		Location lAgent = sModel.getAgPos(id);
 
 		// Colision agent-location
-		if (lAgent.equals(sModel.lJob)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lJob)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lBar)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lHospital)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lSports)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lSchool)) {
-			c = Color.yellow;
-		} else if (lAgent.equals(sModel.lPark)) {
-			c = Color.yellow;
-		} else {
-
-			int i;
-			for (i = 0; i < sModel.NHOMES; ++i) {
-				if (lAgent.equals(sModel.lHomes[i])) {
-					c = Color.yellow;
-					i = -1;
-					break;
-				}
-			}
-
-			if (i != -1) {
-				if (isInfected(id)) {
-					c = Color.red;
-				} else {
-					c = Color.green;
-				}
-
-			}
+		if (isInfected(id) == true) {
+			c = Color.red;
+		} else if (isInfected(id) == false) {
+			c = Color.green;
 		}
+	//	else if (lAgent.equals(sModel.lJob)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lJob)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lBar)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lHospital)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lSports)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lSchool)) {
+	//		c = Color.yellow;
+	//	} else if (lAgent.equals(sModel.lPark)) {
+	//		c = Color.yellow;
+	//	} else {
+
+	//		int i;
+	//		for (i = 0; i < sModel.NHOMES; ++i) {
+	//			if (lAgent.equals(sModel.lHomes[i])) {
+	//				c = Color.yellow;
+	//				i = -1;
+	//				break;
+	//			}
+	//		}
+
+	//		//if (i != -1) {
+	//		//	if (isInfected(id)) {
+	//		//		c = Color.red;
+	//		//	} else {
+	//		//		c = Color.green;
+	//		//	}
+
+	//		//}
+	//	}
 
 		super.drawAgent(g, x, y, c, -1);
 		g.setColor(Color.black);

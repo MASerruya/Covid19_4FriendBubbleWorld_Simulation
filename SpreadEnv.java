@@ -156,9 +156,14 @@ public class SpreadEnv extends Environment {
 		// Infect the patients at begining and communicate it to the spreadView
 		String[] infectedAtBegining = { allAgents[0] };
 		infectAtBegining(infectedAtBegining);
-		//In case we add new agents, it is necessary to initialize their values.
+
+		for (int i = 0; i < numberOfAgents; ++i)
+
+			allAgentsInfectionStatus[i] = false;
+
+		// First infected.
 		allAgentsInfectionStatus[0] = true;
-		allAgentsInfectionStatus[1] = false;
+
 		view.setAllAgents(allAgents);
 		view.setInformationOfInfections(allAgentsInfectionStatus);
 

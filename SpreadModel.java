@@ -20,8 +20,8 @@ public class SpreadModel extends GridWorldModel {
 	public static final int DAY = 30;
 
 	// Amount of youngs and adults
-	public static final int NUMBER_OF_YOUNG = 2;
-	public static final int NUMBER_OF_ADULT = 2;
+	public static final int NUMBER_OF_YOUNG = 10;
+	public static final int NUMBER_OF_ADULT = 5;
 
 	// Grid size
 	public static int GSize = 50;
@@ -89,10 +89,9 @@ public class SpreadModel extends GridWorldModel {
 		}
 
 		// Agents location by order
-		setAgPos(0, 13, 10);
-		setAgPos(1, 3, 3);
-		setAgPos(2, 12, 10);
-		setAgPos(3, 11, 10);
+		for (int i = 0; i < (NUMBER_OF_YOUNG+NUMBER_OF_ADULT); ++i)
+
+			setAgPos(i,i+1,i+1);
 
 		// Initial location of the objects
 		add(JOB, lJob);
