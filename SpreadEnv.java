@@ -417,6 +417,9 @@ public class SpreadEnv extends Environment {
 
 			// After being in the location, check if has been infected
 			if (infected) {
+				//In case infected remoe quarentine
+				removePercept(ag, quar);
+				//And infect
 				addPercept(ag, aginf);
 			}
 			if (asymptomatic && ag.startsWith("young")) {
@@ -499,7 +502,7 @@ public class SpreadEnv extends Environment {
 			// Action to add the quarentine belief to an agent
 			nowait = true;
 			result = true;
-			addPercept(ag, quar);
+			if(!containsPercept(ag, aginf)) addPercept(ag, quar);
 
 		} else {
 			// What to do if action is not defined
