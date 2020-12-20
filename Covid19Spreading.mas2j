@@ -5,19 +5,19 @@ MAS covid_city{
 	infrastructure: Centralised
 	environment: SpreadEnv(gui, "Covid19Spreading.mas2j")
 	agents:
-		young1 young.asl [beliefs="is_home1"];
-		young2 young.asl [beliefs="is_home2"];
-		young3 young.asl [beliefs="is_home3"];
-		young4 young.asl [beliefs="is_home4"];
-		young5 young.asl [beliefs="is_home5"];
-		young6 young.asl [beliefs="is_home1"];
-		young7 young.asl [beliefs="is_home2"];
-		young8 young.asl [beliefs="is_home3"];
-		young9 young.asl [beliefs="is_home4"];
-		young10 young.asl [beliefs="is_home5"];
-		adult1 adult.asl [beliefs="is_home1"];
-		adult2 adult.asl [beliefs="is_home2"];
-		adult3 adult.asl [beliefs="is_home3"];
-		adult4 adult.asl [beliefs="is_home4"];
-		adult5 adult.asl [beliefs="is_home5"];
+		young1 young.asl [beliefs="is_home1, r1"];
+		young2 young.asl [beliefs="is_home2, r2"];
+		young3 young.asl [beliefs="is_home3, r3"];
+		young4 young.asl [beliefs="is_home4, r1"];
+		young5 young.asl [beliefs="is_home4, r1"];
+		young6 young.asl [beliefs="is_home1, r2"];
+		young7 young.asl [beliefs="is_home2, r3"];
+		young8 young.asl [beliefs="is_home3, r2"];
+		young9 young.asl [beliefs="is_home4, r1"];
+		young10 young.asl [beliefs="is_home4, r2"];
+		adult1 adult.asl [beliefs="is_home1, r3"];
+		adult2 adult.asl [beliefs="is_home2, r2"];
+		adult3 adult.asl [beliefs="is_home3, r1"];
+		adult4 adult.asl [beliefs="is_home4, r2"];
+		adult5 adult.asl [beliefs="is_home4, r3"];
 }
