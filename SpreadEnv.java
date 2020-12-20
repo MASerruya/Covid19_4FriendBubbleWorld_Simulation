@@ -211,6 +211,8 @@ public class SpreadEnv extends Environment {
 
 			for (int k = 0; k < ags.length; k++) {
 				addPercept(ags[k], aginf);
+				addPercept(ags[k], caninfect);
+				daysCanInfect[k] = 3;
 			}
 		}
 	}
@@ -330,10 +332,10 @@ public class SpreadEnv extends Environment {
 			randomNum = randomNum - numInfected*0.1;
 
 			if (l.equals("bar")) {
-				if (randomNum < 0.3) {
+				if (randomNum < 0.2) {
 					infected = true;
 				}
-				else if (randomNum < 0.5 && ag.startsWith("young")){
+				else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
 
 				}
@@ -426,12 +428,11 @@ public class SpreadEnv extends Environment {
 				}
 					addPercept(ag, caninfect);
 					daysCanInfect[i] = 3;
-					System.out.println("ASINTOMÁTICO: " + ag);
 				}
 			
 
 			result = true;
-
+                                   
 			// Move_towards
 		} else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
@@ -602,6 +603,7 @@ public class SpreadEnv extends Environment {
 				daysCanInfect[i] = daysCanInfect[i] - 1;
 				if (daysCanInfect[i] == 0) {
 					removePercept(ag, caninfect);
+					removePercept(ag, aginf);
 				}
 			}
 		}
