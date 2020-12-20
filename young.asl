@@ -54,11 +54,11 @@
 	!at(P).
 
 //Plans to tell the other agent that i am infected
-+is_infected: is_home1 <- .broadcast(achieve, quarantine(home1)).
-+is_infected: is_home2 <- .broadcast(achieve, quarantine(home2)).
-+is_infected: is_home3 <- .broadcast(achieve, quarantine(home3)).
-+is_infected: is_home4 <- .broadcast(achieve, quarantine(home4)).
-+is_infected: is_home5 <- .broadcast(achieve, quarantine(home5)).
++at(hospital): is_infected & is_home1 <- .broadcast(achieve, quarantine(home1)).
++at(hospital): is_infected & is_home2 <- .broadcast(achieve, quarantine(home2)).
++at(hospital): is_infected & is_home3 <- .broadcast(achieve, quarantine(home3)).
++at(hospital): is_infected & is_home4 <- .broadcast(achieve, quarantine(home4)).
++at(hospital): is_infected & is_home5 <- .broadcast(achieve, quarantine(home5)).
 
 //Plans by home when quarentine
 //When the broadcast is received, in case there is house 
