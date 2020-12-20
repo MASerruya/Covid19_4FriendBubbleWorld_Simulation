@@ -115,7 +115,7 @@ public class SpreadView extends GridWorldView {
 		} else {
 
 			int i;
-			for (i = 0; i < sModel.NHOMES; i++) {
+			for (i = 0; i < sModel.NHOMES; ++i) {
 				if (lAgent.equals(sModel.lHomes[i])) {
 					c = Color.yellow;
 					i = -1;
