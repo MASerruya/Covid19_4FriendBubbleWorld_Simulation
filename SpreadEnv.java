@@ -221,17 +221,36 @@ public class SpreadEnv extends Environment {
 
 			Random rand = new Random();
 			int value = 0;
+			int respons = 0;
 
 			for (int k = 0; k < ags.length; k++) {
 				// TODO: Asignar probabilidades a que sea High, Medium o Low según cada tipo de
 				// agente
-				if (ags[k].startsWith("young")) { // Young case: 20%High, 40%Medium, 40%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
+				if (ags[k].startsWith("young")) { // Young case: 50%Low, 40%Medium, 10%High
+					value = rand.nextInt(9) + 1;
 
-				} else if (ags[k].startsWith("adult")) { // Adult case: 40%High, 35%Medium, 25%Low
-					value = rand.nextInt(2);
-					addPercept(ags[k], respArray[value]);
+					// Young case: 50%Low, 40%Medium, 10%High
+					if (value < 6) { // Low
+						respons = 0;
+					} else if (value >= 6 && value < 10) { // Medium
+						respons = 1;
+					} else { // High
+						respons = 2;
+					}
+					addPercept(ags[k], respArray[respons]);
+
+				} else if (ags[k].startsWith("adult")) { // Adult case: 20%Low, 30%Medium, 50%High
+					value = rand.nextInt(9) + 1;
+
+					// Adult case: 20%Low, 30%Medium, 50%High
+					if (value < 3) { // Low
+						respons = 0;
+					} else if (value >= 3 && value < 6) { // Medium
+						respons = 1;
+					} else { // High
+						respons = 2;
+					}
+					addPercept(ags[k], respArray[respons]);
 				}
 			}
 		}
