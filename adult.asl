@@ -10,10 +10,15 @@
 +!live: is_infected	 
 	<- .print("live: ADULT INFECTED");
 	!at(hospital);
-	!go_home.
+	do_things(hospital).
 
 // Live if the agent is in quarentine, stay at home
 +!live: quarentine <- true.
+
+// Living if the adult is recovered	
++!live: recovered  
+	<-  !go_home
+	do_things(home).                        
 
 // Live on saturday
 +!live : is_saturday

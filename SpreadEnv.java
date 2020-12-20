@@ -145,6 +145,12 @@ public class SpreadEnv extends Environment {
 		daysInfected = new int[numberOfAgents]; // automatically filled with zeros
 		daysCanInfect = new int[numberOfAgents];
 
+		for (int i = 0; i < numberOfAgents; i++)
+		{
+			daysInfected[i] = 0;
+			daysCanInfect[i] = 0;
+		}
+
 		// Getting the names to save into allAgents array
 		for (AgentParameters ap : agp) {
 			allAgents[agp.indexOf(ap)] = ap.name;
