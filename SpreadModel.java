@@ -16,18 +16,10 @@ public class SpreadModel extends GridWorldModel {
 	public static final int NHOMES = 6;
 	public static int[] HOMES = new int[NHOMES];
 
-	// Week days
-	/*
-	 * public static final int L = 0; public static final int M = 1; public static
-	 * final int X = 2; public static final int J = 3; public static final int V =
-	 * 4; public static final int S = 5; public static final int D = 6; // Cases to
-	 * check if it is someday between L & V or between S & D. public static final
-	 * int WEEK = 7; public static final int WEEKEND = 8;
-	 */
-
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
+	// Amount of youngs and adults
 	public static final int NUMBER_OF_YOUNG = 2;
 	public static final int NUMBER_OF_ADULT = 2;
 
@@ -35,13 +27,13 @@ public class SpreadModel extends GridWorldModel {
 	public static int GSize = 50;
 
 	// Object location
-	Location lJob 		= new Location(4, 0);
-	Location lBar 		= new Location(22, 7);
-	Location lHospital 	= new Location(1, GSize - 2);
-	Location lSports 	= new Location(5, 19);
-	Location lSchool 	= new Location(3, 7);
-	Location lPark 		= new Location(15, 12);
-	Location[] lHomes	= new Location[NHOMES];
+	Location lJob = new Location(4, 0);
+	Location lBar = new Location(22, 40);
+	Location lHospital = new Location(1, GSize - 2);
+	Location lSports = new Location(5, 29);
+	Location lSchool = new Location(14, 22);
+	Location lPark = new Location(35, 12);
+	Location[] lHomes = new Location[NHOMES];
 
 	/**
 	 * Class constructor
@@ -51,46 +43,46 @@ public class SpreadModel extends GridWorldModel {
 		// Create a GSize grid with n mobile agents
 		super(GSize, GSize, NUMBER_OF_YOUNG + NUMBER_OF_ADULT);
 
-		//TODO: change to the highest power of two if new static elements are added.
 		int power_of_two = PARK;
-		//Calculate parameters involving the homes locations.
-		for (int i = 0; i < NHOMES; i++)
-		{
+		// Calculate parameters involving the homes locations.
+		for (int i = 0; i < NHOMES; i++) {
 			power_of_two *= 2;
 			HOMES[i] = power_of_two;
 		}
 
 		int it = 0;
 		Random rand = new Random();
-		//Calculate the actual homes.
-		while (it < NHOMES)
-		{
-			//Generate two random numbers avoiding the borders so the names are easily read once in the grid.
+		
+		// Calculate the actual homes.
+		while (it < NHOMES) {
+			// Generate two random numbers avoiding the borders so the names are easily read
+			// once in the grid.
 			int x = rand.nextInt(48) + 1;
 			int y = rand.nextInt(48) + 1;
 
-			Location provisional_loc = new Location(x,y);
+			Location provisional_loc = new Location(x, y);
 
-			//If the position was already taken by one of the static elements, abort.
-			if (provisional_loc.equals(lJob)    || provisional_loc.equals(lBar)  || provisional_loc.equals(lHospital) ||
-			    provisional_loc.equals(lSports) || provisional_loc.equals(lPark) || provisional_loc.equals(lSchool)) {
+			// If the position was already taken by one of the static elements, abort.
+			if (provisional_loc.equals(lJob) || provisional_loc.equals(lBar) || provisional_loc.equals(lHospital)
+					|| provisional_loc.equals(lSports) || provisional_loc.equals(lPark)
+					|| provisional_loc.equals(lSchool)) {
 
-				continue;	
+				continue;
 			}
 
 			int iit;
-			//If the position was already taken by one of the dynamic elements, abort.
-			for (iit = 0; iit < it; iit++)
-			{
-				if (provisional_loc.equals(lHomes[iit]))
-				{
+			// If the position was already taken by one of the dynamic elements, abort.
+			for (iit = 0; iit < it; iit++) {
+				if (provisional_loc.equals(lHomes[iit])) {
 					iit = -1;
 					break;
 				}
 
-			} if (iit == -1)  continue;
+			}
+			if (iit == -1)
+				continue;
 
-			//If the location was free, positionate the new home.
+			// If the location was free, positionate the new home.
 			lHomes[it] = provisional_loc;
 
 			it++;
@@ -110,7 +102,7 @@ public class SpreadModel extends GridWorldModel {
 		add(SCHOOL, lSchool);
 		add(PARK, lPark);
 		for (int i = 0; i < NHOMES; i++)
-		add(HOMES[i], lHomes[i]);
+			add(HOMES[i], lHomes[i]);
 	}
 
 	/**
@@ -163,7 +155,7 @@ public class SpreadModel extends GridWorldModel {
 			view.update(lBar.x, lBar.y);
 			view.update(lHospital.x, lHospital.y);
 			for (int i = 0; i < NHOMES; i++)
-			view.update(lHomes[i].x, lHomes[i].y);
+				view.update(lHomes[i].x, lHomes[i].y);
 			view.update(lSports.x, lSports.y);
 			view.update(lSchool.x, lSchool.y);
 			view.update(lPark.x, lPark.y);

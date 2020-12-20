@@ -22,6 +22,9 @@ public class SpreadEnv extends Environment {
 	SpreadModel model;
 	SpreadView view;
 
+	// Project
+	private static MAS2JProject project;
+
 	// Week days
 	public static final int L = 0;
 	public static final int M = 1;
@@ -37,17 +40,20 @@ public class SpreadEnv extends Environment {
 	// A day in the system is turned into 30 seconds.
 	public static final int DAY = 30;
 
+	// Agents management arrays
 	public String[] allAgents;
-	// public String[] allAgents = { "young1", "young2", "adult1", "adult2" };
+	public boolean[] allAgentsInfectionStatus;
 	public int[] daysInfected;
 	public int[] daysCanInfect;
 
 	// List of agents of each home
 	ArrayList<ArrayList<String>> lhomes;
 
-	//Control string for further comparisons.
+	// Control string for further comparisons.
 	public static final String home = new String("home");
 
+	// Internal variable to keep track of the current day
+	private int curr_day;
 
 	/******** LITERALS ************************/
 
@@ -60,6 +66,15 @@ public class SpreadEnv extends Environment {
 	public static final Literal yapk = Literal.parseLiteral("at(young,park)");
 	public static Literal[] yahom;
 
+	// Location
+	public static final Literal agab = Literal.parseLiteral("at(bar)");
+	public static final Literal agaj = Literal.parseLiteral("at(job)");
+	public static final Literal agahos = Literal.parseLiteral("at(hospital)");
+	public static final Literal agasp = Literal.parseLiteral("at(sports)");
+	public static final Literal agasch = Literal.parseLiteral("at(school)");
+	public static final Literal agapk = Literal.parseLiteral("at(park)");
+	public static Literal[] agahom;
+
 	// Location adult
 	public static final Literal aab = Literal.parseLiteral("at(adult,bar)");
 	public static final Literal aaj = Literal.parseLiteral("at(adult,job)");
@@ -70,10 +85,9 @@ public class SpreadEnv extends Environment {
 	public static Literal[] aahom;
 
 	// Weekdays and time
+	public static final Literal newday = Literal.parseLiteral("new_day");
 	public static final Literal dweek = Literal.parseLiteral("is_week");
 	public static final Literal dweekend = Literal.parseLiteral("is_weekend");
-	public static final Literal ynewday = Literal.parseLiteral("new_day(young)");
-	public static final Literal anewday = Literal.parseLiteral("new_day(adult)");
 
 	public static final Literal lu = Literal.parseLiteral("is_monday");
 	public static final Literal ma = Literal.parseLiteral("is_tuesday");
@@ -84,33 +98,21 @@ public class SpreadEnv extends Environment {
 	public static final Literal dom = Literal.parseLiteral("is_sunday");
 
 	// Infection
-	public static final Literal ycountday = Literal.parseLiteral("count_infection_days(young)");
-	public static final Literal acountday = Literal.parseLiteral("count_infection_days(adult)");
-
-	public static final Literal yinf = Literal.parseLiteral("is_infected(young)");
-	public static final Literal ainf = Literal.parseLiteral("is_infected(adult)");
-
+	public static final Literal aginf = Literal.parseLiteral("is_infected");
 	public static final Literal pat0 = Literal.parseLiteral("is_patient0");
-
-	//Quarentine literal
-	public static final Literal quar = Literal.parseLiteral("quarentine");
+	public static final Literal caninfect = Literal.parseLiteral("can_infect");
 
 	// Recovered
 	public static final Literal rec = Literal.parseLiteral("recovered");
 
-	public static final Literal caninfect = Literal.parseLiteral("can_infect");
+	// Quarentine literal
+	public static final Literal quar = Literal.parseLiteral("quarentine");
 
 	// Responsability
 	public static final Literal resp1 = Literal.parseLiteral("is_low_responsible");
 	public static final Literal resp2 = Literal.parseLiteral("is_medium_responsible");
 	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
 	public static final Literal[] respArray = { resp1, resp2, resp3 };
-
-	// Project
-	private static MAS2JProject project;
-
-	// Internal variable to keep track of the current day
-	private int curr_day;
 
 	/********************************************************/
 	/****************** SET UP METHODS **********************/
@@ -129,13 +131,12 @@ public class SpreadEnv extends Environment {
 
 		yahom = new Literal[model.NHOMES];
 		aahom = new Literal[model.NHOMES];
-		//Create the at home literals.
-		for (int i = 0; i < model.NHOMES; i++)
-		{
-			yahom[i] = Literal.parseLiteral("at(young,home" +(i+1)+ ")");
-			aahom[i] = Literal.parseLiteral("at(adult,home" +(i+1)+ ")");
-		}
 
+		// Create the at home literals.
+		for (int i = 0; i < model.NHOMES; i++) {
+			yahom[i] = Literal.parseLiteral("at(young,home" + (i + 1) + ")");
+			aahom[i] = Literal.parseLiteral("at(adult,home" + (i + 1) + ")");
+		}
 
 		if (args.length == 2 && args[0].equals("gui")) {
 			view = new SpreadView(model);
@@ -161,8 +162,10 @@ public class SpreadEnv extends Environment {
 
 		// Initialize arrays
 		allAgents = new String[numberOfAgents];
+		allAgentsInfectionStatus = new boolean[numberOfAgents];
 		daysInfected = new int[numberOfAgents]; // automatically filled with zeros
 		daysCanInfect = new int[numberOfAgents];
+
 		// Getting the names to save into allAgents array
 		for (AgentParameters ap : agp) {
 			allAgents[agp.indexOf(ap)] = ap.name;
@@ -174,9 +177,12 @@ public class SpreadEnv extends Environment {
 		// Set the responsability degree to agents
 		setResponsability(allAgents);
 
-		// Infect the patients at begining
+		// Infect the patients at begining and communicate it to the spreadView
 		String[] infectedAtBegining = { allAgents[0] };
 		infectAtBegining(infectedAtBegining);
+		allAgentsInfectionStatus[0] = true;
+		view.setAllAgents(allAgents);
+		view.setInformationOfInfections(allAgentsInfectionStatus);
 
 		// Infect the patient 0 - It will not be recovered nor going to hospital
 		addPercept(allAgents[0], pat0);
@@ -218,13 +224,7 @@ public class SpreadEnv extends Environment {
 		if (ags.length > 0) {
 
 			for (int k = 0; k < ags.length; k++) {
-
-				if (ags[k].startsWith("young")) { // Young case
-					addPercept(ags[k], yinf);
-
-				} else if (ags[k].startsWith("adult")) { // Adult case
-					addPercept(ags[k], ainf);
-				}
+				addPercept(ags[k], aginf);
 			}
 		}
 	}
@@ -257,24 +257,6 @@ public class SpreadEnv extends Environment {
 		}
 	}
 
-	/**
-	 * Removes a quarentine belief from all the agents in a home.
-	 *
-	 * @param      agent  The recovered agent
-	 */
-
-	public void remove_quarentine(String agent){
-
-		//Identify home index
-		int home_i = 0;
-		//For each home, check if the agent on it.
-		while(!lhomes.get(home_i).contains(agent)) ++home_i;
-
-		//Remove quarentine for all the agents (but the revovered)
-		for(String ag : lhomes.get(home_i)) if(!ag.equals(agent)) removePercept(ag, quar);
-
-	}
-
 	/********************************************************/
 	/****************** ACTION METHODS **********************/
 	/********************************************************/
@@ -288,37 +270,41 @@ public class SpreadEnv extends Environment {
 	@Override
 	public boolean executeAction(String ag, Structure action) {
 
-		// DEBUG -- Prior to action, percepts
-		Collection<Literal> allpercb = consultPercepts(ag);
-		System.out.println("PERCEPS FROM BEFORE " + ag + " " + allpercb);
-
 		boolean result = false;
+
+		// Variable modified in those actions that do not want to wait
+		boolean nowait = false;
+
+		// Telling the user what the agents are doing
 		System.out.println("[" + ag + "] doing: " + action);
 
 		// Variables for getting agent id
-		// String sid = ag.substring(ag.length() - 1);
 		String sid;
 		int iid;
 
-		//Variable modified in those actions that do not want to wait
-		boolean nowait = false;
-
-		if (ag.startsWith("young")) { // Si es young, si ag es young1 el iid es 0
-			sid = ag.substring(5, ag.length());
+		// Getting the id of the agent
+		sid = ag.substring(5, ag.length());
+		if (ag.startsWith("young")) {
 			iid = Integer.parseInt(sid) - 1;
 
-		} else { // Si es adult, si ag es adult2 el iid es NUMBER_OF_YOUNG + 1
-			sid = ag.substring(5, ag.length());
+		} else {
 			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
 		}
 
-		// every young or adult has to delete its own newday when 1st action is done
-		if (containsPercept(ag, ynewday)) {
-			removePercept(ag, ynewday);
-		} else if (containsPercept(ag, anewday)) {
-			removePercept(ag, anewday);
+		// Update the agents color in spreadView
+		if (containsPercept(ag, aginf)) {
+			allAgentsInfectionStatus[iid] = true;
+		} else {
+			allAgentsInfectionStatus[iid] = false;
 		}
+		view.setInformationOfInfections(allAgentsInfectionStatus);
 
+		// Every young or adult has to delete its own newday when 1st action is done
+		removePercept(ag, newday);
+
+		
+		// Analyzing the excecutro function:
+		// Do_things
 		if (action.getFunctor().equals("do_things")) {
 
 			try {
@@ -327,7 +313,11 @@ public class SpreadEnv extends Environment {
 
 			}
 
+			// Getting do_things argument (location)
 			String l = action.getTerm(0).toString();
+
+			// Setting a probability to get infected (even if there is no already infected
+			// agent in the location -> simulate more agents than they are)
 			getNumInfected(ag, l);
 			boolean infected = false;
 			double randomNum = Math.random();
@@ -336,32 +326,35 @@ public class SpreadEnv extends Environment {
 
 			if (l.equals("bar")) {
 				if (randomNum < 0.3) {
-
 					infected = true;
-
 				}
+
 			} else if (l.equals("job")) {
 				if (randomNum < 0.05) {
 					infected = true;
 				}
+
 			} else if (l.equals("sports")) {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
+
 			} else if (l.equals("school")) {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
+
 			} else if (l.equals("park")) {
 				if (randomNum < 0.1) {
 					infected = true;
 				}
+
 			} else if (l.equals("home")) {
 				if (containsPercept(ag, rec)) {
 					removePercept(ag, rec);
 				}
 
-			} else if (l.equals("hospital")) { // What if you are in hospital
+			} else if (l.equals("hospital")) {
 				int i = 0;
 				for (i = 0; i < allAgents.length; i++) {
 					if (allAgents[i].equals(ag)) {
@@ -369,21 +362,25 @@ public class SpreadEnv extends Environment {
 					}
 				}
 
+				// Updating infected days counter for agent
 				daysInfected[i] = daysInfected[i] + 1;
 
+				// Act according responsability of the user: High, Medium, Low
 				if (containsPercept(ag, resp1) && daysInfected[i] >= 1) {
-					if (containsPercept(ag, yinf)) {
-						removePercept(ag, yinf);
+					if (containsPercept(ag, aginf)) {
+						removePercept(ag, aginf);
 						remove_quarentine(ag);
 					}
+
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
 					daysCanInfect[i] = 3;
 				}
+
 				if (containsPercept(ag, resp2) && daysInfected[i] >= 2) {
-					if (containsPercept(ag, yinf)) {
-						removePercept(ag, yinf);
+					if (containsPercept(ag, aginf)) {
+						removePercept(ag, aginf);
 						remove_quarentine(ag);
 					}
 					addPercept(ag, caninfect);
@@ -391,9 +388,10 @@ public class SpreadEnv extends Environment {
 					daysInfected[i] = 0;
 					daysCanInfect[i] = 2;
 				}
+
 				if (containsPercept(ag, resp3) && daysInfected[i] >= 3) {
-					if (containsPercept(ag, yinf)) {
-						removePercept(ag, yinf);
+					if (containsPercept(ag, aginf)) {
+						removePercept(ag, aginf);
 						remove_quarentine(ag);
 					}
 					addPercept(ag, rec);
@@ -402,19 +400,19 @@ public class SpreadEnv extends Environment {
 
 			}
 
+			// After being in the location, check if has been infected
 			if (infected) {
-				if (ag.startsWith("young")) {
-					addPercept(ag, yinf);
-				} else {
-					addPercept(ag, ainf);
-				}
+				addPercept(ag, aginf);
 			}
 
 			result = true;
 
+			// Move_towards
 		} else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
+
 			Location dest = null;
+
 			if (l.equals("bar")) {
 				dest = model.lBar;
 			} else if (l.equals("job")) {
@@ -427,12 +425,10 @@ public class SpreadEnv extends Environment {
 				dest = model.lSchool;
 			} else if (l.equals("park")) {
 				dest = model.lPark;
-			} else if (home.equals(l.substring(0,4))) {
+			} else if (home.equals(l.substring(0, 4))) {
 
-				for (int i = 0; i < model.NHOMES; i++)
-				{
-					if (l.equals("home"+(i+1)))
-					{
+				for (int i = 0; i < model.NHOMES; i++) {
+					if (l.equals("home" + (i + 1))) {
 						dest = model.lHomes[i];
 						break;
 					}
@@ -461,26 +457,14 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, yapk);
 				} else {
 
-					for (int i = 0; i < model.NHOMES; i++)
-					{
-						if (containsPercept(ag, yahom[i]))
-						{
+					for (int i = 0; i < model.NHOMES; i++) {
+						if (containsPercept(ag, yahom[i])) {
 							removePercept(ag, yahom[i]);
 							break;
 						}
 					}
 				}
-			} 
-
-			else if (action.getFunctor().equals("add_quarentine")){
-
-				//Action to add the quarentine belief to an agent
-				nowait = true;
-				addPercept(ag, quar);
-
-			}
-
-			else {
+			} else {
 				if (containsPercept(ag, aab)) {
 					removePercept(ag, aab);
 				} else if (containsPercept(ag, aaj)) {
@@ -495,35 +479,36 @@ public class SpreadEnv extends Environment {
 					removePercept(ag, aapk);
 				} else {
 
-					for (int i = 0; i < model.NHOMES; i++)
-					{
-						if (containsPercept(ag, aahom[i]))
-						{
+					for (int i = 0; i < model.NHOMES; i++) {
+						if (containsPercept(ag, aahom[i])) {
 							removePercept(ag, aahom[i]);
 							break;
 						}
 					}
 				}
 			}
+		}
 
-			try {
-				//In case the action has to set the nowait flag, sleep the thread.
-				if(!nowait) Thread.sleep(100);
-			} catch (Exception e) {
-			}
+		// add_quarentine
+		else if (action.getFunctor().equals("add_quarentine")) {
 
-
-
-			// Add the literal determining the new position.
-			updatePosition(ag, sid, iid);
+			// Action to add the quarentine belief to an agent
+			nowait = true;
+			addPercept(ag, quar);
 
 		} else {
 			// What to do if action is not defined
 		}
 
-		// DEBUG -- After action, percepts
-		allpercb = consultPercepts(ag);
-		System.out.println("PERCEPS AFTER FROM " + ag + " " + allpercb);
+		try {
+			// In case the action has to set the nowait flag, sleep the thread.
+			if (!nowait)
+				Thread.sleep(100);
+		} catch (Exception e) {
+		}
+
+		// Add the literal determining the new position.
+		updatePosition(ag, sid, iid);
 
 		return result;
 	}
@@ -539,6 +524,53 @@ public class SpreadEnv extends Environment {
 
 		Location lagent = model.getAgPos(iid);
 
+		String agent;
+		if (ag.startsWith("young")) {
+			agent = "young" + sid;
+
+		} else {
+			agent = "adult" + sid;
+		}
+		
+		/*
+		// Setting percepts according location
+		if (lagent.equals(model.lBar)) {
+			addPercept(agent, agab);
+			System.out.println("At bar!");
+		
+		} else if (lagent.equals(model.lJob)) {
+			addPercept(agent, agaj);
+			System.out.println("At job!");
+		
+		} else if (lagent.equals(model.lHospital)) {
+			addPercept(agent, agahos);
+			System.out.println("At hospital!");
+		
+		} else if (lagent.equals(model.lSports)) {
+			addPercept(agent, agasp);
+			System.out.println("At sports!");
+		
+		} else if (lagent.equals(model.lSchool)) {
+			addPercept(agent, agasch);
+			System.out.println("At school!");
+		
+		} else if (lagent.equals(model.lPark)) {
+			addPercept(agent, agapk);
+			System.out.println("At park!");
+		
+		} else {
+
+			for (int i = 0; i < model.NHOMES; i++) {
+				if (lagent.equals(model.lHomes[i])) {
+					addPercept(agent, agahom[i]);
+					System.out.println("At home!");
+					break;
+				}
+			}
+		}
+		*/
+		
+		
 		if (ag.startsWith("young")) {
 			// add agent location to its percepts
 			if (lagent.equals(model.lBar)) {
@@ -561,10 +593,8 @@ public class SpreadEnv extends Environment {
 				System.out.println("Added lPark percept!");
 			} else {
 
-				for (int i = 0; i < model.NHOMES; i++)
-				{
-					if (lagent.equals(model.lHomes[i]))
-					{
+				for (int i = 0; i < model.NHOMES; i++) {
+					if (lagent.equals(model.lHomes[i])) {
 						addPercept("young" + sid, yahom[i]);
 						System.out.println("Added lHome percept!");
 						break;
@@ -594,10 +624,8 @@ public class SpreadEnv extends Environment {
 				System.out.println("[adult" + sid + "] Added lPark percept!");
 			} else {
 
-				for (int i = 0; i < model.NHOMES; i++)
-				{
-					if (lagent.equals(model.lHomes[i]))
-					{
+				for (int i = 0; i < model.NHOMES; i++) {
+					if (lagent.equals(model.lHomes[i])) {
 						addPercept("adult" + sid, aahom[i]);
 						System.out.println("[adult" + sid + "] Added lHome percept!");
 						break;
@@ -605,44 +633,45 @@ public class SpreadEnv extends Environment {
 				}
 			}
 		}
+		
+		
+		
+		
+		
+		
 	}
 
 	/********************************************************/
 	/****************** ROUTINE METHODS *********************/
 	/********************************************************/
 
-	/* Task to execute each day elapsed. Adds the newday perception */
+	/**
+	 * Task to execute each day elapsed
+	 */
 	private Runnable dayelapsed = () -> {
 
-		// Add newday perception for all agents
-		// here we just remove perceptions of days and weekend
-		// updateListOfInfected();
-		// here we just remove perceptions of days
-		// clearAllPercepts();
-
-		// Add newday perception for all agents
+		// Updating curr_day variable
 		curr_day = (curr_day + 1) % 7;
 
+		// Remove previous day-perceptions
 		clearDay();
 
+		// Update percepts
 		updatePercepts();
 
 		for (int i = 0; i < allAgents.length; i++) {
 			String ag = allAgents[i];
 
-			if (ag.startsWith("young")) {
-				addPercept(ag, ynewday);
-			} else if (ag.startsWith("adult")) {
-				addPercept(ag, anewday);
-			}
+			// New day for all the agents
+			addPercept(ag, newday);
 
+			// Update days the agent can infect (-1)
 			if (containsPercept(ag, caninfect)) {
 				daysCanInfect[i] = daysCanInfect[i] - 1;
 				if (daysCanInfect[i] == 0) {
 					removePercept(ag, caninfect);
 				}
 			}
-
 		}
 
 		try {
@@ -651,45 +680,13 @@ public class SpreadEnv extends Environment {
 		}
 
 		// Debug log code, decide if remove in final version.
-		System.out.println("[DEBUG]: Newday belief added at -> " + new java.util.Date());
-
+		System.out.println("Newday starting -> " + new java.util.Date());
 	};
-
-	/**
-	 * Method that clear perceptions from the current day
-	 */
-	public void clearDay() {
-
-		if (containsPercept(lu)) {
-			removePercept(lu);
-		} else if (containsPercept(ma)) {
-			removePercept(ma);
-		} else if (containsPercept(mi)) {
-			removePercept(mi);
-		} else if (containsPercept(ju)) {
-			removePercept(ju);
-		} else if (containsPercept(vi)) {
-			removePercept(vi);
-		} else if (containsPercept(sa)) {
-			removePercept(sa);
-		} else if (containsPercept(dom)) {
-			removePercept(dom);
-		}
-
-		if (containsPercept(dweek)) {
-			removePercept(dweek);
-		} else if (containsPercept(dweekend)) {
-			removePercept(dweekend);
-		}
-	}
 
 	/**
 	 * Update the percepts for all the agents
 	 */
 	public void updatePercepts() {
-
-		// clear the percepts of the agents
-		// clearAllPercepts();
 
 		// Add the percept of the current day
 		addPercept(get_weeklit(curr_day));
@@ -698,12 +695,30 @@ public class SpreadEnv extends Environment {
 		if (curr_day < S) {
 			addPercept(dweek);
 		} else {
-			System.out.println("WEEKEEEEEEEEEEEEEEEEEEEND");
 			addPercept(dweekend);
 		}
-		// DEBUG -- Print all percepts at this time
-		// Collection<Literal> allperc = consultPercepts("adult1");
-		// System.out.println("************* PERCEPS FROM ADULT1: " + allperc);
+
+		/*
+		 * // Add agent location percept for (int i=0; i< allAgents.length; i++) {
+		 * String sid = Integer.toString(i+1); Location lagent = model.getAgPos(i);
+		 * 
+		 * // add agent location to its percepts if (lagent.equals(model.lBar)) {
+		 * addPercept("young" + sid, yab); System.out.println("Added lbar percept!"); }
+		 * else if (lagent.equals(model.lJob)) { addPercept("young" + sid, yaj);
+		 * System.out.println("Added ljob percept!"); } else if
+		 * (lagent.equals(model.lHospital)) { addPercept("young" + sid, yahos);
+		 * System.out.println("Added lhosp percept!"); } else if
+		 * (lagent.equals(model.lSports)) { addPercept("young" + sid, yasp);
+		 * System.out.println("Added lSports percept!"); } else if
+		 * (lagent.equals(model.lSchool)) { addPercept("young" + sid, yasch);
+		 * System.out.println("Added lSchool percept!"); } else if
+		 * (lagent.equals(model.lPark)) { addPercept("young" + sid, yapk);
+		 * System.out.println("Added lSchool percept!"); } else {
+		 * 
+		 * for (int j = 0; j < model.NHOMES; j++) { if (lyoung.equals(model.lHomes[j]))
+		 * { addPercept("young" + sid, yahom[j]);
+		 * System.out.println("Added lHome percept!"); break; } } } }
+		 */
 
 		// Add location percept
 		// get the Young location
@@ -735,10 +750,8 @@ public class SpreadEnv extends Environment {
 				System.out.println("Added lSchool percept!");
 			} else {
 
-				for (int j = 0; j < model.NHOMES; j++)
-				{
-					if (lyoung.equals(model.lHomes[j]))
-					{
+				for (int j = 0; j < model.NHOMES; j++) {
+					if (lyoung.equals(model.lHomes[j])) {
 						addPercept("young" + sid, yahom[j]);
 						System.out.println("Added lHome percept!");
 						break;
@@ -773,10 +786,8 @@ public class SpreadEnv extends Environment {
 				System.out.println("[adult" + sid + "] Added lPark percept!");
 			} else {
 
-				for (int j = 0; j < model.NHOMES; j++)
-				{
-					if (ladult.equals(model.lHomes[j]))
-					{
+				for (int j = 0; j < model.NHOMES; j++) {
+					if (ladult.equals(model.lHomes[j])) {
 						addPercept("adult" + sid, aahom[j]);
 						System.out.println("[adult" + sid + "] Added lHome percept!");
 						break;
@@ -785,6 +796,34 @@ public class SpreadEnv extends Environment {
 			}
 		}
 
+	}
+
+	/**
+	 * Method that clear perceptions from the current day
+	 */
+	public void clearDay() {
+
+		if (containsPercept(lu)) {
+			removePercept(lu);
+		} else if (containsPercept(ma)) {
+			removePercept(ma);
+		} else if (containsPercept(mi)) {
+			removePercept(mi);
+		} else if (containsPercept(ju)) {
+			removePercept(ju);
+		} else if (containsPercept(vi)) {
+			removePercept(vi);
+		} else if (containsPercept(sa)) {
+			removePercept(sa);
+		} else if (containsPercept(dom)) {
+			removePercept(dom);
+		}
+
+		if (containsPercept(dweek)) {
+			removePercept(dweek);
+		} else if (containsPercept(dweekend)) {
+			removePercept(dweekend);
+		}
 	}
 
 	/********************************************************/
@@ -824,29 +863,57 @@ public class SpreadEnv extends Environment {
 		return Literal.parseLiteral("");
 	}
 
-	/********************************************************/
-	/****************** NO USADOS // EN PRUEBA **************/
-	/********************************************************/
-
+	/**
+	 * Method that returns the amount of infected agents in a certain location
+	 * 
+	 * @param ag agent who will check the location
+	 * @param l  location to be checked
+	 * @return number of agents infected in location
+	 */
 	public int getNumInfected(String ag, String l) {
+
 		int res = 0;
+
 		for (int i = 0; i < allAgents.length; i++) {
 			String auxAgent = allAgents[i];
+
 			Collection<Literal> allperc = consultPercepts(auxAgent);
+
 			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();) {
 				String value = iterator.next().toString();
-				System.out.println("-------------------------------");
+
 				if (value.contains("at") && value.contains(l)) {
 					if (containsPercept(auxAgent, caninfect)) {
 						res++;
 					}
-					System.out.println("PERCEPTS INFECTED = " + value);
-
 				}
 			}
 		}
-		System.out.println("NUM INFECTED IN " + l + ",CHECKED BY " + ag + " = " + res);
 		return res;
 	}
+
+	/**
+	 * Removes a quarentine belief from all the agents in a home.
+	 *
+	 * @param agent The recovered agent
+	 */
+	public void remove_quarentine(String agent) {
+
+		// Identify home index
+		int home_i = 0;
+		// For each home, check if the agent on it.
+		while (!lhomes.get(home_i).contains(agent))
+			++home_i;
+
+		// Remove quarentine for all the agents (but the revovered)
+		for (String ag : lhomes.get(home_i))
+			if (!ag.equals(agent))
+				removePercept(ag, quar);
+
+	}
+
+	/********************************************************/
+	/****************** NO USADOS // EN PRUEBA **************/
+	/********************************************************/
 
 }
