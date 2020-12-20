@@ -51,12 +51,12 @@
 	<-move_towards(P);
 	!at(P).
 
-	//Plans to tell the other agent that i am infected
-+is_infected: is_home1 <- .broadcast(achieve, quarantine(home1)).
-+is_infected: is_home2 <- .broadcast(achieve, quarantine(home2)).
-+is_infected: is_home3 <- .broadcast(achieve, quarantine(home3)).
-+is_infected: is_home4 <- .broadcast(achieve, quarantine(home4)).
-+is_infected: is_home5 <- .broadcast(achieve, quarantine(home5)).
+//Plans to tell the other agent that i am infected
++at(hospital): is_infected & is_home1 <- .broadcast(achieve, quarantine(home1)).
++at(hospital): is_infected & is_home2 <- .broadcast(achieve, quarantine(home2)).
++at(hospital): is_infected & is_home3 <- .broadcast(achieve, quarantine(home3)).
++at(hospital): is_infected & is_home4 <- .broadcast(achieve, quarantine(home4)).
++at(hospital): is_infected & is_home5 <- .broadcast(achieve, quarantine(home5)).
 
 //Plans by home when quarentine
 //When the broadcast is received, in case there is house 
@@ -67,7 +67,7 @@
 +!quarantine(home3) : is_home3 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
 +!quarantine(home4) : is_home4 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
 +!quarantine(home5) : is_home5 & is_high_responsible <- .succeed_goal(live); add_quarentine; !go_home.
-//; .print("CUARENTENA").//If the agent is medium responsible, it will only quarentine next da; .print("CUARENTENA").
+//If the agent is medium responsible, it will only quarentine next da; .print("CUARENTENA").
 +!quarantine(home1) : is_home1 & is_medium_responsible <- add_quarentine.
 +!quarantine(home2) : is_home2 & is_medium_responsible <- add_quarentine.
 +!quarantine(home3) : is_home3 & is_medium_responsible <- add_quarentine.
