@@ -597,7 +597,7 @@ public class SpreadEnv extends Environment {
 			for (int j = 0; j < 3; j++)
 			{
 				Collection<Literal> ag_percepts = consultPercepts(lhomes.get(i).get(j));
-				System.out.println("Family " +i+ +" "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
+				System.out.println("Family " +i+ " "+ lhomes.get(i).get(j) +" percepts: " +ag_percepts);
 			}
 		}
 
