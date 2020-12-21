@@ -9,7 +9,7 @@ La finalidad de este proyecto consiste en **simular mediante un sistema de
 agentes la propagación de la COVID19** considerando distintas situaciones
 y entidades con las que acercarse a la realidad lo máximo posible.
 
-## Introducción 
+## Introducción
 
 La situación generada por el COVID-19 ha cambiado nuestras vidas indudablemente. Estamos ante una situación inaudita, donde la cantidad de interacciones que tienen los ciudadanos influye directamente en su probabilidad de contagio y, por tanto, en su posterior incapacidad (y la de sus convivientes) para realizar su actividad normal debido a la enfermedad. 
 
