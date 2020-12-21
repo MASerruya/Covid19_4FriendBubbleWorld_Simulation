@@ -158,8 +158,9 @@ public class SpreadEnv extends Environment {
 
 		// Getting the names to save into allAgents array
 		for (AgentParameters ap : agp)
-
+		{
 			allAgents[agp.indexOf(ap)] = ap.name;
+		}
 
 		// Set the responsability degree to agents
 		setResponsability(allAgents);
@@ -169,8 +170,9 @@ public class SpreadEnv extends Environment {
 		infectAtBegining(infectedAtBegining);
 
 		for (int i = 0; i < numberOfAgents; ++i)
-
+		{
 			allAgentsInfectionStatus[i] = false;
+		}
 
 		// First infected.
 		allAgentsInfectionStatus[0] = true;
@@ -324,8 +326,11 @@ public class SpreadEnv extends Environment {
 		// Perform the DO_THINGS action considering different scenarios.
 		if (action.getFunctor().equals("do_things")) {
 
-			try {Thread.sleep(300);} 
-			catch (Exception e) {}
+			try {
+				Thread.sleep(300);
+			} 
+			catch (Exception e) {
+			}
 
 			// Getting do_things argument (location)
 			String l = action.getTerm(0).toString();
@@ -383,7 +388,7 @@ public class SpreadEnv extends Environment {
 					infected = true;
 				}
 				//Asymptomatic probability.
-				} else if (randomNum < 0.3 && ag.startsWith("young")){
+				else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			}
@@ -403,8 +408,9 @@ public class SpreadEnv extends Environment {
 			else if (l.equals("home"))
 			{
 				if (containsPercept(ag, rec))
-
+				{
 					removePercept(ag, rec);
+				}
 			}
 			//If an agent is at the hospital, different situations will be considered.
 			else if (l.equals("hospital"))
@@ -519,8 +525,7 @@ public class SpreadEnv extends Environment {
 			result = true;
 		}
 		//Consider the MOVE_TOWARDS action taking into account different desired locations.
-		else if (action.getFunctor().equals("move_towards"))
-		{
+		else if (action.getFunctor().equals("move_towards")) {
 			String l = action.getTerm(0).toString();
 			Location dest = null;
 
