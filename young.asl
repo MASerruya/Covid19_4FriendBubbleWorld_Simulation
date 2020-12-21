@@ -135,14 +135,14 @@
 	do_things(bar);
 	!go_home.
 		
-+!live : is_saturday & r3 
++!live : is_sunday & r3 
 	<- !at(sports);
 	do_things(sports);
 	!at(park)
 	do_things(park);
 	!go_home.	
 	
-+!live: is_saturday
++!live: is_sunday
 	<- !at(park);
 	do_things(park);
 	!go_home.
