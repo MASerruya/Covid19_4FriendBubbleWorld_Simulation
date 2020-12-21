@@ -39,16 +39,16 @@ public class SpreadEnv extends Environment {
 	public static final int WEEK = 7;
 	public static final int WEEKEND = 8;
 
-	// A day in the system is turned into 30 seconds.
+	// A day in the system is turned into the following number of seconds.
 	public static final int DAY = 75;
 
-	// Agents management arrays
+	// Agents management arrays.
 	public String[] allAgents;
 	public boolean[] allAgentsInfectionStatus;
 	public int[] daysInfected;
 	public int[] daysCanInfect;
 
-	// List of agents of each home
+	// List of agents of each home.
 	ArrayList<ArrayList<String>> lhomes;
 
 	// Control string for further comparisons.
@@ -57,7 +57,10 @@ public class SpreadEnv extends Environment {
 	// Internal variable to keep track of the current day
 	private int curr_day;
 
-	/******** LITERALS ************************/
+	/***********************************************************************/
+	/******************************* LITERALS ******************************/
+	/***********************************************************************/
+
 	// Location
 	public static final Literal agab = Literal.parseLiteral("at(bar)");
 	public static final Literal agaj = Literal.parseLiteral("at(job)");
@@ -88,7 +91,7 @@ public class SpreadEnv extends Environment {
 	// Recovered
 	public static final Literal rec = Literal.parseLiteral("recovered");
 
-	// Quarentine literal
+	// Quarentine
 	public static final Literal quar = Literal.parseLiteral("quarentine");
 
 	// Responsability
@@ -112,7 +115,7 @@ public class SpreadEnv extends Environment {
 		// Instance of SpreadModel class
 		model = new SpreadModel();
 
-		// Create the athome literals.
+		// Create the athome literals taking into account the number of homes involved.
 		agahom = new Literal[model.NHOMES];
 		for (int i = 0; i < model.NHOMES; i++) {
 			agahom[i] = Literal.parseLiteral("at(home" + (i + 1) + ")");
@@ -132,9 +135,9 @@ public class SpreadEnv extends Environment {
 				e.printStackTrace();
 			}
 		}
-
 		System.out.println("Starting the life in the Covid City...\n");
-		// Set initial day to monday
+
+		// Set initial day to Friday.
 		curr_day = V;
 
 		// Fill the arrays
@@ -142,10 +145,10 @@ public class SpreadEnv extends Environment {
 		int numberOfAgents = agp.size();
 
 		// Initialize arrays
-		allAgents = new String[numberOfAgents];
-		allAgentsInfectionStatus = new boolean[numberOfAgents];
-		daysInfected = new int[numberOfAgents]; // automatically filled with zeros
-		daysCanInfect = new int[numberOfAgents];
+		allAgents = new String[numberOfAgents];			//Array containing the names of all involved agents.
+		allAgentsInfectionStatus = new boolean[numberOfAgents];	//Infection status of all agents.
+		daysInfected = new int[numberOfAgents]; 		//Number of days that each agent has lived with the virus.
+		daysCanInfect = new int[numberOfAgents];		//Number of days that each agent will be able to infect having symptoms or not having them.
 
 		for (int i = 0; i < numberOfAgents; i++)
 		{
@@ -154,9 +157,9 @@ public class SpreadEnv extends Environment {
 		}
 
 		// Getting the names to save into allAgents array
-		for (AgentParameters ap : agp) {
+		for (AgentParameters ap : agp)
+
 			allAgents[agp.indexOf(ap)] = ap.name;
-		}
 
 		// Set the responsability degree to agents
 		setResponsability(allAgents);
@@ -189,8 +192,7 @@ public class SpreadEnv extends Environment {
 		// Fill the homes
 		for (AgentParameters agent : project.getAgents()) {
 			String initbels = agent.getOption("beliefs");
-			// For every home, if the agent contains the home literal, add it and stop the
-			// loop
+			// For every home, if the agent contains the home literal, add it and stop the loop
 			for (int i = 0; i < model.NHOMES; ++i)
 				if (initbels.contains("is_home" + String.valueOf(i + 1))) {
 					lhomes.get(i).add(agent.name);
@@ -198,11 +200,9 @@ public class SpreadEnv extends Environment {
 				}
 		}
 
-		// Creating a executor sevice to schedule a task that adds the newday belief
-		// each 'DAY' seconds elapsed
+		// Creating a executor sevice to schedule a task that adds the newday belief each 'DAY' seconds elapsed
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule
-		// each DAY seconds
+		// Schedule, dayelapsed->task to run, delay DAY to first execution, schedule each DAY seconds
 		executorService.scheduleWithFixedDelay(dayelapsed, DAY, DAY, TimeUnit.SECONDS);
 
 	}
@@ -241,12 +241,11 @@ public class SpreadEnv extends Environment {
 			int respons = 0;
 
 			for (int k = 0; k < ags.length; k++) {
-				// TODO: Asignar probabilidades a que sea High, Medium o Low segÃºn cada tipo de
-				// agente
-				if (ags[k].startsWith("young")) { // Young case: 50%Low, 40%Medium, 10%High
+ 				// Young case: 50%Low, 40%Medium, 10%High
+				if (ags[k].startsWith("young"))
+				{
 					value = rand.nextInt(9) + 1;
 
-					// Young case: 50%Low, 40%Medium, 10%High
 					if (value < 6) { // Low
 						respons = 0;
 					} else if (value >= 6 && value < 10) { // Medium
@@ -254,12 +253,16 @@ public class SpreadEnv extends Environment {
 					} else { // High
 						respons = 2;
 					}
+
+					// Add the percept that a yoing agent has some resposibility degree.
 					addPercept(ags[k], respArray[respons]);
 
-				} else if (ags[k].startsWith("adult")) { // Adult case: 20%Low, 30%Medium, 50%High
+				}
+ 				// Adult case: 20%Low, 30%Medium, 50%High
+				else if (ags[k].startsWith("adult"))
+				{
 					value = rand.nextInt(9) + 1;
 
-					// Adult case: 20%Low, 30%Medium, 50%High
 					if (value < 3) { // Low
 						respons = 0;
 					} else if (value >= 3 && value < 6) { // Medium
@@ -267,6 +270,8 @@ public class SpreadEnv extends Environment {
 					} else { // High
 						respons = 2;
 					}
+
+					// Add the percept that a adult agent has some resposibility degree.
 					addPercept(ags[k], respArray[respons]);
 				}
 			}
@@ -278,7 +283,7 @@ public class SpreadEnv extends Environment {
 	/********************************************************/
 
 	/**
-	 * Excecution of the action
+	 * Excecution of an action
 	 * 
 	 * @param ag
 	 * @param action
@@ -286,18 +291,15 @@ public class SpreadEnv extends Environment {
 	@Override
 	public boolean executeAction(String ag, Structure action) {
 
+		// Value returned by the current method.
 		boolean result = false;
 
 		// Variable modified in those actions that do not want to wait
 		boolean nowait = false;
 
-		// Telling the user what the agents are doing
-		// Only for debug purposes.
-		//System.out.println("[" + ag + "] doing: " + action);
-
 		// Variables for getting agent id
-		String sid;
-		int iid;
+		String 	sid;
+		int 	iid;
 
 		// Getting the id of the agent
 		sid = ag.substring(5, ag.length());
@@ -308,7 +310,7 @@ public class SpreadEnv extends Environment {
 			iid = Integer.parseInt(sid) - 1 + model.NUMBER_OF_YOUNG;
 		}
 
-		// Update the agents color in spreadView
+		// Update the agents color in spreadView considering if it is infected or if it is not.
 		if (containsPercept(ag, aginf)) {
 			allAgentsInfectionStatus[iid] = true;
 		} else {
@@ -319,15 +321,11 @@ public class SpreadEnv extends Environment {
 		// Every young or adult has to delete its own newday when 1st action is done
 		removePercept(ag, newday);
 
-		// Analyzing the excecutro function:
-		// Do_things
+		// Perform the do_things action considering different scenarios.
 		if (action.getFunctor().equals("do_things")) {
 
-			try {
-				Thread.sleep(300);
-			} catch (Exception e) {
-
-			}
+			try {Thread.sleep(300);} 
+			catch (Exception e) {}
 
 			// Getting do_things argument (location)
 			String l = action.getTerm(0).toString();
@@ -335,51 +333,71 @@ public class SpreadEnv extends Environment {
 			// Setting a probability to get infected (even if there is no already infected
 			// agent in the location -> simulate more agents than they are)
 			getNumInfected(ag, l);
-			boolean infected = false;
-			boolean asymptomatic = false;
-			double randomNum = Math.random();
+			boolean infected = false;		 //Considers if the agent will end up infected and will show symptoms.
+			boolean asymptomatic = false;		 //Considers if the agent will end up infected and will not show symptoms.
+			double randomNum = Math.random();	 //Infection probability.
 			int numInfected = getNumInfected(ag, l);
-			randomNum = randomNum - numInfected*0.1;
+			randomNum = randomNum - numInfected*0.1; //Increse the infection probability considering the number of infected agents in the same location.
 
-			if (l.equals("bar") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
+			//If an agent is in the bar and it does not have the virus, consider infecting it.
+			if (l.equals("bar") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
+			{
+				//Symptomatic probability.
 				if (randomNum < 0.2) {
 					infected = true;
 				}
+				//Asymptomatic probability.
 				else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
-
 				}
-
-			} else if (l.equals("job") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
+			}
+			//If an agent is at its job and it does not have the virus, consider infecting it.
+			else if (l.equals("job") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
+			{
+				//Symptomatic probability.
 				if (randomNum < 0.05) {
 					infected = true;
 				}
-
-			} else if (l.equals("sports") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
+				//Asymptomatic probability.
+				else if (randomNum < 0.3 && ag.startsWith("young")){
+					asymptomatic = true;
+				}
+			}
+			else if (l.equals("sports") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
+			{
 				if (randomNum < 0.1) {
 					infected = true;
 				}
-
-			} else if (l.equals("school") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
+				//Asymptomatic probability.
+				else if (randomNum < 0.3 && ag.startsWith("young")){
+					asymptomatic = true;
+				}
+			} 
+			else if (l.equals("school") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
+			{
 				if (randomNum < 0.1) {
 					infected = true;
 				} else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
-
-			} else if (l.equals("park") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf))) {
+			}
+			else if (l.equals("park") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
+			{
 				if (randomNum < 0.1) {
 					infected = true;
 				} else if (randomNum < 0.2 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
-
-			} else if (l.equals("home")) {
+			}
+			else if (l.equals("home"))
+			{
 				if (containsPercept(ag, rec)) {
 					removePercept(ag, rec);
 				}
 
-			} else if (l.equals("hospital")) {
+			}
+			else if (l.equals("hospital"))
+			{
 				int i = 0;
 				for (i = 0; i < allAgents.length; i++) {
 					if (allAgents[i].equals(ag)) {
