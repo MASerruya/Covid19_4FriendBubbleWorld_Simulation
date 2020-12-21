@@ -156,27 +156,6 @@
 	do_things(park);
 	!go_home.
 
-+!live : is_friday & r3
-	<- !at(park);
-	do_things(park);
-	!at(bar);
-	do_things(bar);
-	!go_home.	
-	
-+!live: is_friday & r2
-	<- !at(job);
-	do_things(job);
-	!at(bar);
-	do_things(bar);
-	!go_home.
-
-+!live: is_friday
-	<- !at(job);
-	do_things(job);
-	!at(park);
-	do_things(park);
-	!go_home.
-
 
 +!live: is_saturday & r2
 	<- !at(park);
