@@ -342,7 +342,7 @@ public class SpreadEnv extends Environment {
 			boolean asymptomatic = false;		 //Considers if the agent will end up infected and will not show symptoms.
 			double randomNum = Math.random();	 //Infection probability.
 			int numInfected = getNumInfected(ag, l);
-			randomNum = randomNum - numInfected*0.1; //Increse the infection probability considering the number of infected agents in the same location.
+			randomNum = randomNum - numInfected*0.1; //Increse the infection probability 10% considering the number of infected agents in the same location.
 
 			//If an agent is in the bar and it does not have the virus, consider infecting it.
 			if (l.equals("bar") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
@@ -359,36 +359,36 @@ public class SpreadEnv extends Environment {
 			//If an agent is at its job and it does not have the virus, consider infecting it.
 			else if (l.equals("job") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
-				//Symptomatic probability.
+				//Symptomatic probability 5%.
 				if (randomNum < 0.05) {
 					infected = true;
 				}
-				//Asymptomatic probability.
-				else if (randomNum < 0.3 && ag.startsWith("young")){
+				//Asymptomatic probability 5%
+				else if (randomNum < 0.1 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			}
 			//If an agent is at the sports and it does not have the virus, consider infecting it.
 			else if (l.equals("sports") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
-				//Symptomatic probability.
+				//Symptomatic probability. 10%
 				if (randomNum < 0.1) {
 					infected = true;
 				}
-				//Asymptomatic probability.
-				else if (randomNum < 0.3 && ag.startsWith("young")){
+				//Asymptomatic probability.10%
+				else if (randomNum < 0.2 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			} 
 			//If an agent is at the school and it does not have the virus, consider infecting it.
 			else if (l.equals("school") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
-				//Symptomatic probability.
+				//Symptomatic probability.10%
 				if (randomNum < 0.1) {
 					infected = true;
 				}
-				//Asymptomatic probability.
-				else if (randomNum < 0.3 && ag.startsWith("young")){
+				//Asymptomatic probability.10%
+				else if (randomNum < 0.2 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			}
