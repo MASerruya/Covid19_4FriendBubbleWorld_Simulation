@@ -100,9 +100,9 @@ public class SpreadEnv extends Environment {
 	public static final Literal resp3 = Literal.parseLiteral("is_high_responsible");
 	public static final Literal[] respArray = { resp1, resp2, resp3 };
 
-	/********************************************************/
-	/****************** SET UP METHODS **********************/
-	/********************************************************/
+	/***********************************************************************/
+	/*************************** SET UP METHODS ****************************/
+	/***********************************************************************/
 
 	/**
 	 * Initiate the program
@@ -363,8 +363,10 @@ public class SpreadEnv extends Environment {
 					asymptomatic = true;
 				}
 			}
+			//If an agent is at the sports and it does not have the virus, consider infecting it.
 			else if (l.equals("sports") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
+				//Symptomatic probability.
 				if (randomNum < 0.1) {
 					infected = true;
 				}
@@ -373,31 +375,41 @@ public class SpreadEnv extends Environment {
 					asymptomatic = true;
 				}
 			} 
+			//If an agent is at the school and it does not have the virus, consider infecting it.
 			else if (l.equals("school") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
+				//Symptomatic probability.
 				if (randomNum < 0.1) {
 					infected = true;
+				}
+				//Asymptomatic probability.
 				} else if (randomNum < 0.3 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			}
+			//If an agent is at the park and it does not have the virus, consider infecting it.
 			else if (l.equals("park") && !(containsPercept(ag, caninfect) || containsPercept(ag, aginf)))
 			{
+				//Symptomatic probability.
 				if (randomNum < 0.1) {
 					infected = true;
-				} else if (randomNum < 0.2 && ag.startsWith("young")){
+				}
+				//Asymptomatic probability.
+				else if (randomNum < 0.2 && ag.startsWith("young")){
 					asymptomatic = true;
 				}
 			}
+			//If an agent was infected and then recoverd from the virus, confirm the recovery.
 			else if (l.equals("home"))
 			{
-				if (containsPercept(ag, rec)) {
-					removePercept(ag, rec);
-				}
+				if (containsPercept(ag, rec))
 
+					removePercept(ag, rec);
 			}
+			//If an agent is at the hospital, different situations will be considered.
 			else if (l.equals("hospital"))
 			{
+				//Retrieve the agents ID number.
 				int i = 0;
 				for (i = 0; i < allAgents.length; i++) {
 					if (allAgents[i].equals(ag)) {
@@ -405,52 +417,83 @@ public class SpreadEnv extends Environment {
 					}
 				}
 
-				// Updating infected days counter for agent
+				// Update the number of days that the agent has been hospitalized with the virus.
 				daysInfected[i] = daysInfected[i] + 1;
 
-				// Act according responsability of the user: High, Medium, Low
+				// Act according responsability of the user: High, Medium, Low.
+
+				// If the agent is irresponsible, it will leave the hospital once two days have passed.
 				if (containsPercept(ag, resp1) && daysInfected[i] >= 2) {
-					if (containsPercept(ag, aginf)) {
+
+					//If it was infected...
+					if (containsPercept(ag, aginf))
+					{
+						// ... it does not show more symptoms;
 						removePercept(ag, aginf);
+						// and every family member it was in touch with are notified to
+						// leave quarantine as the former does not show more symptoms.
 						remove_quarentine(ag);
 					}
 
+					// However, it leaves the hospital with the probability to infect.
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
+					// It will be able to infect during three days.
 					daysCanInfect[i] = 3;
 					System.out.println("[" + ag + "] " + "Agent cured! (Still infects!)");
 				}
 
+				// If the agent is not so responsible, it will be in the hospital for four days.
 				if (containsPercept(ag, resp2) && daysInfected[i] >= 4) {
-					if (containsPercept(ag, aginf)) {
+
+					//If it was infected...
+					if (containsPercept(ag, aginf))
+					{
+						// ... it does not show more symptoms.
 						removePercept(ag, aginf);
+						// and every family member it was in touch with are notified to
+						// leave quarantine as the former does not show more symptoms.
 						remove_quarentine(ag);
 					}
+
+					// However, it leaves the hospital with the probability to infect.
 					addPercept(ag, caninfect);
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
+					// It will be able to infect during two days.
 					daysCanInfect[i] = 2;
 					System.out.println("[" + ag + "] " + "Agent cured! (Still infects!)");
 				}
 
+				// If the agent is responsible, it will be in the hospital for five days.
 				if (containsPercept(ag, resp3) && daysInfected[i] >= 5) {
-					if (containsPercept(ag, aginf)) {
+
+					//If it was infected...
+					if (containsPercept(ag, aginf))
+					{
+						// ... it does not show more symptoms.
 						removePercept(ag, aginf);
 						System.out.println("[" + ag + "] " + "Agent cured!");
+						// and every family member it was in touch with are notified to
+						// leave quarantine as the former does not show more symptoms.
 						remove_quarentine(ag);
 					}
+
+					//As the former spent enough days at the hospital, it leaves it completely
+					//cured. It has been recovered and it does not have the ability to infect.
 					addPercept(ag, rec);
 					daysInfected[i] = 0;
 				}
 
 			}
 
-			// After being in the location, check if has been infected
-			if (infected) {
-				//In case infected remoe quarentine
+			// After being in the corresponding location, check if has been infected.
+			if (infected)
+			{
+				//In case infected remove quarentine.
 				removePercept(ag, quar);
-				//And infect
+				//And corroborate the infection.
 				addPercept(ag, aginf);
 				System.out.println("[" + ag + "] " + "Agent infected at " + l + "!");
 			}
