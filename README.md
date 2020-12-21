@@ -27,13 +27,13 @@ En esta simulación se han modelado 6 tipos de estancia (5 homes, un parque, un 
 El modelo del mundo usado en esta simulación es un grid 50x50. En este modelo actuarán 15 agentes (10 young y 5 adult), con distintas subrutinas en función de su edad. 
 
 El modelo también tendrá las siguientes localizaciones:
-HomeX: Cada agente volverá a su correspondiente casa una vez acabado el día, y empezará siempre su rutina desde ahí a no ser que esté infectado y salga del hospital.
-Hospital: Agentes infectados con síntomas irán al hospital a tratarse. Aquellos agentes de baja responsabilidad saldrán del hospital una vez ya no tengan síntomas. Esto nos permitirá modelar aquellos ciudadanos que no realizan la cuarentena de 14 días obligatoria y, por tanto, pueden seguir infectando a otros agentes.
-Bar: Casilla de simulación de una interacción en un bar. Es el gran foco de contagio, debido a la propensión a quitarse la mascarilla. 
-School: Casilla de simulación de un colegio, donde los young (tanto niños como jóvenes) realizan sus planes de lunes a viernes, además de otras actividades lúdicas.
-Job: Casilla de simulación del trabajo, donde los adult y young universitarios realizan sus interacciones durante la semana, además de otras actividades lúdicas.
-Sports: Casilla de simulación de una instalación deportiva.
-Park: Casilla de simulación de un parque público.
+- HomeX: Cada agente volverá a su correspondiente casa una vez acabado el día, y empezará siempre su rutina desde ahí a no ser que esté infectado y salga del hospital.
+- Hospital: Agentes infectados con síntomas irán al hospital a tratarse. Aquellos agentes de baja responsabilidad saldrán del hospital una vez ya no tengan síntomas. Esto nos permitirá modelar aquellos ciudadanos que no realizan la cuarentena de 14 días obligatoria y, por tanto, pueden seguir infectando a otros agentes.
+- Bar: Casilla de simulación de una interacción en un bar. Es el gran foco de contagio, debido a la propensión a quitarse la mascarilla. 
+- School: Casilla de simulación de un colegio, donde los young (tanto niños como jóvenes) realizan sus planes de lunes a viernes, además de otras actividades lúdicas.
+- Job: Casilla de simulación del trabajo, donde los adult y young universitarios realizan sus interacciones durante la semana, además de otras actividades lúdicas.
+- Sports: Casilla de simulación de una instalación deportiva.
+- Park: Casilla de simulación de un parque público.
 
 
     
