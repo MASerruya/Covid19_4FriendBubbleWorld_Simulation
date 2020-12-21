@@ -229,7 +229,7 @@ public class SpreadEnv extends Environment {
 	/**
 	 * Method that defines randomly how responsible an agent is
 	 * 
-	 * @param ag agent to be set
+	 * @param ag agents to be set
 	 */
 	private void setResponsability(String[] ags) {
 
@@ -285,8 +285,8 @@ public class SpreadEnv extends Environment {
 	/**
 	 * Excecution of an action
 	 * 
-	 * @param ag
-	 * @param action
+	 * @param ag		agent performing the action.
+	 * @param action	action to be performed.
 	 */
 	@Override
 	public boolean executeAction(String ag, Structure action) {
@@ -321,7 +321,7 @@ public class SpreadEnv extends Environment {
 		// Every young or adult has to delete its own newday when 1st action is done
 		removePercept(ag, newday);
 
-		// Perform the do_things action considering different scenarios.
+		// Perform the DO_THINGS action considering different scenarios.
 		if (action.getFunctor().equals("do_things")) {
 
 			try {Thread.sleep(300);} 
@@ -491,46 +491,53 @@ public class SpreadEnv extends Environment {
 			// After being in the corresponding location, check if has been infected.
 			if (infected)
 			{
-				//In case infected remove quarentine.
+				//Remove quarentine.
 				removePercept(ag, quar);
 				//And corroborate the infection.
 				addPercept(ag, aginf);
 				System.out.println("[" + ag + "] " + "Agent infected at " + l + "!");
 			}
+
+			// If the agent is asymptomatic and a young one, the corresponding perception will be added.
 			if (asymptomatic && ag.startsWith("young")) {
+
+				//Retrieve agent's ID number.
 				int i = 0;
 				for (i = 0; i < allAgents.length; i++) {
 					if (allAgents[i].equals(ag)) {
 						break;
 					}
 				}
-					addPercept(ag, caninfect);
-					System.out.println("[" + ag + "] " + "Agent infected! (No synthoms)");
-					daysCanInfect[i] = 3;
-				}
-			
+
+				//Add the caninfect perception -> infected yet asymptomatic.
+				addPercept(ag, caninfect);
+				System.out.println("[" + ag + "] " + "Agent infected! (No synthoms)");
+				daysCanInfect[i] = 3;
+
+			}
 
 			result = true;
-                                   
-			// Move_towards
-		} else if (action.getFunctor().equals("move_towards")) {
+		}
+		//Consider the MOVE_TOWARDS action taking into account different desired locations.
+		else if (action.getFunctor().equals("move_towards"))
+		{
 			String l = action.getTerm(0).toString();
-
 			Location dest = null;
 
-			if (l.equals("bar")) {
+			//Discover location to be reached.
+			if (l.equals("bar")) {				//BAR
 				dest = model.lBar;
-			} else if (l.equals("job")) {
+			} else if (l.equals("job")) {			//JOB
 				dest = model.lJob;
-			} else if (l.equals("hospital")) {
+			} else if (l.equals("hospital")) {		//HOSPITAL
 				dest = model.lHospital;
-			} else if (l.equals("sports")) {
+			} else if (l.equals("sports")) {		//SPORTS
 				dest = model.lSports;
-			} else if (l.equals("school")) {
+			} else if (l.equals("school")) {		//SCHOOL
 				dest = model.lSchool;
-			} else if (l.equals("park")) {
+			} else if (l.equals("park")) {			//PARK
 				dest = model.lPark;
-			} else if (home.equals(l.substring(0, 4))) {
+			} else if (home.equals(l.substring(0, 4))) {	//Some HOME within the set.
 
 				for (int i = 0; i < model.NHOMES; i++) {
 					if (l.equals("home" + (i + 1))) {
@@ -540,59 +547,55 @@ public class SpreadEnv extends Environment {
 				}
 			}
 			try {
+				//Move the actual agent to the considered destination.
 				result = model.moveTowards(dest, iid);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			// TODO: optimizar
-
 			// Remove the literal determining the starting position.
 			if (containsPercept(ag, agab)) {
-				removePercept(ag, agab);
+				removePercept(ag, agab);			//AT_BAR percept.
 			} else if (containsPercept(ag, agaj)) {
-				removePercept(ag, agaj);
+				removePercept(ag, agaj);			//AT_JOB percept.
 			} else if (containsPercept(ag, agahos)) {
-				removePercept(ag, agahos);
+				removePercept(ag, agahos);			//AT_HOSPITAL percept.
 			} else if (containsPercept(ag, agasp)) {
-				removePercept(ag, agasp);
+				removePercept(ag, agasp);			//AT_SPORTS percept.
 			} else if (containsPercept(ag, agasch)) {
-				removePercept(ag, agasch);
+				removePercept(ag, agasch);			//AT_SCHOOL percept.
 			} else if (containsPercept(ag, agapk)) {
-				removePercept(ag, agapk);
+				removePercept(ag, agapk);			//AT_PARK percept.
 			} else {
 
 				for (int i = 0; i < model.NHOMES; i++) {
 					if (containsPercept(ag, agahom[i])) {
-						removePercept(ag, agahom[i]);
+						removePercept(ag, agahom[i]);	//AT_HOMEX percept.
 						break;
 					}
 				}
 			}
 		}
-
-		// add_quarentine
+		// Consider the ADD_QUARANTINE action.
 		else if (action.getFunctor().equals("add_quarentine")) {
 
-			// Action to add the quarentine belief to an agent
 			nowait = true;
 			result = true;
-			if(!containsPercept(ag, aginf)){
+
+			//Add the quarentine percept to the non-infected agents that have
+			//been in contact with an infected one.
+			if(!containsPercept(ag, aginf))
+			{
 				addPercept(ag, quar);
 				System.out.println("[" + ag + "] " + "Agent quarentine!");
 			} 
-
-		} else {
-			// What to do if action is not defined
 		}
 
-		try {
 			// In case the action has to set the nowait flag, sleep the thread.
-			if (!nowait)
-				Thread.sleep(100);
-		} catch (Exception e) {
-		}
+		try {
+			if (!nowait) Thread.sleep(100);
+		} catch (Exception e) {}
 
 		// Add the literal determining the new position.
 		updatePosition(ag, sid, iid);
@@ -603,12 +606,13 @@ public class SpreadEnv extends Environment {
 	/**
 	 * Updates the position of an agent
 	 * 
-	 * @param ag  whose position is going to be updated
-	 * @param sid
-	 * @param iid
+	 * @param ag  agent whose position is going to be updated
+	 * @param sid agent's string id (name).
+	 * @param iid agent's ID number.
 	 */
 	public void updatePosition(String ag, String sid, int iid) {
 
+		//Retrieve the position of the current agent within the grid.
 		Location lagent = model.getAgPos(iid);
 
 		String agent;
@@ -619,7 +623,7 @@ public class SpreadEnv extends Environment {
 			agent = "adult" + sid;
 		}
 
-		// Setting percepts according location
+		// Setting percepts according to the location
 		if (lagent.equals(model.lBar)) {
 			addPercept(agent, agab);
 			System.out.println("[" + agent + "] " + "at bar");
@@ -674,32 +678,40 @@ public class SpreadEnv extends Environment {
 		// Update percepts
 		updatePercepts();
 
+		/***********************************/
+		/***** Manage House infections *****/
+		/***********************************/
 
-		//Manage House infections
 		//For each home
 		for (ArrayList<String> home : lhomes)
-		{	//For each agent in a gome
+		{
+			//For each agent in some home
 			for (String ag : home)
-			{	//In case he/she/they can infect and is not quareentined
+			{
+				//In case he/she/they can infect and is not quareentined
 				if ((containsPercept(ag, aginf) || containsPercept(ag, caninfect)) && !containsPercept(ag, quar))
-				{	//Infect each agent
+				{
+					//Infect each agent
 					for (String ag_ : home)
-					{	//In case the agent is not quareentined or infected
-						if (!containsPercept(ag_, aginf) && !containsPercept(ag_, caninfect)  && !containsPercept(ag_, quar))
+					{
+						//In case the agent is not quareentined nor infected
+						if (!containsPercept(ag_, aginf) && !containsPercept(ag_, caninfect) && !containsPercept(ag_, quar))
 						{
 							Random rand = new Random();
 							int x = rand.nextInt(100);
 
-							//Young agents: * Infect with no synthoms (0.3/1)
-							//				* Infect (0.3/1)
+							//Young agents: * Infect with no symptoms (0.3/1)
+							//		* Infect with symptoms	  (0.3/1)
 
 							if (ag_.startsWith("young") && x < 30)
 							{
+								//Add infected perception -> it has the virus and it is conscious about it.
 								addPercept(ag_, aginf);
 								System.out.println("[" + ag_ + "] " + "Agent infected at home!");
 							}
 							else if (ag_.startsWith("young") && x < 60)
 							{
+								//Add can_infect perception -> it has the virus and it is not conscious about it.
 								addPercept(ag_, caninfect);
 								System.out.println("[" + ag_ + "] " + "Agent infected at home -> Asynthomatic!");
 							}
@@ -713,12 +725,14 @@ public class SpreadEnv extends Environment {
 							}
 						}
 					}
-					//Once reached the first infected in a house stop and jump to next
+
+					//Once reached the first infected in a house stop and jump to next family
 					break;
 				}
 			}
 		}
 
+		//Update infected and can_infect perceptions per agent considering once more day transcurred.
 		for (int i = 0; i < allAgents.length; i++) {
 			String ag = allAgents[i];
 
@@ -737,12 +751,16 @@ public class SpreadEnv extends Environment {
 		}
 
 
-		double infected 		= 0;
-		double asymptomatic 		= 0;
-		double quarentine 		= 0;
-		double at_hospital 		= 0;
-		double quarentine_inf		= 0;
-		double quarentine_not_inf	= 0;
+		/************************************/
+		/************ STATISTICS ************/
+		/************************************/
+
+		double infected 		= 0;	//Number of infected agents.
+		double asymptomatic 		= 0;	//Number of asymptomatic agents.
+		double quarentine 		= 0;	//Number of agents in quarantine.
+		double at_hospital 		= 0;	//Number of hospitalized agents.
+		double quarentine_inf		= 0;	//Number of agents in quarantine but not infected.
+		double quarentine_not_inf	= 0;	//Number of agents in quarantine and infected.
 
 		//Calculating statistics to be printed at the end of the day.
 		for (String ag : allAgents)
@@ -812,37 +830,28 @@ public class SpreadEnv extends Environment {
 			addPercept(dweekend);
 		}
 
-		// TODO: optimizar
-
 		for (int i = 0; i < allAgents.length; i++) {
 
 			Location lagent = model.getAgPos(i);
 
 			// add agent location to its percepts
 			if (lagent.equals(model.lBar)) {
-				addPercept(allAgents[i], agab);
-				//[DEBUG] System.out.println("Added lbar percept!");
+				addPercept(allAgents[i], agab);		//AT_BAR
 			} else if (lagent.equals(model.lJob)) {
-				addPercept(allAgents[i], agaj);
-				//[DEBUG] System.out.println("Added ljob percept!");
+				addPercept(allAgents[i], agaj);		//AT_JOB
 			} else if (lagent.equals(model.lHospital)) {
-				addPercept(allAgents[i], agahos);
-				//[DEBUG] System.out.println("Added lhosp percept!");
+				addPercept(allAgents[i], agahos);	//AT_HOSPITAL
 			} else if (lagent.equals(model.lSports)) {
-				addPercept(allAgents[i], agasp);
-				//[DEBUG] System.out.println("Added lSports percept!");
+				addPercept(allAgents[i], agasp);	//AT_SPORTS
 			} else if (lagent.equals(model.lSchool)) {
-				addPercept(allAgents[i], agasch);
-				//[DEBUG] System.out.println("Added lSchool percept!");
+				addPercept(allAgents[i], agasch);	//AT_SHOOLS
 			} else if (lagent.equals(model.lPark)) {
-				addPercept(allAgents[i], agapk);
-				//[DEBUG] System.out.println("Added lSchool percept!");
+				addPercept(allAgents[i], agapk);	//AT_PARK
 			} else {
 
 				for (int j = 0; j < model.NHOMES; ++j) {
 					if (lagent.equals(model.lHomes[j])) {
-						addPercept(allAgents[i], agahom[j]);
-						//[DEBUG] System.out.println("Added lHome percept!");
+						addPercept(allAgents[i], agahom[j]);	//AT_HOMEX
 						break;
 					}
 				}
@@ -885,8 +894,8 @@ public class SpreadEnv extends Environment {
 	/**
 	 * Auxiliar function to translate numbers into weeday literals
 	 * 
-	 * @param ag wday
-	 * @return result of the int to literal convertion
+	 * @param wday	day of the week.
+	 * @return 	result of the int to literal convertion.
 	 */
 	private Literal get_weeklit(int wday) {
 
@@ -908,32 +917,34 @@ public class SpreadEnv extends Environment {
 			return dom;
 		}
 
-		// For other number error
-		System.out.println("[ERROR] Invalid weeday internal record.");
-		System.exit(-1);
-
 		return Literal.parseLiteral("");
 	}
 
 	/**
-	 * Method that returns the amount of infected agents in a certain location
+	 * Method that returns the number of infected agents in a certain location
 	 * 
 	 * @param ag agent who will check the location
 	 * @param l  location to be checked
-	 * @return number of agents infected in location
+	 * @return   number of agents infected in location
 	 */
 	public int getNumInfected(String ag, String l) {
 
 		int res = 0;
 
-		for (int i = 0; i < allAgents.length; i++) {
+		for (int i = 0; i < allAgents.length; i++)
+		{
+			//Retrieve every agent.
 			String auxAgent = allAgents[i];
 
+			//Retrieve its literals.
 			Collection<Literal> allperc = consultPercepts(auxAgent);
 
-			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();) {
+			//Iterate through them.
+			for (Iterator<Literal> iterator = allperc.iterator(); iterator.hasNext();)
+			{
 				String value = iterator.next().toString();
 
+				//Check if it is in the concerned location by checking the AT_* literal.
 				if (value.contains("at") && value.contains(l)) {
 					if (containsPercept(auxAgent, caninfect)) {
 						res++;
@@ -957,6 +968,7 @@ public class SpreadEnv extends Environment {
 		while (!lhomes.get(home_i).contains(agent))
 			++home_i;
 
+		// If there is another infected agent in that home, no quarantine is removed.
 		for (String ag : lhomes.get(home_i))
 			if (!ag.equals(agent) && containsPercept(ag, aginf))
 				return;
@@ -969,9 +981,4 @@ public class SpreadEnv extends Environment {
 			}
 
 	}
-
-	/********************************************************/
-	/****************** NO USADOS // EN PRUEBA **************/
-	/********************************************************/
-
 }
