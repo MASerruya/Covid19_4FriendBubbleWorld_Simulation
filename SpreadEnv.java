@@ -140,6 +140,8 @@ public class SpreadEnv extends Environment {
 		// Set initial day to Friday.
 		curr_day = V;
 
+		System.out.println("CURRENT DAY: "+get_weekstring(curr_day));
+
 		// Fill the arrays
 		List<AgentParameters> agp = project.getAgents();
 		int numberOfAgents = agp.size();
@@ -674,6 +676,8 @@ public class SpreadEnv extends Environment {
 	 */
 	private Runnable dayelapsed = () -> {
 
+		String last_day = get_weekstring(curr_day);
+
 		// Updating curr_day variable
 		curr_day = (curr_day + 1) % 7;
 
@@ -789,23 +793,21 @@ public class SpreadEnv extends Environment {
 			if (containsPercept(ag, agahos)) at_hospital++;
 		}
 
-		//Number of irresponsible agents: infected but not quarentined.
-		double irresponsible = infected - quarentine;
-
 		System.out.println("***********************************************************************************************************************");
 		System.out.println("***********************************************************************************************************************");
-		System.out.println("\t\t\t STATISTICS DAY " +day_counter);
+		System.out.println("\t\t      STATISTICS DAY " +day_counter+ " ("+last_day+")");
 		System.out.println();
 		System.out.println("Total number of agents:\t\t\t"+15);
 		System.out.println("Infected agents:\t\t\t"+infected+" (" +((infected*100)/allAgents.length)+ "% of all agents)");
-		System.out.println("Asymptomatic agents:\t\t\t"+asymptomatic+ " (" +((asymptomatic*100)/infected)+ "% of all infected agents)");
+		System.out.println("Asymptomatic agents:\t\t\t"+asymptomatic+ " (" +((asymptomatic*100)/allAgents.length)+ "% of all agents)");
 		System.out.println("Agents in hospital:\t\t\t"+at_hospital);
 		System.out.println("Agents in quarantine:\t\t\t"+quarentine);
 		System.out.println("Agents in quarantine and infected:\t\t"+quarentine_inf+" ("+((quarentine_inf*100)/infected)+"% of all infected agents)");
 		System.out.println("Agents in quarantine but not infected:\t\t"+quarentine_not_inf);
-		System.out.println("Unconscious agents (infected and not quarantined):\t"+irresponsible);
 		System.out.println("***********************************************************************************************************************");
 		System.out.println("***********************************************************************************************************************");
+		System.out.println();
+		System.out.println("NEW DAY: "+get_weekstring(curr_day));
 
 		//Increase by one the day counter.
 		day_counter++;
@@ -814,10 +816,6 @@ public class SpreadEnv extends Environment {
 			Thread.sleep(100);
 		} catch (Exception e) {
 		}
-
-		// Debug log code, decide if remove in final version.
-		System.out.println("Newday starting -> " + new java.util.Date());
-
 	};
 
 	/**
@@ -924,6 +922,45 @@ public class SpreadEnv extends Environment {
 
 		return Literal.parseLiteral("");
 	}
+
+	/**
+	 * Auxiliar function to translate numbers into weeday strings
+	 * 
+	 * @param wday	day of the week.
+	 * @return 	result of the int to string convertion.
+	 */
+	private String get_weekstring(int wday) {
+
+		String weekday = new String("");
+
+		// Translate number to literal
+		switch (wday) {
+		case L:
+			weekday = "MONDAY";
+			break;
+		case M:
+			weekday = "TUESDAY";
+			break;
+		case X:
+			weekday = "WEDNESDAY";
+			break;
+		case J:
+			weekday = "THURSDAY";
+			break;
+		case V:
+			weekday = "FRIDAY";
+			break;
+		case S:
+			weekday = "SATURDAY";
+			break;
+		case D:
+			weekday = "SUNDAY";
+			break;
+		}
+
+		return weekday;
+	}
+	
 
 	/**
 	 * Method that returns the number of infected agents in a certain location

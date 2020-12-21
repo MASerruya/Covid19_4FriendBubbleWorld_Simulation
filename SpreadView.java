@@ -39,31 +39,37 @@ public class SpreadView extends GridWorldView {
 		// Painting each object
 		switch (object) {
 
+		//Set the color and the corresponding string to the JOB cell.
 		case SpreadModel.JOB:
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "JOB");
 			break;
 
+		//Set the color and the corresponding string to the BAR cell.
 		case SpreadModel.BAR:
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "BAR");
 			break;
 
+		//Set the color and the corresponding string to the HOSPITAL cell.
 		case SpreadModel.HOSPITAL:
 			g.setColor(Color.red);
 			drawString(g, x, y, defaultFont, "HOSPITAL");
 			break;
 
+		//Set the color and the corresponding string to the SPORTS cell.
 		case SpreadModel.SPORTS:
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "SPORTS");
 			break;
 
+		//Set the color and the corresponding string to the SCHOOL cell.
 		case SpreadModel.SCHOOL:
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "SCHOOL");
 			break;
 
+		//Set the color and the corresponding string to the PARK cell.
 		case SpreadModel.PARK:
 			g.setColor(Color.orange);
 			drawString(g, x, y, defaultFont, "PARK");
@@ -71,6 +77,7 @@ public class SpreadView extends GridWorldView {
 
 		default:
 
+			//Set the color and the corresponding string to every HOME cell within the grid.
 			for (int i = 0; i < sModel.NHOMES; i++) {
 				if (object == SpreadModel.HOMES[i]) {
 					g.setColor(Color.blue);
@@ -99,9 +106,10 @@ public class SpreadView extends GridWorldView {
 
 		Location lAgent = sModel.getAgPos(id);
 
-		// Colision agent-location
+		//Paint the agent of red if it is infected.
 		if (isInfected(id) == true) {
 			c = Color.red;
+		//Paint the agent of green if it is not infected.
 		} else if (isInfected(id) == false) {
 			c = Color.green;
 		}
@@ -109,11 +117,11 @@ public class SpreadView extends GridWorldView {
 		super.drawAgent(g, x, y, c, -1);
 		g.setColor(Color.black);
 
-		if (id < sModel.NUMBER_OF_YOUNG) { // young case
+		if (id < sModel.NUMBER_OF_YOUNG) {
 
-			super.drawString(g, x, y, defaultFont, "Y");
+			super.drawString(g, x, y, defaultFont, "Y"); // Y for young agents.
 		} else {
-			super.drawString(g, x, y, defaultFont, "A");
+			super.drawString(g, x, y, defaultFont, "A"); // A for adult agents.
 
 		}
 
@@ -150,6 +158,7 @@ public class SpreadView extends GridWorldView {
 
 		String sid = allAgents[id];
 
+		//Check if the agent is infected.
 		if (allAgentsInfectionStatus[id]) {
 			return true;
 		}

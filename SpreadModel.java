@@ -16,9 +16,6 @@ public class SpreadModel extends GridWorldModel {
 	public static final int NHOMES = 4;
 	public static int[] HOMES = new int[NHOMES];
 
-	// A day in the system is turned into 30 seconds.
-	public static final int DAY = 30;
-
 	// Amount of youngs and adults
 	public static final int NUMBER_OF_YOUNG = 10;
 	public static final int NUMBER_OF_ADULT = 5;
