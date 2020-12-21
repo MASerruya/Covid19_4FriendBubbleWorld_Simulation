@@ -42,5 +42,5 @@ El modelo también tendrá las siguientes localizaciones:
 En la siguiente imagen veremos un esquema del output que proporcionará el sistema:
 
 <p align="center">
-  <img src="/images/screen.png" width="350" alt="accessibility text">
+  <img src="/images/screen.png" width="500" alt="accessibility text">
 </p>
